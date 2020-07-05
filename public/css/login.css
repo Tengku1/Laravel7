@@ -1,0 +1,26 @@
+* {
+    padding: 0;
+    margin: 0 auto;
+    text-decoration: none;
+    list-style-type: none;
+    box-sizing: border-box;
+}
+body {
+    background-color: #ddd !important;
+}
+form {
+    background-color: white;
+    padding: 25px 2% 30px !important;
+    border: 1px solid #aaa;
+}
+form button {
+    margin-top: 25px;
+}	
+#image-preview{
+    display:none;
+    margin-top: 50px;
+    float: left;
+    border-radius: 10px;
+    width : auto;
+    height : auto;
+}
