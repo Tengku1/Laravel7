@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 05, 2020 at 03:09 PM
+-- Generation Time: Jul 05, 2020 at 04:05 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -76,7 +76,7 @@ CREATE TABLE `history_sell` (
 --
 
 INSERT INTO `history_sell` (`id`, `modified_user`, `created_at`, `modified_at`) VALUES
-(1, 'Tengku', '2020-07-05 10:55:47', '2020-07-05 02:55:47');
+(1, 'Tengku', '2020-07-05 13:47:32', '2020-07-05 05:47:32');
 
 -- --------------------------------------------------------
 
@@ -99,7 +99,7 @@ CREATE TABLE `history_sell_product` (
 --
 
 INSERT INTO `history_sell_product` (`id`, `history_sell`, `product_id`, `branch_code`, `qty`, `buy_price`, `sell_price`) VALUES
-(1, 1, 16, 1, 15, 5000000, 1000000);
+(1, 1, 16, 1, 30, 5000000, 1000000);
 
 -- --------------------------------------------------------
 
@@ -200,8 +200,8 @@ CREATE TABLE `products_stock` (
 INSERT INTO `products_stock` (`id`, `product_id`, `branch_code`, `buy_price`, `qty`, `created_at`, `modified_at`) VALUES
 (2, 6, 1, 150000, 19, '2020-07-02 05:54:55', '2020-07-05 04:55:43'),
 (3, 5, 1, 9500000, 180, '2020-07-05 04:57:34', '2020-07-05 02:40:16'),
-(13, 16, 1, 5000000, 955, '2020-07-05 02:24:08', '2020-07-05 02:55:47'),
-(17, 16, 1, 5000000, 2000, '2020-07-05 05:24:08', '2020-07-05 02:55:47'),
+(13, 16, 1, 5000000, 850, '2020-07-05 02:24:08', '2020-07-05 05:47:32'),
+(17, 16, 1, 5000000, 2000, '2020-07-05 05:24:08', '2020-07-05 05:47:32'),
 (18, 17, 2, NULL, NULL, '2020-07-05 08:26:25', '2020-07-05 08:26:25');
 
 -- --------------------------------------------------------
