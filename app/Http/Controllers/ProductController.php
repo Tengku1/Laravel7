@@ -228,13 +228,18 @@ class ProductController extends Controller
             }
             $history_product = history_sell_product::where('product_id', $data[0]->id)->get();
 
-            $historyattr['qty'] = $total;
             $historyattr['product_id'] = $id;
             $historyattr['branch_code'] = $stock[0]->branch_code;
             $historyattr['buy_price'] = $stock[0]->buy_price;
             $historyattr['sell_price'] = $data[0]->sell_price;
             if (count($history_product)) {
-                history_sell_product::where('product_id', $data[0]->id)->update($historyattr);
+                $historyattr['qty'] = $history_product[0]->qty;
+                $historyattr['qty'] += $total;
+                history_sell_product::where('product_id', $data[0]->id)->update([
+                    'sell_price' => $historyattr['sell_price'],
+                    'buy_price' => $historyattr['buy_price'],
+                    'qty' => $historyattr['qty'],
+                ]);
             } else {
                 $historyattr['history_sell'] = $history_sell[0]->id;
                 history_sell_product::create($historyattr);
