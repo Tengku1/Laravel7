@@ -133,11 +133,9 @@ class StockController extends Controller
     {
         $data['code'] = $code;
         if (Auth::user()->roles[0] == "Master") {
-            return view('Admin.Stock.create', compact('data'));
-        } elseif (Auth::user()->roles[0] == "Admin") {
             return view('Master.Stock.create', compact('data'));
-        } else {
-            return abort(404);
+        } elseif (Auth::user()->roles[0] == "Admin") {
+            return view('Admin.Stock.create', compact('data'));
         }
     }
 
