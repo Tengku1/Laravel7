@@ -15,29 +15,51 @@ class ProductsExport implements FromCollection, WithHeadings
 
     protected $code;
 
-    public function __construct($code)
+    public function __construct($code, $date)
     {
         $this->code = $code;
+        $this->date = $date;
     }
     public function collection()
     {
-        return Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
-            ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
-            ->select(
-                "products.name as Name",
-                "branch.name",
-                'products_stock.qty',
-                'products.sell_price',
-                "products_stock.buy_price",
-                DB::raw(
-                    "month(products_stock.created_at)",
-                ),
-                DB::raw(
-                    "year(products_stock.created_at)",
+        if ($this->date != null || $this->date != '') {
+            return Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
+                ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
+                ->select(
+                    "products.name as Name",
+                    "branch.name",
+                    'products_stock.qty',
+                    'products.sell_price',
+                    "products_stock.buy_price",
+                    DB::raw(
+                        "month(products_stock.created_at)",
+                    ),
+                    DB::raw(
+                        "year(products_stock.created_at)",
+                    )
                 )
-            )
-            ->where('branch_code', '=', $this->code)
-            ->get();
+                ->where('branch_code', '=', $this->code)
+                ->where('products_stock.created_at', 'like', '%' . $this->date . '%')
+                ->get();
+        } else {
+            return Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
+                ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
+                ->select(
+                    "products.name as Name",
+                    "branch.name",
+                    'products_stock.qty',
+                    'products.sell_price',
+                    "products_stock.buy_price",
+                    DB::raw(
+                        "month(products_stock.created_at)",
+                    ),
+                    DB::raw(
+                        "year(products_stock.created_at)",
+                    )
+                )
+                ->where('branch_code', '=', $this->code)
+                ->get();
+        }
     }
     public function headings(): array
     {
