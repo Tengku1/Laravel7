@@ -48,19 +48,11 @@
                     Dashboard <i class="fa fa-dashboard"></i>
                 </a>
             </li>
-            @if (Auth::user()->roles[0] == 'Master')
             <li class="mx-1{{ request()->is(strstr($url,"stock")) ? ' active' : '' }}">
                 <a href="/stock" class="menuitem nav-item nav-link">
                     Stock <i class="fa fa-dropbox"></i>
                 </a>
             </li>
-            @else
-            <li class="mx-1{{ request()->is(strstr($url,"product")) ? ' active' : '' }}">
-                <a href="/product" class="menuitem nav-item nav-link">
-                    Product <i class="fa fa-dropbox"></i>
-                </a>
-            </li>
-            @endif
             <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
                 <a href="/history" class="menuitem nav-item nav-link">
                     History Sells <i class="fa fa-shopping-cart"></i>
