@@ -28,10 +28,10 @@ class StockController extends Controller
         }
     }
 
-    public function Excel($data)
+    public function Excel($code, $date = null)
     {
         $name = "Stocks " . date("Y-m-d") . ".xlsx";
-        return Excel::download(new ProductsExport($data), $name);
+        return Excel::download(new ProductsExport($code, $date), $name);
     }
     public function market($id)
     {
@@ -251,12 +251,28 @@ class StockController extends Controller
                 ->orderBy('products_stock.id')
                 ->paginate(7);
         } else {
-            if ($branch == null) {
+            if (request()->date) {
+                $date = request()->date;
                 $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
                     ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
-                    ->select("products.*", "products_stock.qty", 'products_stock.id', 'branch_code', "products_stock.product_id", "products_stock.buy_price", "branch.name as Branch_name")
+                    ->select(
+                        "products.name",
+                        "products.sell_price",
+                        'products_stock.id',
+                        "products_stock.qty",
+                        "products_stock.product_id",
+                        "products_stock.buy_price",
+                        "products_stock.created_at",
+                        'branch_code',
+                        "branch.name as Branch_name"
+                    )
+                    ->where('branch.code', '=', $branch)
+                    ->where('products_stock.created_at', 'like', '%' . $date . '%')
                     ->orderBy('products_stock.id')
                     ->paginate(7);
+                foreach ($stocks as $stock) {
+                    $stock['date'] = $date;
+                }
             } else {
                 $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
                     ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
