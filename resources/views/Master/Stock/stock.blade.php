@@ -21,13 +21,19 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                 <a class="dropdown-item"><i class="fa fa-print"></i> Print</a>
-                <a class="dropdown-item" target="_blank" href="/stock/excel/{{$stocks[0]->branch_code}}">
+                @if ($stocks[0]->date)
+                    <a class="dropdown-item" target="_blank" href="/stock/excel/{{$stocks[0]->branch_code}}/{{$stocks[0]->date}}">
                     <i class="fa fa-file-excel-o"> Export Excel</i>
                 </a>
+                @else
+                    <a class="dropdown-item" target="_blank" href="/stock/excel/{{$stocks[0]->branch_code}}">
+                    <i class="fa fa-file-excel-o"> Export Excel</i>
+                </a>
+                @endif
             </div>
         </div>
         <div class="col-md-2 float-left pr-1">
-            <form action="/stock/excel/{{$stocks[0]->branch_code}}" method="post" class="p-0">
+            <form action="/stock/branch/{{$stocks[0]->branch_code}}" method="post" class="p-0">
                 {{ csrf_field() }}
                 <input type="month" name="date" max="3000-12-31" min="2000-01-01" onchange="this.form.submit();" class="form-control">
             </form>
