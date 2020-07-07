@@ -62,11 +62,11 @@
 </div>
 
 <div class="col-md-12">
-    <div class="col-md-6 px-1 pt-3 table-responsive float-left">
+    <div class="col-md-6 px-2 pt-3 float-left">
         <span class="text-info"><i class="fa fa-star"></i> New Product At This Day !</span>
         @if (count($data['productThisDay']))
         @else
-        <div class="row mt-3 alert alert-info">
+        <div class="mt-3 alert alert-info">
             There are no products here
         </div>
         @endif
@@ -81,7 +81,7 @@
             @foreach ($data['productThisDay'] as $item)
             <tr>
                 <td>{{$item->id}}</td>
-                <td>{{$item->name}}</td>
+                <td>{{Str::limit($item->name,20)}}</td>
                 <td>{{$item->sell_price}}</td>
                 <td>{{$item->status}}</td>
                 <td><a href="/product/{{$item->slug}}"><i class="fa fa-search"></i></a></td>
@@ -89,19 +89,19 @@
             @endforeach
         </table>
     </div>
-    <div class="col-md-6 px-1 pt-3 table-responsive float-left">
-        <span class="text-info"><i class="fa fa-star"></i> New History At This Day !</span>
+    <div class="col-md-6 px-2 pt-3 float-left">
+        <span class="text-info"><i class="fa fa-star"></i> History</span>
         @if (count($data['historySells']))
         @else
-        <div class="row mt-3 alert alert-info">
+        <div class="mt-3 alert alert-info">
             There are no History here
         </div>
         @endif
         <table class="tableData mt-3 table-hover table table-light">
             <tr>
                 <th scope="col">Product ID</th>
-                <th scope="col">Branch Code</th>
                 <th scope="col">Quantity</th>
+                <th scope="col">Sell Price</th>
             </tr>
             @foreach ($data['historyThisDay'] as $item)
             <tr>
