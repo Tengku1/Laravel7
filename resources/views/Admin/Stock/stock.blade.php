@@ -11,23 +11,17 @@
 @if ($stocks->count())
 
 <div class="col-md-12">
-    <form action="#" method="post" class="p-0">
-        <div class="col-md-8 float-left">
-            <a href="/stock/create/{{$stocks[0]->branch_code}}">
-                <button class="btn btn-primary rounded-0">Add Product <i class="fa fa-plus"></i></button>
-            </a>
-            <button id="btnGroupDrop1" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Action
-            </button>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <a class="dropdown-item"><i class="fa fa-print"></i> Print</a>
-                <a class="dropdown-item" target="_blank" href="/stock/excel/{{$stocks[0]->branch_code}}">
-                    <i class="fa fa-file-excel-o"> Export Excel</i>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-4 float-left">
+
+    <div class="col-md-8 btn-group float-left">
+        <a href="/stock/create/{{Auth::user()->branch_code}}">
+            <button class="btn btn-primary rounded-0">Add Product <i class="fa fa-plus"></i></button>
+        </a>
+        <a href="/stock/excel/{{Auth::user()->branch_code}}">
+            <button class="btn btn-success rounded-0">Export <i class="fa fa-file-excel-o"></i></button>
+        </a>
+    </div>
+    <div class="col-md-4 float-left">
+        <form action="#" method="post" class="p-0">
             <div class="input-group col-md-12">
                 <input class="form-control py-2" type="search" value="" placeholder="Search ..." id="searchdata">
                 <span class="input-group-append">
@@ -36,8 +30,9 @@
                     </button>
                 </span>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
+
 </div>
 
 <div class="table-responsive px-1">
