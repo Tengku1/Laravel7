@@ -20,7 +20,7 @@ class StockController extends Controller
     {
         if (Auth::user()->roles[0] == "Master") {
             $data = Branch::paginate(7);
-            return view('Admin.Stock.index', compact('data'));
+            return view('Master.Stock.index', compact('data'));
         } elseif (Auth::user()->roles[0] == "Admin") {
             return redirect()->to("/stock/branch/" . Auth::user()->branch_code);
         } else {
@@ -28,16 +28,17 @@ class StockController extends Controller
         }
     }
 
-    public function Excel($code)
+    public function Excel($data)
     {
-        return Excel::download(new ProductsExport($code), 'Stocks.xlsx');
+        $name = "Stocks " . date("Y-m-d") . ".xlsx";
+        return Excel::download(new ProductsExport($data), $name);
     }
     public function market($id)
     {
         $data = Product::where('products.id', '=', $id)->get();
-        if (Auth::user()->roles[0] == "Master") {
+        if (Auth::user()->roles[0] == "Admin") {
             return view('Admin.Stock.market', compact('data'));
-        } elseif (Auth::user()->roles[0] == "Admin") {
+        } elseif (Auth::user()->roles[0] == "Master") {
             return view('Master.Stock.market', compact('data'));
         } else {
             return abort(404);
@@ -157,9 +158,9 @@ class StockController extends Controller
         }
         $branch = Branch::get();
         $stocks['branch'] = $branch;
-        if (Auth::user()->roles[0] == "Master") {
+        if (Auth::user()->roles[0] == "Admin") {
             return view('Admin.Stock.edit', compact('stocks'));
-        } elseif (Auth::user()->roles[0] == "Admin") {
+        } elseif (Auth::user()->roles[0] == "Master") {
             return view('Master.Stock.edit', compact('stocks'));
         } else {
             return abort(404);
@@ -214,9 +215,9 @@ class StockController extends Controller
                 $product['buy_price'] = 0;
             }
         }
-        if (Auth::user()->roles[0] == "Master") {
+        if (Auth::user()->roles[0] == "Admin") {
             return view('Admin.Stock.show', compact('product'));
-        } elseif (Auth::user()->roles[0] == "Admin") {
+        } elseif (Auth::user()->roles[0] == "Master") {
             return view('Master.Stock.show', compact('product'));
         } else {
             return abort(404);
@@ -265,9 +266,9 @@ class StockController extends Controller
                     ->paginate(7);
             }
         }
-        if (Auth::user()->roles[0] == "Master") {
+        if (Auth::user()->roles[0] == "Admin") {
             return view('Admin.Stock.stock', compact('stocks'));
-        } elseif (Auth::user()->roles[0] == "Admin") {
+        } elseif (Auth::user()->roles[0] == "Master") {
             return view('Master.Stock.stock', compact('stocks'));
         } else {
             return abort(404);
