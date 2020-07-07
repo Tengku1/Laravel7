@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Branch;
 use App\Exports\ProductsExport;
+use App\history_product_monthly;
 use App\history_sell;
 use App\history_sell_product;
 use App\Http\Requests\ProductRequest;
@@ -11,6 +12,7 @@ use App\Product;
 use App\Products_Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
