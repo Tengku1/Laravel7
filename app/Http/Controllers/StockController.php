@@ -35,7 +35,13 @@ class StockController extends Controller
     public function market($id)
     {
         $data = Product::where('products.id', '=', $id)->get();
-        return view("Admin.Stock.market", compact('data'));
+        if (Auth::user()->roles[0] == "Master") {
+            return view('Admin.Stock.market', compact('data'));
+        } elseif (Auth::user()->roles[0] == "Admin") {
+            return view('Master.Stock.market', compact('data'));
+        } else {
+            return abort(404);
+        }
     }
     public function marketex($id)
     {
@@ -125,7 +131,13 @@ class StockController extends Controller
     public function create($code)
     {
         $data['code'] = $code;
-        return view('Admin.Stock.create', compact('data'));
+        if (Auth::user()->roles[0] == "Master") {
+            return view('Admin.Stock.create', compact('data'));
+        } elseif (Auth::user()->roles[0] == "Admin") {
+            return view('Master.Stock.create', compact('data'));
+        } else {
+            return abort(404);
+        }
     }
 
     public function edit($id)
@@ -145,7 +157,13 @@ class StockController extends Controller
         }
         $branch = Branch::get();
         $stocks['branch'] = $branch;
-        return view('Admin.Stock.edit', compact('stocks'));
+        if (Auth::user()->roles[0] == "Master") {
+            return view('Admin.Stock.edit', compact('stocks'));
+        } elseif (Auth::user()->roles[0] == "Admin") {
+            return view('Master.Stock.edit', compact('stocks'));
+        } else {
+            return abort(404);
+        }
     }
 
     public function destroy()
@@ -163,7 +181,7 @@ class StockController extends Controller
                 session()->flash('success', 'The Data Was Deleted');
                 return redirect()->to('/stock/branch/' . request('branch_code'));
             }
-        } else {
+        } elseif (Auth::user()->roles[0] == "Admin") {
             if (count($product)) {
                 session()->flash('success', 'The Data Was Deleted');
                 return redirect()->to('/stock/branch/' . Auth::user()->branch_code);
@@ -172,6 +190,8 @@ class StockController extends Controller
                 session()->flash('success', 'The Data Was Deleted');
                 return redirect()->to('/stock/branch/' . Auth::user()->branch_code);
             }
+        } else {
+            return abort(404);
         }
     }
 
@@ -194,7 +214,13 @@ class StockController extends Controller
                 $product['buy_price'] = 0;
             }
         }
-        return view('Admin.Stock.show', compact('product'));
+        if (Auth::user()->roles[0] == "Master") {
+            return view('Admin.Stock.show', compact('product'));
+        } elseif (Auth::user()->roles[0] == "Admin") {
+            return view('Master.Stock.show', compact('product'));
+        } else {
+            return abort(404);
+        }
     }
 
     public function store($code)
@@ -239,7 +265,13 @@ class StockController extends Controller
                     ->paginate(7);
             }
         }
-        return view('Admin.Stock.stock', compact('stocks'));
+        if (Auth::user()->roles[0] == "Master") {
+            return view('Admin.Stock.stock', compact('stocks'));
+        } elseif (Auth::user()->roles[0] == "Admin") {
+            return view('Master.Stock.stock', compact('stocks'));
+        } else {
+            return abort(404);
+        }
     }
 
     public function update(ProductRequest $request, Product $product)
