@@ -11,7 +11,6 @@
 @if ($stocks->count())
 
 <div class="col-md-12">
-    <form action="#" method="post" class="p-0">
         <div class="col-md-6 float-left">
             <a href="/stock/create/{{$stocks[0]->branch_code}}">
                 <button class="btn btn-primary rounded-0">Add Product <i class="fa fa-plus"></i></button>
@@ -28,7 +27,10 @@
             </div>
         </div>
         <div class="col-md-2 float-left pr-1">
-            <input type="month" name="bday" max="3000-12-31" min="1000-01-01" class="form-control">
+            <form action="/stock/excel/{{$stocks[0]->branch_code}}" method="post" class="p-0">
+                {{ csrf_field() }}
+                <input type="month" name="date" max="3000-12-31" min="2000-01-01" onchange="this.form.submit();" class="form-control">
+            </form>
         </div>
         <div class="col-md-4 float-left">
             <div class="input-group col-md-12">
@@ -40,7 +42,6 @@
                 </span>
             </div>
         </div>
-    </form>
 </div>
 
 <div class="table-responsive px-1">
