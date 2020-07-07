@@ -27,7 +27,9 @@ Route::group(['middleware' => ['auth']], function () {
     // Stock Routes
     Route::get('/stock', 'StockController@index');
     Route::get('/stock/branch/{code}', 'StockController@stock');
+    Route::post('/stock/branch/{code}', 'StockController@stock');
     Route::get('/stock/excel/{code}', 'StockController@Excel');
+    Route::get('/stock/excel/{code}/{date}', 'StockController@Excel');
     Route::get('/stock/create/{code}', 'StockController@create');
     Route::post('/stock/store/{code}', 'StockController@store');
 
