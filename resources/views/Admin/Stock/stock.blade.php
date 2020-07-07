@@ -12,7 +12,7 @@
 
 <div class="col-md-12">
     <form action="#" method="post" class="p-0">
-        <div class="col-md-6 float-left">
+        <div class="col-md-8 float-left">
             <a href="/stock/create/{{$stocks[0]->branch_code}}">
                 <button class="btn btn-primary rounded-0">Add Product <i class="fa fa-plus"></i></button>
             </a>
@@ -26,9 +26,6 @@
                     <i class="fa fa-file-excel-o"> Export Excel</i>
                 </a>
             </div>
-        </div>
-        <div class="col-md-2 float-left pr-1">
-            <input type="month" name="bday" max="3000-12-31" min="1000-01-01" class="form-control">
         </div>
         <div class="col-md-4 float-left">
             <div class="input-group col-md-12">
