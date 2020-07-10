@@ -1,5 +1,5 @@
 {{-- extends --}}
-@extends('Admin.layout.master',['title' => 'Branch - Laravel 7'])
+@extends('Master.layout.master',['title' => 'Branch - Laravel 7'])
 {{-- ======= --}}
 {{-- section --}}
 @section('content')

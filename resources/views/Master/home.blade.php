@@ -1,6 +1,6 @@
 {{-- Extends --}}
 
-@extends('Admin.layout.master')
+@extends('Master.layout.master')
 
 {{-- end Extends --}}
 

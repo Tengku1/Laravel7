@@ -1,6 +1,6 @@
 {{-- extends --}}
 
-@extends('Admin.layout.master',['title' => 'Product - Laravel 7'])
+@extends('Master.layout.master',['title' => 'Product - Laravel 7'])
 
 {{-- ======= --}}
 
@@ -11,47 +11,41 @@
 @if ($stocks->count())
 
 <div class="col-md-12">
-        <div class="col-md-6 float-left">
-            <a href="/stock/create/{{$stocks[0]->branch_code}}">
-                <button class="btn btn-primary rounded-0">Add Product <i class="fa fa-plus"></i></button>
-            </a>
-            <button id="btnGroupDrop1" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                Action
-            </button>
-            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                <a class="dropdown-item"><i class="fa fa-print"></i> Print</a>
-                @if ($stocks[0]->date)
-                    <a class="dropdown-item" target="_blank" href="/stock/excel/{{$stocks[0]->branch_code}}/{{$stocks[0]->date}}">
-                    <i class="fa fa-file-excel-o"> Export Excel</i>
-                </a>
-                @else
-                    <a class="dropdown-item" target="_blank" href="/stock/excel/{{$stocks[0]->branch_code}}">
-                    <i class="fa fa-file-excel-o"> Export Excel</i>
-                </a>
-                @endif
-            </div>
+    <div class="col-md-6 float-left">
+        <a href="/stock/create/{{$stocks[0]->branch_code}}">
+            <button class="btn btn-primary rounded-0">Add Product <i class="fa fa-plus"></i></button>
+        </a>
+        @if ($stocks[0]->date)
+        <a href="/stock/excel/{{$stocks[0]->branch_code}}/{{$stocks[0]->date}}" target="_blank">
+            <button class="btn btn-success rounded-0">Export Excel <i class="fa fa-file-excel-o"></i></button>
+        </a>
+        @else
+        <a href="/stock/excel/{{$stocks[0]->branch_code}}" target="_blank">
+            <button class="btn btn-success rounded-0">Export Excel <i class="fa fa-file-excel-o"></i></button>
+        </a>
+        @endif
+    </div>
+    <div class="col-md-2 float-left pr-1">
+        <form action="/stock/branch/{{$stocks[0]->branch_code}}" method="post" class="p-0">
+            {{ csrf_field() }}
+            <input type="month" name="date" max="3000-12-31" min="2000-01-01" onchange="this.form.submit();"
+                class="form-control">
+        </form>
+    </div>
+    <div class="col-md-4 float-left">
+        <div class="input-group col-md-12">
+            <input class="form-control py-2" type="search" value="" placeholder="Search ..." id="searchdata">
+            <span class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">
+                    <i class="fa fa-search"></i>
+                </button>
+            </span>
         </div>
-        <div class="col-md-2 float-left pr-1">
-            <form action="/stock/branch/{{$stocks[0]->branch_code}}" method="post" class="p-0">
-                {{ csrf_field() }}
-                <input type="month" name="date" max="3000-12-31" min="2000-01-01" onchange="this.form.submit();" class="form-control">
-            </form>
-        </div>
-        <div class="col-md-4 float-left">
-            <div class="input-group col-md-12">
-                <input class="form-control py-2" type="search" value="" placeholder="Search ..." id="searchdata">
-                <span class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </span>
-            </div>
-        </div>
+    </div>
 </div>
 
 <div class="table-responsive px-1">
-    @include('Admin.Stock.table',$stocks)
+    @include('Master.Stock.table',$stocks)
 </div>
 
 <!-- Modal -->

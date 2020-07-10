@@ -98,7 +98,8 @@ class StockController extends Controller
             }
 
 
-            // // history sell product
+            // history sell product
+
             $history_sell = history_sell::get();
             if (count($history_sell)) {
                 history_sell::where('modified_user', '=', Auth::user()->name)->update([
@@ -282,10 +283,10 @@ class StockController extends Controller
                     ->paginate(7);
             }
         }
-        if (Auth::user()->roles[0] == "Admin") {
-            return view('Admin.Stock.stock', compact('stocks'));
-        } elseif (Auth::user()->roles[0] == "Master") {
+        if (Auth::user()->roles[0] == "Master") {
             return view('Master.Stock.stock', compact('stocks'));
+        } elseif (Auth::user()->roles[0] == "Admin") {
+            return view('Admin.Stock.stock', compact('stocks'));
         } else {
             return abort(404);
         }

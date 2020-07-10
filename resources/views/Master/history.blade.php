@@ -1,5 +1,5 @@
 {{-- extends --}}
-@extends('Admin.layout.master',['title' => 'Product - Laravel 7'])
+@extends('Master.layout.master',['title' => 'Product - Laravel 7'])
 {{-- ======= --}}
 {{-- section --}}
 @section('content')
