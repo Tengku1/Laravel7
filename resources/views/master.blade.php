@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css">
     @yield('linkCss')
-    <title>{{$title ?? 'Laravel 7'}}</title>
+    <title>{{$title ?? 'Crux'}}</title>
 </head>
 
 <body>

@@ -4,7 +4,7 @@
         <a href="#"><i class="fa fa-inbox mr-3"></i></a>
         <a href="#"><i class="fa fa-comment-o mr-3"></i></a>
     </div>
-    <div class="col-4 float-left text-center pt-3 headerTitle">
+    <div class="col-4 float-left text-center pt-3">
         <h4><a href="/">Crux</a></h4>
     </div>
     <div class="col-4 float-left text-right pr-4 userheader pt-2">
