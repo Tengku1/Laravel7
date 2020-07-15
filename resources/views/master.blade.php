@@ -13,11 +13,21 @@
 </head>
 
 <body>
-    @include('Master.layout.navbar')
-    <div class="container mb-4 py-4">
-        @include('Master.alert')
-        @yield('content')
-    </div>
+    @if (Auth::user()->roles[0] == "Master")
+        @include('layout.Masternavbar')
+        <div class="container mb-4 py-4">
+            @include('Master.alert')
+            @yield('content')
+        </div>
+    @elseif(Auth::user()->roles[0] == "Admin")
+        @include('layout.Adminnavbar')
+        <div class="container mb-4 py-4">
+            @include('Admin.alert')
+            @yield('content')
+        </div>
+    @else 
+        <p>a</p>
+    @endif
     <script src="{{ asset('js/jquery_3_5_1.min.js')}}" crossorigin="anonymous">
     </script>
     <script src="{{ asset('js/popper.min.js')}}" crossorigin="anonymous">
