@@ -1,9 +1,4 @@
 <header>
-    <div class="col-4 float-left pl-4 pt-3">
-        <a href="#"><i class="fa fa-bell-o mr-3"></i></a>
-        <a href="#"><i class="fa fa-inbox mr-3"></i></a>
-        <a href="#"><i class="fa fa-comment-o mr-3"></i></a>
-    </div>
     <div class="col-4 float-left text-center pt-3">
         <h4><a href="/">Crux</a></h4>
     </div>
@@ -56,16 +51,6 @@
             <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
                 <a href="/history" class="menuitem nav-item nav-link">
                     History Sells <i class="fa fa-shopping-cart"></i>
-                </a>
-            </li>
-            <li class="mx-1{{ request()->is(strstr($url,"gallery")) ? ' active' : '' }}">
-                <a href="#" class="menuitem nav-item nav-link">
-                    Gallery <i class="fa fa-image"></i>
-                </a>
-            </li>
-            <li class="mx-1{{ request()->is(strstr($url,"setting")) ? ' active' : '' }}">
-                <a href="#" class="menuitem nav-item nav-link">
-                    Settings <i class="fa fa-gear"></i>
                 </a>
             </li>
         </div>
