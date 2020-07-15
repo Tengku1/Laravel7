@@ -80,7 +80,6 @@
             </tr>
             @foreach ($data['productThisDay'] as $item)
             <tr>
-                <td>{{$item->id}}</td>
                 <td>{{Str::limit($item->name,20)}}</td>
                 <td>{{$item->sell_price}}</td>
                 <td>{{$item->status}}</td>
@@ -99,7 +98,7 @@
         @endif
         <table class="tableData mt-3 table-hover table table-light">
             <tr>
-                <th scope="col">Product ID</th>
+                <th scope="col">Product Name</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Sell Price</th>
             </tr>

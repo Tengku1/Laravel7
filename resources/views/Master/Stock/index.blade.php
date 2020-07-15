@@ -11,10 +11,6 @@
         <a href="/branch/create">
             <button class="btn btn-primary">Add Data <i class="fa fa-plus"></i></button>
         </a>
-        <button id="btnGroupDrop1" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Action
-        </button>
         <a href="/stock/excel/Branches" target="_blank">
             <button class="btn btn-success rounded-0">Export Excel <i class="fa fa-file-excel-o"></i></button>
         </a>

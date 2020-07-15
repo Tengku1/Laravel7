@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,21 +12,11 @@
 </head>
 
 <body>
-    @if (Auth::user()->roles[0] == "Master")
-        @include('layouts.Masternavbar')
-        <div class="container mb-4 py-4">
-            @include('Master.alert')
-            @yield('content')
-        </div>
-    @elseif(Auth::user()->roles[0] == "Admin")
-        @include('layouts.Adminnavbar')
-        <div class="container mb-4 py-4">
-            @include('Admin.alert')
-            @yield('content')
-        </div>
-    @else 
-        {{abort(404)}}
-    @endif
+    @include('layouts.Navbar')
+    <div class="container mb-4 py-4">
+        @include('layouts.alert')
+        @yield('content')
+    </div>
     <script src="{{ asset('js/jquery_3_5_1.min.js')}}" crossorigin="anonymous">
     </script>
     <script src="{{ asset('js/popper.min.js')}}" crossorigin="anonymous">
