@@ -1,8 +1,6 @@
 <header>
     <div class="col-md-10 float-left text-center pt-3">
         <h4><a href="/">Crux</a></h4>
-    </div>
-    <div class="col-md-1 float-left text-right pr-4 userheader pt-2">
         @guest
         <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
         @if (Route::has('register'))
