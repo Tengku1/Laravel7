@@ -15,11 +15,9 @@
             aria-haspopup="true" aria-expanded="false">
             Action
         </button>
-        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-        <a class="dropdown-item"><i class="fa fa-print"></i> Print</a>
-            <a class="dropdown-item" href="#"><i class="fa fa-file-pdf-o"></i> Export PDF</a>
-            <a class="dropdown-item" href="#"><i class="fa fa-file-excel-o"></i> Export Excel</a>
-        </div>
+        <a href="/stock/excel/Branches" target="_blank">
+            <button class="btn btn-success rounded-0">Export Excel <i class="fa fa-file-excel-o"></i></button>
+        </a>
     </div>
 </div>
 <div class="table-responsive px-1">

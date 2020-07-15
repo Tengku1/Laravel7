@@ -26,7 +26,7 @@
             @yield('content')
         </div>
     @else 
-        <p>a</p>
+        {{abort(404)}}
     @endif
     <script src="{{ asset('js/jquery_3_5_1.min.js')}}" crossorigin="anonymous">
     </script>

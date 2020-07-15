@@ -10,11 +10,11 @@ class BranchController extends Controller
     public function index()
     {
         $data = Branch::paginate(5);
-        return view("Admin.Branch.index", compact("data"));
+        return view("Master.index", compact("data"));
     }
     public function create()
     {
-        return view("Admin.Branch.create");
+        return view("Master.BranchCreate");
     }
     public function store()
     {
@@ -26,7 +26,7 @@ class BranchController extends Controller
     }
     public function edit(Branch $branch)
     {
-        return view("Admin.Branch.edit", compact("branch"));
+        return view("Master.BranchEdit", compact("branch"));
     }
     public function update(Branch $branch)
     {
@@ -37,7 +37,7 @@ class BranchController extends Controller
     }
     public function show(Branch $branch)
     {
-        return view("Admin.Branch.show", compact("branch"));
+        return view("Master.BranchShow", compact("branch"));
     }
     public function destroy(Branch $branch)
     {
