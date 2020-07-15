@@ -1,5 +1,5 @@
 {{-- extends --}}
-@extends('layout.master',['title' => 'Branch - Crux'])
+@extends('layouts.master',['title' => 'Branch - Crux'])
 {{-- ======= --}}
 {{-- section --}}
 @section('content')

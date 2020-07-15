@@ -1,6 +1,6 @@
 {{-- extends --}}
 
-@extends('layout.master',['title' => 'Product - Crux'])
+@extends('layouts.master',['title' => 'Product - Crux'])
 
 {{-- ======= --}}
 
