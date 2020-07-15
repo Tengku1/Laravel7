@@ -1,4 +1,4 @@
-@extends('Admin.layout.master')
+@extends('layout.master')
 
 {{-- Section --}}
 

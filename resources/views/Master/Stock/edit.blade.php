@@ -1,4 +1,4 @@
-@extends('Master.layout.master',['title'=>'Edit - Laravel 7'])
+@extends('layout.master',['title'=>'Edit - Crux'])
 
 @section('content')
 <div class="card">

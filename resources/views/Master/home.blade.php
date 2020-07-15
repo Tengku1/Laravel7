@@ -1,6 +1,6 @@
 {{-- Extends --}}
 
-@extends('Master.layout.master')
+@extends('layout.master')
 
 {{-- end Extends --}}
 

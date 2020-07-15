@@ -1,6 +1,6 @@
 {{-- extends --}}
 
-@extends('Admin.layout.master',['title' => 'Product - Laravel 7'])
+@extends('layout.master',['title' => 'Product - Crux'])
 
 {{-- ======= --}}
 
