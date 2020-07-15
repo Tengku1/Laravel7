@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://joli-chocolatine-82300.herokuapp.com/stock/branch/1'),
 
     'asset_url' => env('ASSET_URL', null),
 
