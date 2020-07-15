@@ -104,7 +104,7 @@
             </tr>
             @foreach ($data['historyThisDay'] as $item)
             <tr>
-                <td>{{$item->branch_code}}</td>
+                <td>{{$item->name}}</td>
                 <td>{{$item->qty}}</td>
                 <td>{{$item->sell_price}}</td>
             </tr>
