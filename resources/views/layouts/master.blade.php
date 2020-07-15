@@ -14,13 +14,13 @@
 
 <body>
     @if (Auth::user()->roles[0] == "Master")
-        @include('Masternavbar')
+        @include('layouts.Masternavbar')
         <div class="container mb-4 py-4">
             @include('Master.alert')
             @yield('content')
         </div>
     @elseif(Auth::user()->roles[0] == "Admin")
-        @include('Adminnavbar')
+        @include('layouts.Adminnavbar')
         <div class="container mb-4 py-4">
             @include('Admin.alert')
             @yield('content')
