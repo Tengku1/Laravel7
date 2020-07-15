@@ -14,7 +14,7 @@ class BranchController extends Controller
     }
     public function create()
     {
-        return view("Master.BranchCreate");
+        return view("Master.Stock.BranchCreate");
     }
     public function store()
     {
@@ -26,7 +26,7 @@ class BranchController extends Controller
     }
     public function edit(Branch $branch)
     {
-        return view("Master.BranchEdit", compact("branch"));
+        return view("Master.Stock.BranchEdit", compact("branch"));
     }
     public function update(Branch $branch)
     {
@@ -37,7 +37,7 @@ class BranchController extends Controller
     }
     public function show(Branch $branch)
     {
-        return view("Master.BranchShow", compact("branch"));
+        return view("Master.Stock.BranchShow", compact("branch"));
     }
     public function destroy(Branch $branch)
     {
