@@ -1,8 +1,9 @@
 <header>
-    <div class="col-md-10 float-left text-center pl-5 -r-0 pt-3">
+    <div class="col-md-8 float-left text-center pt-3"></div>
+    <div class="col-md-8 float-left text-center pt-3">
         <h4><a href="/">Crux</a></h4>
     </div>
-    <div class="col-md-1 float-left text-right pr-4 pt-2">
+    <div class="col-md-2 float-left text-right pr-4 pt-2">
         @guest
         <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
         @if (Route::has('register'))
@@ -44,7 +45,7 @@
                     Dashboard <i class="fa fa-dashboard"></i>
                 </a>
             </li>
-            @if (request()->is(strstr($url,"stock")) || request()->is(strstr($url,"branch")))
+            @if (Request::path() == '/stock' || Request::path() == '/branch')
             <li class="mx-1">
                 <a href="/branch" class="menuitem nav-item nav-link">
                     Branch <i class="fa fa-dropbox"></i>
