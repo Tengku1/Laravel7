@@ -36,10 +36,6 @@ $i = 1;
                             <button class="btn rounded-0 btn-sm btn-secondary" title="Edit"><i
                                     class="fa fa-pencil-square-o"></i></button>
                         </a>
-                        <a href="/stock/{{$stock->product_id}}/market">
-                            <button class="btn rounded-0 btn-sm btn-success" title="Market"><i
-                                    class="fa fa-shopping-basket"></i></button>
-                        </a>
                         <button type="submit" class="btn rounded-0 btn-sm btn-danger deleteProduct" data-toggle="modal"
                             data-target="#deleteProduct" data-productid="{{$stock->id}}" title="Delete">
                             <i class="fa fa-trash"></i>

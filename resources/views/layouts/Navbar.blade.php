@@ -54,6 +54,16 @@
                     History Sells <i class="fa fa-shopping-cart"></i>
                 </a>
             </li>
+            <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
+                <a href="/addProduct" class="menuitem nav-item nav-link">
+                    Add Product <i class="fa fa-product-hunt"></i>
+                </a>
+            </li>
+            <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
+                <a href="/market" class="menuitem nav-item nav-link">
+                    Market <i class="fa fa-shopping-cart"></i>
+                </a>
+            </li>
         </div>
         @elseif(Auth::user()->roles[0] == "Admin")
         <div class="navbar-nav">
