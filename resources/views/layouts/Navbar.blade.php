@@ -44,11 +44,19 @@
                     Dashboard <i class="fa fa-dashboard"></i>
                 </a>
             </li>
-            <li class="mx-1{{  if(request()->is(strstr($url,"stock")) || request()->is(strstr($url,"branch"))) {" active"} else {""} }}">
+            @if (request()->is(strstr($url,"stock")) || request()->is(strstr($url,"branch")))
+            <li class="mx-1">
                 <a href="/branch" class="menuitem nav-item nav-link">
                     Branch <i class="fa fa-dropbox"></i>
                 </a>
             </li>
+            @else
+            <li class="mx-1">
+                <a href="/branch" class="menuitem nav-item nav-link">
+                    Branch <i class="fa fa-dropbox"></i>
+                </a>
+            </li>
+            @endif
             <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
                 <a href="/history" class="menuitem nav-item nav-link">
                     History Sells <i class="fa fa-shopping-cart"></i>
