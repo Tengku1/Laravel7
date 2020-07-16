@@ -13,8 +13,7 @@
             <div class="form-group row">
                 <div class="col-md-6 px-1">
                     <label for="name" class="font-weight-bold">Product Name</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Product Name ..."
-                        value="{{ old('title') ?? $stocks['name']}}">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Product Name ..." value="{{ old('title') ?? $stocks['name']}}" required>
                     @error('name')
                     <span class="text-danger">{{$message}}</span>
                     @enderror
@@ -33,7 +32,7 @@
                 <div class="col-md-6 px-1">
                     <label for="sell_price" class="font-weight-bold">Sell Price</label>
                     <input type="text" class="form-control" name="sell_price" id="sell_price"
-                        placeholder="Product Name ..." value="{{ old('sell_price') ?? $stocks['sell_price']}}">
+                        placeholder="Product Name ..." value="{{ old('sell_price') ?? $stocks['sell_price']}}" required>
                     @error('sell_price')
                     <span class="text-danger">{{$message}}</span>
                     @enderror
@@ -41,7 +40,7 @@
                 <div class="col-md-6 px-1">
                     <label for="buyprice" class="font-weight-bold">Buy Price</label>
                     <input type="text" class="form-control" name="buyprice" id="buyprice" placeholder="Product Name ..."
-                        value="{{ old('buy_price') ?? $stocks['buy_price']}}">
+                        value="{{ old('buy_price') ?? $stocks['buy_price']}}" required>
                     @error('buyprice')
                     <span class="text-danger">{{$message}}</span>
                     @enderror

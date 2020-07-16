@@ -22,7 +22,7 @@
                     <td>Product Name</td>
                     <td>:</td>
                     <td>
-                        <select name="ProductName" id="" class="form-control">
+                        <select name="ProductName" id="" class="form-control" required>
                             <option value="">Select Product ---</option>
                             @foreach ($data['product'] as $product)
                             <option value="{{$product->name}}">{{$product->name}}</option>
@@ -34,13 +34,13 @@
                 <tr>
                     <td>Buy Quantity</td>
                     <td>:</td>
-                    <td><input type="text" name="buyqty" placeholder="How many ?" class="form-control"></td>
+                    <td><input type="text" name="buyqty" placeholder="How many ?" class="form-control" required></td>
                 </tr>
                 @else
                 <tr>
                     <td>Sell Quantity</td>
                     <td>:</td>
-                    <td><input type="text" name="sellqty" placeholder="How many ?" class="form-control"></td>
+                    <td><input type="text" name="sellqty" placeholder="How many ?" class="form-control" required></td>
                 </tr>
                 @endif
             </table>
