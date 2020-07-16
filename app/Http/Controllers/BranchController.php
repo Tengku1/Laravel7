@@ -20,6 +20,7 @@ class BranchController extends Controller
     {
         $attr = request()->all();
         $attr['address_name'] = request()->address;
+        $attr['status'] = 'active';
         Branch::create($attr);
         session()->flash('success', 'The Data Was Added');
         return redirect()->to("/branch");
