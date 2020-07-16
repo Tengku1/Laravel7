@@ -1,9 +1,9 @@
 <header>
-    <div class="col-md-2 float-left text-center pt-3"></div>
-    <div class="col-md-8 float-left text-center pt-3">
+    <div class="col-2 float-left text-center pt-3"></div>
+    <div class="col-8 float-left text-center pt-3">
         <h4><a href="/">Crux</a></h4>
     </div>
-    <div class="col-md-2 float-left text-right pr-4 pt-2">
+    <div class="col-2 float-left text-right pr-4 pt-2">
         @guest
         <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
         @if (Route::has('register'))
@@ -65,12 +65,7 @@
                     History Sells <i class="fa fa-shopping-cart"></i>
                 </a>
             </li>
-            <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
-                <a href="/addProduct" class="menuitem nav-item nav-link">
-                    Add Product <i class="fa fa-product-hunt"></i>
-                </a>
-            </li>
-            <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
+            <li class="mx-1{{ request()->is(strstr($url,"market")) ? ' active' : '' }}">
                 <a href="/market" class="menuitem nav-item nav-link">
                     Market <i class="fa fa-shopping-cart"></i>
                 </a>

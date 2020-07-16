@@ -12,9 +12,6 @@
 
 <div class="col-md-12">
     <div class="col-md-6 float-left">
-        {{-- <a href="/stock/create/{{$stocks[0]->branch_code}}">
-            <button class="btn btn-primary rounded-0">Add Product <i class="fa fa-plus"></i></button>
-        </a> --}}
         @if ($stocks[0]->date)
         <a href="/stock/excel/{{$stocks[0]->branch_code}}/{{$stocks[0]->date}}" target="_blank">
             <button class="btn btn-success rounded-0">Export Excel <i class="fa fa-file-excel-o"></i></button>
