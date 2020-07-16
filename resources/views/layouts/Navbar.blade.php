@@ -45,8 +45,9 @@
                     Dashboard <i class="fa fa-dashboard"></i>
                 </a>
             </li>
+            
             @if (Request::path() == '/stock' || Request::path() == '/branch')
-            <li class="mx-1">
+            <li class="mx-1 active">
                 <a href="/branch" class="menuitem nav-item nav-link">
                     Branch <i class="fa fa-dropbox"></i>
                 </a>
@@ -58,6 +59,7 @@
                 </a>
             </li>
             @endif
+
             <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
                 <a href="/history" class="menuitem nav-item nav-link">
                     History Sells <i class="fa fa-shopping-cart"></i>
