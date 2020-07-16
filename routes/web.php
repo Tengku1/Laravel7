@@ -25,7 +25,9 @@ Route::group(['middleware' => ['auth']], function () {
     // End Home
 
     // Stock Routes
-    Route::get('/stock', 'StockController@index');
+    // Route::get('/stock', 'StockController@index');
+
+    Route::get('/branch', 'StockController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::get('/stock/branch/{code}', 'StockController@stock');
     Route::post('/stock/branch/{code}', 'StockController@stock');
     Route::get('/stock/excel/{code}', 'StockController@Excel');
@@ -42,7 +44,8 @@ Route::group(['middleware' => ['auth']], function () {
     // End Stock
 
     // Branch Routes
-    Route::get('/branch', 'BranchController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+    // Route::get('/branch', 'BranchController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+
     Route::get('/branch/create', 'BranchController@create')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::post('/branch/store', 'BranchController@store')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::get('/branch/{branch:code}', 'BranchController@show')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);

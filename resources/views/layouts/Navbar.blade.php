@@ -1,6 +1,6 @@
 <header>
-    <div class="col-md-10 float-left text-center pt-3">
-        <h4 class="ml-5"><a href="/">Crux</a></h4>
+    <div class="col-md-10 float-left text-center pl-5 -r-0 pt-3">
+        <h4><a href="/">Crux</a></h4>
     </div>
     <div class="col-md-1 float-left text-right pr-4 pt-2">
         @guest
@@ -44,8 +44,8 @@
                     Dashboard <i class="fa fa-dashboard"></i>
                 </a>
             </li>
-            <li class="mx-1{{ request()->is(strstr($url,"stock")) ? ' active' : '' }}">
-                <a href="/stock" class="menuitem nav-item nav-link">
+            <li class="mx-1{{  if(request()->is(strstr($url,"stock")) || request()->is(strstr($url,"branch"))) {" active"} else {""} }}">
+                <a href="/branch" class="menuitem nav-item nav-link">
                     Branch <i class="fa fa-dropbox"></i>
                 </a>
             </li>
