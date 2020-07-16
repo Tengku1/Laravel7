@@ -151,6 +151,23 @@ class StockController extends Controller
         }
     }
 
+    public function search($branch)
+    {
+        $by = request()->all();
+        foreach ($by as $value) {
+            $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
+                ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
+                ->select("products.*", "products_stock.qty", 'products_stock.id', 'branch_code', "products_stock.product_id", "products_stock.buy_price", "branch.name as Branch_name")
+                ->where('products.name', 'like', '%' . $value . '%')
+                ->orWhere('products.sell_price', 'like', '%' . $value . '%')
+                ->orWhere('products_stock.buy_price', 'like', '%' . $value . '%')
+                ->orderBy('products_stock.qty')
+                ->paginate(7);
+        }
+        $arr['branch'] = $branch;
+        return view('Master.Stock.stock', compact('stocks', 'arr'));
+    }
+
     public function create($code)
     {
         $data['code'] = $code;

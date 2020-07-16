@@ -25,18 +25,19 @@
     <div class="col-md-2 float-left pr-1">
         <form action="/stock/branch/{{$stocks[0]->branch_code}}" method="post" class="p-0">
             {{ csrf_field() }}
-            <input type="month" placeholder="Year-Month" name="date" max="3000-12-31" min="2000-01-01" onchange="this.form.submit();" class="form-control">
+            <input type="month" placeholder="Year-Month" name="date" max="3000-12-31" min="2000-01-01"
+                onchange="this.form.submit();" class="form-control">
         </form>
     </div>
     <div class="col-md-4 float-left">
-        <div class="input-group col-md-12">
-            <input class="form-control py-2" type="search" value="" placeholder="Search ..." id="searchdata">
+        <form action="/stock/branch/search/{{$stocks[0]->branch_code}}" method="get" class="px-0 py-0 col-md-12 input-group">
+            <input class="form-control py-2 float-left" type="search" value="" placeholder="Search ..." id="searchdata" name="by">
             <span class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button">
+                <button class="btn btn-outline-secondary" type="submit">
                     <i class="fa fa-search"></i>
                 </button>
             </span>
-        </div>
+        </form>
     </div>
 </div>
 

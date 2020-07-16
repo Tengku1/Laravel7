@@ -14,9 +14,9 @@
         <a href="/branch/create">
             <button class="btn btn-primary">Add Data <i class="fa fa-plus"></i></button>
         </a>
-        <a href="/stock/excel/Branches" target="_blank">
+        {{-- <a href="/stock/excel/Branches" target="_blank">
             <button class="btn btn-success rounded-0">Export Excel <i class="fa fa-file-excel-o"></i></button>
-        </a>
+        </a> --}}
     </div>
 </div>
 <div class="table-responsive px-1">

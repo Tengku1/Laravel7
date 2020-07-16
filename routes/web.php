@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/branch', 'StockController@index');
     Route::get('/stock/branch/{code}', 'StockController@stock');
     Route::post('/stock/branch/{code}', 'StockController@stock');
+    Route::get('/stock/branch/search/{code}', 'StockController@search');
     Route::get('/stock/excel/{code}', 'StockController@Excel');
     Route::get('/stock/excel/{code}/{date}', 'StockController@Excel');
     Route::get('/stock/create/{code}', 'StockController@create');
