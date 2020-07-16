@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request\BranchRequest;
 
 class BranchController extends Controller
 {

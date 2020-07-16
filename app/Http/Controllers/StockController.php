@@ -7,7 +7,6 @@ use App\Exports\ProductsExport;
 use App\history_product_monthly;
 use App\history_sell;
 use App\history_sell_product;
-use App\Http\Requests\ProductRequest;
 use App\Product;
 use App\Products_Stock;
 use Illuminate\Http\Request;
@@ -329,9 +328,9 @@ class StockController extends Controller
         }
     }
 
-    public function update(ProductRequest $request, Product $product)
+    public function update(Product $product)
     {
-        $attr = $request->all();
+        $attr = request()->all();
         if (request()->qty > 0) {
             $attr['status'] = "in_stock";
         } else {
