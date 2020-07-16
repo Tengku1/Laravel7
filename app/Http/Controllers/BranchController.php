@@ -41,8 +41,7 @@ class BranchController extends Controller
     }
     public function destroy(Branch $branch)
     {
-        $branch->delete();
-        session()->flash('success', 'The Data Was Deleted');
+        Branch::where('code', '=', $branch['code'])->update(['status' => 'inactive']);
         return redirect()->to('/branch');
     }
 }

@@ -12,21 +12,12 @@
 <h4 class="text-info mb-3">Dashboard <i class="fa fa-dashboard"></i></h4>
 <div class="col-md-12">
     @if (Auth::user()->roles[0]=="Master")
-        <div class="col-4 dashboardDatabase float-left px-1">
+    <div class="col-4 dashboardDatabase float-left px-1">
         <div class="card col-md-12 dashboardUser">
             <div class="card-header">Users</div>
             <div class="card-body text-center">
                 {{$data['User']->count()}}
                 <i class="fa fa-user"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-4 dashboardDatabase float-left px-1 ">
-        <div class="card col-md-12 dashboardProduct">
-            <div class="card-header">Products</div>
-            <div class="card-body text-center">
-                {{$data['Stock']->count()}}
-                <i class="fa fa-shopping-cart"></i>
             </div>
         </div>
     </div>
@@ -36,6 +27,15 @@
             <div class="card-body text-center">
                 {{$data['Branch']->count()}}
                 <i class="fa fa-code-fork"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-4 dashboardDatabase float-left px-1 ">
+        <div class="card col-md-12 dashboardProduct">
+            <div class="card-header">Products</div>
+            <div class="card-body text-center">
+                {{$data['Stock']->count()}}
+                <i class="fa fa-shopping-cart"></i>
             </div>
         </div>
     </div>
@@ -72,7 +72,6 @@
         @endif
         <table class="tableData mt-3 table-hover table table-light">
             <tr>
-                <th scope="col">ID</th>
                 <th scope="col">Name</th>
                 <th scope="col">Sell Price</th>
                 <th scope="col">Status</th>

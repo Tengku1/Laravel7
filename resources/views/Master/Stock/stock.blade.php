@@ -25,8 +25,7 @@
     <div class="col-md-2 float-left pr-1">
         <form action="/stock/branch/{{$stocks[0]->branch_code}}" method="post" class="p-0">
             {{ csrf_field() }}
-            <input type="month" name="date" max="3000-12-31" min="2000-01-01" onchange="this.form.submit();"
-                class="form-control">
+            <input type="month" placeholder="Year-Month" name="date" max="3000-12-31" min="2000-01-01" onchange="this.form.submit();" class="form-control">
         </form>
     </div>
     <div class="col-md-4 float-left">
@@ -84,7 +83,7 @@
 {{-- EndPagination --}}
 
 @else
-<a href="/product/create">
+<a href="/stock/create/{{$arr['branch']}}">
     <div class="col-md-12">
         <button class="btn btn-primary">Add Data <i class="fa fa-plus"></i></button>
     </div>

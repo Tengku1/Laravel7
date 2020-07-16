@@ -35,7 +35,6 @@
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        @if (Auth::user()->roles[0] == "Master")
         <div class="navbar-nav">
             @php
             $url = request()->url();
@@ -45,19 +44,35 @@
                     Dashboard <i class="fa fa-dashboard"></i>
                 </a>
             </li>
-            
+
+            @if (Auth::user()->roles[0] == "Master")
+                @if (request()->is(strstr($url,"branch")) || request()->is(strstr($url,"stock")))
+                <li class="mx-1 active">
+                    <a href="/branch" class="menuitem nav-item nav-link">
+                        Branch <i class="fa fa-dropbox"></i>
+                    </a>
+                </li>
+                @else
+                <li class="mx-1">
+                    <a href="/branch" class="menuitem nav-item nav-link">
+                        Branch <i class="fa fa-dropbox"></i>
+                    </a>
+                </li>
+                @endif
+            @else
             @if (request()->is(strstr($url,"branch")) || request()->is(strstr($url,"stock")))
             <li class="mx-1 active">
                 <a href="/branch" class="menuitem nav-item nav-link">
-                    Branch <i class="fa fa-dropbox"></i>
+                    Stock <i class="fa fa-dropbox"></i>
                 </a>
             </li>
             @else
             <li class="mx-1">
                 <a href="/branch" class="menuitem nav-item nav-link">
-                    Branch <i class="fa fa-dropbox"></i>
+                    Stock <i class="fa fa-dropbox"></i>
                 </a>
             </li>
+            @endif
             @endif
 
             <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
@@ -71,29 +86,5 @@
                 </a>
             </li>
         </div>
-        @elseif(Auth::user()->roles[0] == "Admin")
-        <div class="navbar-nav">
-            @php
-            $url = request()->url();
-            @endphp
-            <li class="mx-1{{ Request::path() == '/' ? ' active' : '' }}">
-                <a href="/" class="menuitem nav-item nav-link">
-                    Dashboard <i class="fa fa-dashboard"></i>
-                </a>
-            </li>
-            <li class="mx-1{{ request()->is(strstr($url,"stock")) ? ' active' : '' }}">
-                <a href="/stock" class="menuitem nav-item nav-link">
-                    Stock <i class="fa fa-dropbox"></i>
-                </a>
-            </li>
-            <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
-                <a href="/history" class="menuitem nav-item nav-link">
-                    History Sells <i class="fa fa-shopping-cart"></i>
-                </a>
-            </li>
-        </div>
-        @else
-        {{abort(404)}}
-        @endif
     </div>
 </nav>

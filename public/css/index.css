@@ -132,7 +132,7 @@ header {
     height: 60px;
     width: 100%;
     color: white;
-    background-color: #5dbcd2;
+    background-color: #0d768d;
 }
 
 header a,
@@ -167,6 +167,45 @@ header div:first-of-type {
 /* ============================================= */
 
 /* ==================== M ====================== */
+
+.market .card {
+    height: 230px;
+    font-weight: bolder;
+}
+
+.market .card-body {
+    padding: 35px 0 0;
+}
+
+.market a {
+    color: white;
+}
+
+.market:first-of-type .card {
+    background-color: rgb(0, 182, 106);
+    color: white;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.market:first-of-type .card:hover {
+    background-color: rgb(0, 160, 93);
+    color: white;
+}
+
+.market:last-of-type .card {
+    background-color: rgb(1, 218, 182);
+    color: white;
+    transition: background-color 0.1s ease-in-out;
+}
+
+.market:last-of-type .card:hover {
+    background-color: rgb(0, 190, 159);
+    color: white;
+}
+
+.market i {
+    font-size: 55px;
+}
 
 /* ============================================= */
 

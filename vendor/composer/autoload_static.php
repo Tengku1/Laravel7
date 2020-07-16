@@ -604,14 +604,13 @@ class ComposerStaticInitdfd6b17116da4a05adc1f35575c7e2b0
 
     public static $classMap = array (
         'App\\Branch' => __DIR__ . '/../..' . '/app/Branch.php',
+        'App\\Console\\Commands\\MoveToMonthly' => __DIR__ . '/../..' . '/app/Console/Commands/MoveToMonthly.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Exports\\ProductsExport' => __DIR__ . '/../..' . '/app/Exports/ProductsExport.php',
         'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
-        'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
         'App\\Http\\Controllers\\Auth\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisterController.php',
-        'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
         'App\\Http\\Controllers\\BranchController' => __DIR__ . '/../..' . '/app/Http/Controllers/BranchController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
@@ -639,6 +638,7 @@ class ComposerStaticInitdfd6b17116da4a05adc1f35575c7e2b0
         'App\\Role\\RoleChecker' => __DIR__ . '/../..' . '/app/Role/RoleChecker.php',
         'App\\Role\\UserRole' => __DIR__ . '/../..' . '/app/Role/UserRole.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
+        'App\\history_product_monthly' => __DIR__ . '/../..' . '/app/history_product_monthly.php',
         'App\\history_sell' => __DIR__ . '/../..' . '/app/history_sell.php',
         'App\\history_sell_product' => __DIR__ . '/../..' . '/app/history_sell_product.php',
         'Asm89\\Stack\\Cors' => __DIR__ . '/..' . '/asm89/stack-cors/src/Cors.php',

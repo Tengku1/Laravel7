@@ -35,20 +35,26 @@ class StockController extends Controller
         $name = "Stocks " . date("Y-m-d") . ".xlsx";
         return Excel::download(new ProductsExport($code, $date), $name);
     }
-    public function market($id)
+    public function market()
     {
-        $data = Product::where('products.id', '=', $id)->get();
-        if (Auth::user()->roles[0] == "Admin") {
-            return view('Admin.Stock.market', compact('data'));
-        } elseif (Auth::user()->roles[0] == "Master") {
-            return view('Master.Stock.market', compact('data'));
-        } else {
-            return abort(404);
-        }
+        return view('layouts.market');
+    }
+    public function buy()
+    {
+        $data['product'] = Product::join('products_stock', 'products.id', '=', 'products_stock.product_id')->get();
+        $data['branch'] = Branch::get();
+        return view('layouts.buyAndSells', compact('data'));
+    }
+    public function sell()
+    {
+        $data['product'] = Product::join('products_stock', 'products.id', '=', 'products_stock.product_id')->get();
+        $data['branch'] = Branch::get();
+        return view('layouts.buyAndSells', compact('data'));
     }
     public function marketex($id)
     {
         $attr = request()->all();
+        dd($attr);
         if ($attr['sellqty'] == null && $attr['buyqty'] == null) {
             return redirect()->to('/stock');
         } elseif ($attr['sellqty'] == null) {
@@ -152,13 +158,12 @@ class StockController extends Controller
             $stocks['name'] = $value->name;
             $stocks['sell_price'] = $value->sell_price;
             $stocks['qty'] = $value->qty;
+            $stocks['branch_code'] = $value->branch_code;
             $stocks['buy_price'] = $value->buy_price;
             if (!$stocks['buy_price']) {
                 $product['buy_price'] = 0;
             }
         }
-        $branch = Branch::get();
-        $stocks['branch'] = $branch;
         if (Auth::user()->roles[0] == "Admin") {
             return view('Admin.Stock.edit', compact('stocks'));
         } elseif (Auth::user()->roles[0] == "Master") {
@@ -238,7 +243,7 @@ class StockController extends Controller
         $prd['branch_code'] = $code;
         Products_Stock::create($prd);
         session()->flash('success', 'The Data Was Added');
-        return redirect()->to('/stock');
+        return redirect()->to('/branch');
     }
 
     public function stock($branch = null)
@@ -251,7 +256,8 @@ class StockController extends Controller
                 ->where('users.branch_code', "=", $id)
                 ->orderBy('products_stock.id')
                 ->paginate(7);
-        } else {
+            return view('Admin.Stock.stock', compact('stocks'));
+        } elseif (Auth::user()->roles[0] == "Master") {
             if (request()->date) {
                 $date = request()->date;
                 $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
@@ -282,11 +288,8 @@ class StockController extends Controller
                     ->orderBy('products_stock.id')
                     ->paginate(7);
             }
-        }
-        if (Auth::user()->roles[0] == "Master") {
-            return view('Master.Stock.stock', compact('stocks'));
-        } elseif (Auth::user()->roles[0] == "Admin") {
-            return view('Admin.Stock.stock', compact('stocks'));
+            $arr['branch'] = $branch;
+            return view('Master.Stock.stock', compact('stocks', 'arr'));
         } else {
             return abort(404);
         }
@@ -316,6 +319,6 @@ class StockController extends Controller
 
         $product->update($attr);
         session()->flash('success', 'The Data Was Updated');
-        return redirect()->to('/stock');
+        return back();
     }
 }

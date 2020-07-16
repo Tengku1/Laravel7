@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        Add Data
+        Update Data
     </div>
     <div class="card-body">
         <form action="/stock/{{$stocks['id']}}/update" method="post">
@@ -22,9 +22,7 @@
                 <div class="col-md-6 px-1">
                     <label for="code">Branch Code</label>
                     <select name="code" id="code" class="custom-select">
-                        @foreach ($stocks['branch'] as $item)
-                        <option value="{{$item['code']}}">{{strval($item['name'])}}</option>
-                        @endforeach
+                        <option value="{{$stocks['branch_code']}}">{{$stocks['branch_code']}}</option>
                     </select>
                     @error('code')
                     <span class="text-danger">{{$message}}</span>

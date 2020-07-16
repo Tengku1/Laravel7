@@ -27,7 +27,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Stock Routes
     // Route::get('/stock', 'StockController@index');
 
-    Route::get('/branch', 'StockController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+    Route::get('/branch', 'StockController@index');
     Route::get('/stock/branch/{code}', 'StockController@stock');
     Route::post('/stock/branch/{code}', 'StockController@stock');
     Route::get('/stock/excel/{code}', 'StockController@Excel');
@@ -40,11 +40,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/stock/{product:id}/edit', 'StockController@edit');
     Route::patch('/stock/{product:id}/update', 'StockController@update');
     Route::get('/stock/{product:id}/market', 'StockController@market');
-    Route::patch('/stock/{product:id}/marketex', 'StockController@marketex');
     // End Stock
 
-    // Branch Routes
-    // Route::get('/branch', 'BranchController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+    // Market
+    Route::get('/market', 'StockController@market');
+    Route::get('/market/buy', 'StockController@buy');
+    Route::get('/market/sell', 'StockController@sell');
+    Route::patch('/market/marketex', 'StockController@marketex');
+    // End Market
 
     Route::get('/branch/create', 'BranchController@create')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::post('/branch/store', 'BranchController@store')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);

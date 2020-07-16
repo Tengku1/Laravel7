@@ -7,14 +7,13 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Branch' => $baseDir . '/app/Branch.php',
+    'App\\Console\\Commands\\MoveToMonthly' => $baseDir . '/app/Console/Commands/MoveToMonthly.php',
     'App\\Console\\Kernel' => $baseDir . '/app/Console/Kernel.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Exports\\ProductsExport' => $baseDir . '/app/Exports/ProductsExport.php',
     'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
-    'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
     'App\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',
     'App\\Http\\Controllers\\Auth\\RegisterController' => $baseDir . '/app/Http/Controllers/Auth/RegisterController.php',
-    'App\\Http\\Controllers\\Auth\\ResetPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ResetPasswordController.php',
     'App\\Http\\Controllers\\Auth\\VerificationController' => $baseDir . '/app/Http/Controllers/Auth/VerificationController.php',
     'App\\Http\\Controllers\\BranchController' => $baseDir . '/app/Http/Controllers/BranchController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
@@ -42,6 +41,7 @@ return array(
     'App\\Role\\RoleChecker' => $baseDir . '/app/Role/RoleChecker.php',
     'App\\Role\\UserRole' => $baseDir . '/app/Role/UserRole.php',
     'App\\User' => $baseDir . '/app/User.php',
+    'App\\history_product_monthly' => $baseDir . '/app/history_product_monthly.php',
     'App\\history_sell' => $baseDir . '/app/history_sell.php',
     'App\\history_sell_product' => $baseDir . '/app/history_sell_product.php',
     'Asm89\\Stack\\Cors' => $vendorDir . '/asm89/stack-cors/src/Cors.php',

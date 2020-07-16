@@ -3,6 +3,9 @@
 {{-- ======= --}}
 {{-- section --}}
 @section('content')
+@php
+    $no = 1;
+@endphp
 <h4 class="text-info mb-3">Branch <i class="fa fa-code-fork"></i></h4>
 
 @if ($data->count())
@@ -19,23 +22,25 @@
 <div class="table-responsive px-1">
     <table class="mt-3 tableData table-hover table table-light">
         <tr>
-            <th scope="col">Code</th>
+            <th scope="col">No</th>
             <th scope="col">Name</th>
             <th scope="col">Address</th>
+            <th scope="col">Status</th>
             <th scope="col" colspan="2">Action</th>
         </tr>
         @foreach ($data as $values)
         <tr>
-            <td scope="col">{{$values->code}}</td>
+            <td scope="col">{{$no++}}</td>
             <td scope="col">{{Str::limit($values->name,20)}}</td>
             <td scope="col">{{Str::limit($values->address_name,20)}}</td>
+            <td scope="col">{{$values->status}}</td>
             <td>
                 <div class="btn-group">
                     <a href="/stock/branch/{{$values->code}}">
                         <button class="btn rounded-0 btn-sm btn-info" title="Show Info"><i
                                 class="fa fa-eye"></i></button>
                     </a>
-                    <a href="/stock/{{$values->code}}/edit">
+                    <a href="/branch/{{$values->code}}/edit">
                         <button class="btn rounded-0 btn-sm btn-secondary" title="Edit"><i
                                 class="fa fa-pencil-square-o"></i></button>
                     </a>
