@@ -10,7 +10,6 @@ $i = 1;
         <th scope="col">Sell Price </th>
         <th scope="col">Buy Price </th>
         <th scope="col">Quantity </th>
-        <th scope="col">Created At </th>
         <th scope="col" colspan="2">Action</th>
     </tr>
     @foreach ($stocks as $stock)
@@ -25,7 +24,6 @@ $i = 1;
                 <td scope="col">{{$stock->sell_price}}</td>
                 <td scope="col">{{$stock->buy_price}}</td>
                 <td scope="col">{{$stock->qty}}</td>
-                <td scope="col">{{date_format($stock->created_at,'Y-M-d H-i-s')}}</td>
                 <td>
                     <div class="btn-group border border-white">
                         <a href="/stock/{{$stock->slug}}">
