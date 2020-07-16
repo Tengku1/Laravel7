@@ -11,7 +11,7 @@
             <div class="form-group row">
                 <div class="col-md-12">
                     <label for="name" class="font-weight-bold">Name</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Branch Name ...">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Branch Name ..." required>
                     @error('name')
                     <span class="text-danger">{{$message}}</span>
                     @enderror
@@ -20,7 +20,7 @@
             <div class="form-group row">
                 <div class="col-md-12">
                     <label for="address" class="font-weight-bold">Address</label>
-                    <textarea name="address" class="form-control" id="address" cols="30" rows="10" placeholder="Address ..."></textarea>
+                    <textarea name="address" class="form-control" id="address" cols="30" rows="10" placeholder="Address ..." required></textarea>
                     @error('address')
                     <span class="text-danger">{{$message}}</span>
                     @enderror
