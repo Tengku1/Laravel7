@@ -75,11 +75,12 @@
                     <form action="/branch/{{$values->code}}/delete" method="post" class="px-0 py-0">
                         @csrf
                         @method("delete")
-                        <button type="submit" class="btn rounded-0 btn-sm btn-link" title="Delete">Yes</button>
+                        <button type="submit" class="btn rounded-0 btn-sm btn-danger" title="Delete">Yes</button>
                     </form>
-                    <button type="button" class="btn rounded-0 btn-sm btn-link" data-dismiss="modal">
+                    <button type="button" class="btn rounded-0 btn-sm" data-dismiss="modal">
                         <span aria-hidden="true">No</span>
                     </button>
+                    
                 </div>
             </div>
         </div>

@@ -45,7 +45,7 @@
                 @endif
             </table>
             <div class="col-md-12 btn-group mt-3">
-                <button type="submit" class="btn btn-primary">Buy <i class="fa fa-money"></i></button>
+                <button type="submit" class="btn btn-primary">Buy Or Sell <i class="fa fa-money"></i></button>
                 <button type="reset" class="btn btn-danger">Clear <i class="fa fa-trash"></i></button>
                 <a href="{{URL::previous()}}">
                     <button type="button" class="btn btn-primary rounded-0">Back</button>

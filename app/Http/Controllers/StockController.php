@@ -41,46 +41,56 @@ class StockController extends Controller
     }
     public function buy()
     {
-        $data['product'] = Product::join('products_stock', 'products.id', '=', 'products_stock.product_id')->get();
-        $data['branch'] = Branch::get();
+        $data['product'] = Product::get();
         return view('layouts.buyAndSells', compact('data'));
     }
     public function sell()
     {
-        $data['product'] = Product::join('products_stock', 'products.id', '=', 'products_stock.product_id')->get();
-        $data['branch'] = Branch::get();
+        $data['product'] = Product::get();
         return view('layouts.buyAndSells', compact('data'));
     }
-    public function marketex($id)
+    public function marketex()
     {
         $attr = request()->all();
-        dd($attr);
-        if ($attr['sellqty'] == null && $attr['buyqty'] == null) {
-            return redirect()->to('/stock');
-        } elseif ($attr['sellqty'] == null) {
-            $stock = Products_Stock::where('product_id', '=', $id)->get();
+        // check and set Null
+        if (!isset($attr['sellqty'])) {
+            $attr['sellqty'] = null;
+        } elseif (!isset($attr['buyqty'])) {
+            $attr['buyqty'] = null;
+        } else {
+            abort(404);
+        }
+        // End
+
+        // Buy Stocks
+        if ($attr['sellqty'] == null) {
+            $stock = Products_Stock::join("products", "products_stock.product_id", "=", "products.id")->where('products.name', '=', $attr['ProductName'])->get();
             foreach ($stock as $value) {
-                if ($value->qty != 0) {
-                    $attr['qty'] = $attr['buyqty'];
-                    $attr['product_id'] = $id;
-                    $attr['branch_code'] = $value->branch_code;
-                    $attr['buy_price'] = $value->buy_price;
-                    $data = Products_Stock::where('product_id', '=', $id)->create($attr);
-                    session()->flash('success', 'The Stock Has Increased or Created');
-                } else {
-                    $data = Products_Stock::where('product_id', '=', $id)->update([
+                $attr['qty'] = $attr['buyqty'];
+                $attr['product_id'] = $value->product_id;
+                $attr['branch_code'] = $value->branch_code;
+                $attr['buy_price'] = $value->buy_price;
+                if (count($stock) == 1 && $stock[0]->qty == 0) {
+                    $data = Products_Stock::where('products_stock.product_id', '=', $attr['product_id'])->update([
                         'qty' => $attr['buyqty'],
                     ]);
+                    session()->flash('success', 'The Stock Has Increased or Created');
+                } else {
+                    $data = Products_Stock::where('product_id', '=', $attr['product_id'])->create($attr);
                     session()->flash('success', 'The Data Was Updated');
                 }
             }
-            return redirect()->to('/stock');
+            return redirect()->to('/branch');
+
+            // Sell Stocks
         } elseif ($attr['buyqty'] == null) {
-            $data = Product::where('id', '=', $id)->get();
+
+            $productId = Products_Stock::join("products", "products_stock.product_id", "=", "products.id")->where('products.name', '=', $attr['ProductName'])->get();
+
 
             $stock = Product::leftJoin('products_stock', 'products.id', '=', 'product_id')
                 ->select('qty', 'product_id', 'products_stock.id as stockId', 'products.sell_price', 'branch_code', 'products_stock.created_at', 'buy_price')
-                ->where('products_stock.product_id', '=', $data[0]->id)
+                ->where('products_stock.product_id', '=', $productId[0]->product_id)
                 ->orderBy('products_stock.created_at', "asc")
                 ->get();
 
@@ -91,11 +101,12 @@ class StockController extends Controller
             for ($i = 0; $i < sizeof($stock); $i++) {
                 $qty = $stock[$i]->qty;
                 $qty -= $attr['sellqty'];
+                $attr['sellqty'] -= $qty;
                 if ($qty <= 0) {
-                    $attr['sellqty'] += $qty;
+                    $attr['sellqty'] = abs($qty);
                     $qty = 0;
                 } else {
-                    $attr['sellqty'] -= $qty;
+                    $attr['sellqty'] = 0;
                 }
                 Products_Stock::where('id', '=', $stock[$i]->stockId)
                     ->update([
@@ -115,16 +126,16 @@ class StockController extends Controller
                 $historysellattr['modified_user'] = Auth::user()->name;
                 history_sell::create($historysellattr);
             }
-            $history_product = history_sell_product::where('product_id', '=', $data[0]->id)->get();
+            $history_product = history_sell_product::where('product_id', '=', $productId[0]->product_id)->get();
 
-            $historyattr['product_id'] = $id;
+            $historyattr['product_id'] = $productId[0]->product_id;
             $historyattr['branch_code'] = $stock[0]->branch_code;
             $historyattr['buy_price'] = $stock[0]->buy_price;
-            $historyattr['sell_price'] = $data[0]->sell_price;
+            $historyattr['sell_price'] = $productId[0]->sell_price;
             if (count($history_product)) {
                 $historyattr['qty'] = $history_product[0]->qty;
                 $historyattr['qty'] += $total;
-                history_sell_product::where('product_id', $data[0]->id)->update([
+                history_sell_product::where('product_id', $productId[0]->product_id)->update([
                     'sell_price' => $historyattr['sell_price'],
                     'buy_price' => $historyattr['buy_price'],
                     'qty' => $historyattr['qty'],
@@ -134,7 +145,9 @@ class StockController extends Controller
                 $historyattr['history_sell'] = $history_sell[0]->id;
                 history_sell_product::create($historyattr);
             }
-            return redirect()->to('/stock');
+            return redirect()->to('/branch');
+        } else {
+            abort(404);
         }
     }
 
@@ -158,7 +171,11 @@ class StockController extends Controller
             $stocks['name'] = $value->name;
             $stocks['sell_price'] = $value->sell_price;
             $stocks['qty'] = $value->qty;
-            $stocks['branch_code'] = $value->branch_code;
+            if (Auth::user()->roles[0] == "Master") {
+                $stocks['branch_code'] = $value->branch_code;
+            } else {
+                $stocks['branch_code'] = Auth::user()->branch_code;
+            }
             $stocks['buy_price'] = $value->buy_price;
             if (!$stocks['buy_price']) {
                 $product['buy_price'] = 0;

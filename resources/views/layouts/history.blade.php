@@ -32,16 +32,16 @@
     <table class="mt-3 tableData table-hover table table-light">
         <tr>
             <th><i class="fa fa-check"></i></th>
-            <th scope="col">Product ID </th>
-            <th scope="col">Branch Code</th>
+            <th scope="col">Product Name </th>
+            <th scope="col">Branch Name</th>
             <th scope="col">Quantity Total</th>
             <th scope="col">Buy Price</th>
             <th scope="col">Sell Price</th>
         </tr>
         @foreach ($data as $item)
         <td scope="col"><input type="checkbox" name="list[]" id=""></td>
-        <td scope="col">{{$item->id}}</td>
-        <td scope="col">{{$item->branch_code}}</td>
+        <td scope="col">{{$item->ProductName}}</td>
+        <td scope="col">{{$item->BranchName}}</td>
         <td scope="col">{{$item->qty}}</td>
         <td scope="col">{{$item->buy_price}}</td>
         <td scope="col">{{$item->sell_price}}</td>
