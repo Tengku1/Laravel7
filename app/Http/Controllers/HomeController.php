@@ -20,12 +20,12 @@ class HomeController extends Controller
             $data['User'] = User::paginate(5);
             $data['Branch'] = Branch::get();
             $data['historySells'] = history_sell_product::join('history_sell', 'history_sell_product.history_sell', 'history_sell.id')->get();
-            $data['historyThisDay'] = history_sell_product::paginate(5);
+            $data['historyThisDay'] = history_sell_product::join("branch", "history_sell_product.branch_code", "=", "branch.code")->paginate(5);
         } else {
             $data['Stock'] = Products_Stock::get();
             $data['productThisDay'] = Product::where('created_at', 'like', '%' . date("Y-m-d") . '%')->paginate(5);
             $data['historySells'] = history_sell_product::join('history_sell', 'history_sell_product.history_sell', 'history_sell.id')->where('history_sell_product.branch_code', '=', Auth::user()->branch_code)->get();
-            $data['historyThisDay'] = history_sell_product::where('history_sell_product.branch_code', '=', Auth::user()->branch_code)->paginate(5);
+            $data['historyThisDay'] = history_sell_product::join("branch", "history_sell_product.branch_code", "=", "branch.code")->where('history_sell_product.branch_code', '=', Auth::user()->branch_code)->paginate(5);
         }
         return view('layouts.home', compact('data'));
     }
