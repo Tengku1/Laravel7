@@ -80,7 +80,6 @@
             </tr>
             @foreach ($data['productThisDay'] as $item)
             <tr>
-                <td>{{$item->id}}</td>
                 <td>{{Str::limit($item->name,20)}}</td>
                 <td>{{$item->sell_price}}</td>
                 <td>{{$item->status}}</td>

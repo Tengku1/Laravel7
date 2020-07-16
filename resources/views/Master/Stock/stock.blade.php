@@ -42,7 +42,7 @@
 </div>
 
 <div class="table-responsive px-1">
-    @include('Master.Stock.table',$stocks)
+    @include('layouts.table',$stocks)
 </div>
 
 <!-- Modal -->

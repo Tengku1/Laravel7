@@ -36,7 +36,7 @@
 </div>
 
 <div class="table-responsive px-1">
-    @include('Admin.Stock.table',$stocks)
+    @include('layouts.table',$stocks)
 </div>
 
 <!-- Modal -->
