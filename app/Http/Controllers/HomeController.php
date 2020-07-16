@@ -27,7 +27,7 @@ class HomeController extends Controller
             $data['historySells'] = history_sell_product::join('history_sell', 'history_sell_product.history_sell', 'history_sell.id')->where('history_sell_product.branch_code', '=', Auth::user()->branch_code)->get();
             $data['historyThisDay'] = history_sell_product::where('history_sell_product.branch_code', '=', Auth::user()->branch_code)->paginate(5);
         }
-        return view('Admin.home', compact('data'));
+        return view('layouts.home', compact('data'));
     }
 
     public function history()
