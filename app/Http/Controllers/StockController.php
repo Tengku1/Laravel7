@@ -21,7 +21,7 @@ class StockController extends Controller
     public function index()
     {
         if (Auth::user()->roles[0] == "Master") {
-            $data = Branch::paginate(7);
+            $data = Branch::where("status", "=", "Active")->paginate(7);
             return view('Master.Stock.index', compact('data'));
         } elseif (Auth::user()->roles[0] == "Admin") {
             return redirect()->to("/stock/branch/" . Auth::user()->branch_code);
