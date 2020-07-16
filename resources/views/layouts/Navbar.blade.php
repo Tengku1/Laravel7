@@ -46,7 +46,7 @@
                 </a>
             </li>
             
-            @if (Request::path() == '/stock' || Request::path() == '/branch')
+            @if (request()->is(strstr($url,"branch")) || request()->is(strstr($url,"stock")))
             <li class="mx-1 active">
                 <a href="/branch" class="menuitem nav-item nav-link">
                     Branch <i class="fa fa-dropbox"></i>
