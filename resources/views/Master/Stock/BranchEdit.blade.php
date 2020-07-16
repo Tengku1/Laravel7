@@ -13,8 +13,7 @@
             <div class="form-group row">
                 <div class="col-md-12 px-1">
                     <label for="name" class="font-weight-bold">Branch Name</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Product Name ..."
-                        value="{{ old('name') ?? $branch->name}}">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Product Name ..." required value="{{ old('name') ?? $branch->name}}">
                     @error('name')
                     <span class="text-danger">{{$message}}</span>
                     @enderror
@@ -23,7 +22,7 @@
             <div class="form-group row">
                 <div class="col-md-12 px-1">
                     <label for="address" class="font-weight-bold">Address</label>
-                    <textarea name="address_name" class="form-control" id="address" cols="30" rows="10">{{$branch->address_name}}</textarea>
+                    <textarea name="address_name" required class="form-control" id="address" cols="30" rows="10">{{$branch->address_name}}</textarea>
                     @error('address_name')
                     <span class="text-danger">{{$message}}</span>
                     @enderror

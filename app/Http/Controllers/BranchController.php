@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
-use Illuminate\Http\Request\BranchRequest;
+use App\Http\Requests\BranchRequest as RequestsBranchRequest;
 
 class BranchController extends Controller
 {
@@ -16,9 +16,9 @@ class BranchController extends Controller
     {
         return view("Master.Stock.BranchCreate");
     }
-    public function store()
+    public function store(RequestsBranchRequest $request)
     {
-        $attr = request()->all();
+        $attr = $request->all();
         $attr['address_name'] = request()->address;
         $attr['status'] = 'active';
         Branch::create($attr);
