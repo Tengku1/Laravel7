@@ -66,7 +66,7 @@ class ProductController extends Controller
         $attr['status'] = "out of stock";
         Product::create($attr);
         session()->flash('success', 'New Product !');
-        return view('Master.Product.index');
+        return redirect()->to('/product');
     }
 
     public function show($slug)
