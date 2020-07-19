@@ -11,13 +11,13 @@ class UserController extends Controller
 {
     public function index()
     {
-        $data = User::paginate(7);
+        $data = User::where('roles', 'like', '%Admin%')->paginate(7);
         return view('Master.User.index', compact('data'));
     }
 
-    public function destroy($id)
+    public function destroy()
     {
-        User::where('id', '=', $id)->delete();
+        User::where('id', '=', request('id'))->delete();
         return redirect()->to('/user');
     }
 

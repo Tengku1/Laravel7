@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class BranchController extends Controller
 {
@@ -14,20 +14,21 @@ class BranchController extends Controller
     }
     public function create()
     {
-        return view("Master.Stock.BranchCreate");
+        return view("Master.Branch.create");
     }
     public function store()
     {
         $attr = request()->all();
         $attr['address_name'] = request()->address;
         $attr['status'] = 'active';
+        $attr['slug'] = Str::slug($attr['name']);
         Branch::create($attr);
         session()->flash('success', 'The Data Was Added');
         return redirect()->to("/branch");
     }
     public function edit(Branch $branch)
     {
-        return view("Master.Stock.BranchEdit", compact("branch"));
+        return view("Master.Branch.edit", compact("branch"));
     }
     public function update(Branch $branch)
     {
@@ -38,11 +39,12 @@ class BranchController extends Controller
     }
     public function show(Branch $branch)
     {
-        return view("Master.Stock.BranchShow", compact("branch"));
+        return view("Master.Branch.show", compact("branch"));
     }
     public function destroy(Branch $branch)
     {
         Branch::where('code', '=', $branch['code'])->update(['status' => 'inactive']);
+        session()->flash('success', 'The Selected Branch Has Been Deactivated');
         return redirect()->to('/branch');
     }
 }

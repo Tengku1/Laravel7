@@ -90,7 +90,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/user', 'UserController@index');
     Route::get('/user/excel', 'UserController@excel');
     Route::get('/user/search', 'UserController@search');
-    Route::delete('/user/{id}/destroy', 'UserController@destroy');
+    Route::delete('/user/destroy', 'UserController@destroy');
 
     // End User
 
