@@ -25,10 +25,7 @@ Route::group(['middleware' => ['auth']], function () {
     // End Home
 
     // Branch Only For Master !!
-    Route::get(
-        '/branch',
-        'BranchController@index'
-    );
+    Route::get('/branch', 'BranchController@index');
     Route::get('/branch/create', 'BranchController@create')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::post('/branch/store', 'BranchController@store')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::get('/branch/{branch:code}', 'BranchController@show')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
@@ -38,10 +35,7 @@ Route::group(['middleware' => ['auth']], function () {
     // End Branch
 
     // Market
-    Route::get(
-        '/market',
-        'StockController@market'
-    );
+    Route::get('/market', 'StockController@market');
     Route::get('/market/buy', 'StockController@buy');
     Route::get('/market/sell', 'StockController@sell');
     Route::patch('/market/marketex', 'StockController@marketex');
@@ -87,10 +81,13 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Users
 
-    Route::get('/user', 'UserController@index');
-    Route::get('/user/excel', 'UserController@excel');
-    Route::get('/user/search', 'UserController@search');
-    Route::delete('/user/destroy', 'UserController@destroy');
+    Route::get('/user', 'UserController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+
+    Route::get('/user/excel', 'UserController@excel')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+
+    Route::get('/user/search', 'UserController@search')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+
+    Route::delete('/user/destroy', 'UserController@destroy')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 
     // End User
 
