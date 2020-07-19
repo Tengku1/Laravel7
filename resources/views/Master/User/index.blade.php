@@ -35,6 +35,7 @@ $no = 1;
             <th scope="col">Name</th>
             <th scope="col">Full Name</th>
             <th scope="col">Email</th>
+            <th scope="col">Status</th>
             <th scope="col">Modified At</th>
             <th scope="col" colspan="2">Action</th>
         </tr>
@@ -42,8 +43,9 @@ $no = 1;
         <tr>
             <td scope="col">{{$no++}}</td>
             <td scope="col">{{Str::limit($values->name,20)}}</td>
-            <td scope="col">{{$values->full_name}}</td>
+            <td scope="col">{{Str::limit($values->full_name,20)}}</td>
             <td scope="col">{{$values->email}}</td>
+            <td scope="col">{{$values->status}}</td>
             <td scope="col">{{$values->modified_at->diffForHumans()}}</td>
             <td>
                 <div class="btn-group">

@@ -9,6 +9,7 @@ use App\Products_Stock;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HomeController extends Controller
 {

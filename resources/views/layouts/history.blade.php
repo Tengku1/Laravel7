@@ -3,19 +3,10 @@
 {{-- ======= --}}
 {{-- section --}}
 @section('content')
-<h4 class="text-info mb-3">Histories Sells <i class="fa fa-shopping-cart"></i></h4>
 @if ($data->count())
 <div class="col-md-12">
     <div class="col-md-8 float-left">
-        <button id="btnGroupDrop1" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-            Action
-        </button>
-        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-            <a class="dropdown-item"><i class="fa fa-print"></i> Print</a>
-            <a class="dropdown-item" target="_blank" href="/product/excel"><i class="fa fa-file-excel-o"></i> Export
-                Excel</a>
-        </div>
+        <h4 class="text-info mb-3">Histories Sells <i class="fa fa-shopping-cart"></i></h4>
     </div>
     <div class="col-md-4 float-left">
         <div class="input-group col-md-12">

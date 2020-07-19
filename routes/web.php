@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Branch Only For Master !!
     Route::get('/branch', 'BranchController@index');
     Route::get('/branch/create', 'BranchController@create')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+    Route::get('/branch/excel', 'BranchController@excel')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::post('/branch/store', 'BranchController@store')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::get('/branch/{branch:code}', 'BranchController@show')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::delete('/branch/{branch}/delete', 'BranchController@destroy')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
