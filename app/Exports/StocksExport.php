@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ProductsExport implements FromCollection, WithHeadings
+class StocksExport implements FromCollection, WithHeadings
 {
 
     use Exportable;
@@ -74,27 +74,3 @@ class ProductsExport implements FromCollection, WithHeadings
         ];
     }
 }
-
-// namespace App\Exports;
-
-// use App\Products_Stock;
-// use Illuminate\Contracts\View\View;
-// use Maatwebsite\Excel\Concerns\FromView;
-
-// class ProductsExport implements FromView
-// {
-
-//     protected $code;
-
-//     public function __construct($code)
-//     {
-//         $this->code = $code;
-//     }
-
-//     public function view(): View
-//     {
-//         return view('Admin.Stock.table', [
-//             'stocks' => Products_Stock::where('branch_code', '=', $this->code)->get()
-//         ]);
-//     }
-// }

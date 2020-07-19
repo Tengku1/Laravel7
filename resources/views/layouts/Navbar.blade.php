@@ -46,40 +46,38 @@
             </li>
 
             @if (Auth::user()->roles[0] == "Master")
-                @if (request()->is(strstr($url,"branch")) || request()->is(strstr($url,"stock")))
-                <li class="mx-1 active">
+                <li class="mx-1{{ request()->is(strstr($url,"branch")) ? ' active' : '' }}">
                     <a href="/branch" class="menuitem nav-item nav-link">
                         Branch <i class="fa fa-dropbox"></i>
                     </a>
                 </li>
-                @else
-                <li class="mx-1">
-                    <a href="/branch" class="menuitem nav-item nav-link">
-                        Branch <i class="fa fa-dropbox"></i>
+                <li class="mx-1{{ request()->is(strstr($url,"product")) ? ' active' : '' }}">
+                    <a href="/product" class="menuitem nav-item nav-link">
+                        Product <i class="fa fa-product-hunt"></i>
                     </a>
                 </li>
-                @endif
+                <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
+                    <a href="/history" class="menuitem nav-item nav-link">
+                        History Sells <i class="fa fa-history"></i>
+                    </a>
+                </li>
+                <li class="mx-1{{ request()->is(strstr($url,"user")) ? ' active' : '' }}">
+                    <a href="/user" class="menuitem nav-item nav-link">
+                        User <i class="fa fa-user"></i>
+                    </a>
+                </li>
             @else
-            @if (request()->is(strstr($url,"branch")) || request()->is(strstr($url,"stock")))
-            <li class="mx-1 active">
-                <a href="/branch" class="menuitem nav-item nav-link">
+            <li class="mx-1{{ request()->is(strstr($url,"stock")) ? ' active' : '' }}">
+                <a href="/stock" class="menuitem nav-item nav-link">
                     Stock <i class="fa fa-dropbox"></i>
                 </a>
             </li>
-            @else
-            <li class="mx-1">
-                <a href="/branch" class="menuitem nav-item nav-link">
-                    Stock <i class="fa fa-dropbox"></i>
-                </a>
-            </li>
-            @endif
-            @endif
-
             <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
-                <a href="/history" class="menuitem nav-item nav-link">
-                    History Sells <i class="fa fa-shopping-cart"></i>
-                </a>
-            </li>
+                    <a href="/history" class="menuitem nav-item nav-link">
+                        History Sells <i class="fa fa-history"></i>
+                    </a>
+                </li>
+            @endif
             <li class="mx-1{{ request()->is(strstr($url,"market")) ? ' active' : '' }}">
                 <a href="/market" class="menuitem nav-item nav-link">
                     Market <i class="fa fa-shopping-cart"></i>

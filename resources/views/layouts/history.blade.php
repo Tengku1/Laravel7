@@ -31,7 +31,6 @@
 <div class="table-responsive px-1">
     <table class="mt-3 tableData table-hover table table-light">
         <tr>
-            <th><i class="fa fa-check"></i></th>
             <th scope="col">Product Name </th>
             <th scope="col">Branch Name</th>
             <th scope="col">Quantity Total</th>
@@ -39,7 +38,6 @@
             <th scope="col">Sell Price</th>
         </tr>
         @foreach ($data as $item)
-        <td scope="col"><input type="checkbox" name="list[]" id=""></td>
         <td scope="col">{{$item->ProductName}}</td>
         <td scope="col">{{$item->BranchName}}</td>
         <td scope="col">{{$item->qty}}</td>

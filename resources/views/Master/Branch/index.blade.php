@@ -36,10 +36,6 @@
             <td scope="col">{{$values->status}}</td>
             <td>
                 <div class="btn-group">
-                    <a href="/stock/branch/{{$values->code}}">
-                        <button class="btn rounded-0 btn-sm btn-info" title="Show Info"><i
-                                class="fa fa-eye"></i></button>
-                    </a>
                     <a href="/branch/{{$values->code}}/edit">
                         <button class="btn rounded-0 btn-sm btn-secondary" title="Edit"><i
                                 class="fa fa-pencil-square-o"></i></button>

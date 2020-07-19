@@ -9,8 +9,8 @@ class BranchController extends Controller
 {
     public function index()
     {
-        $data = Branch::paginate(5);
-        return view("Master.index", compact("data"));
+        $data = Branch::where('status', '=', 'active')->paginate(5);
+        return view("Master.Branch.index", compact("data"));
     }
     public function create()
     {

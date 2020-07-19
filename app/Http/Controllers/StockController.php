@@ -2,28 +2,62 @@
 
 namespace App\Http\Controllers;
 
-use App\Branch;
-use App\Exports\ProductsExport;
+use App\Exports\StocksExport;
 use App\history_product_monthly;
 use App\history_sell;
 use App\history_sell_product;
 use App\Product;
 use App\Products_Stock;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StockController extends Controller
 {
-    public function index()
+    public function index($branch = null)
     {
-        if (Auth::user()->roles[0] == "Master") {
-            $data = Branch::where("status", "=", "Active")->paginate(7);
-            return view('Master.Stock.index', compact('data'));
-        } elseif (Auth::user()->roles[0] == "Admin") {
-            return redirect()->to("/stock/branch/" . Auth::user()->branch_code);
+        if (Auth::user()->roles[0] == "Admin") {
+            $id = Auth::user()->branch_code;
+            $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
+                ->join("users", "users.branch_code", "branch.code")
+                ->select("products.*", "products_stock.qty", 'branch.code', 'products_stock.id', "products_stock.product_id", "products_stock.buy_price", "branch.name as Branch_name", "users.roles")
+                ->where('users.branch_code', "=", $id)
+                ->orderBy('products_stock.id')
+                ->paginate(7);
+            return view('Admin.Stock.stock', compact('stocks'));
+        } elseif (Auth::user()->roles[0] == "Master") {
+            if (request()->date) {
+                $date = request()->date;
+                $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
+                    ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
+                    ->select(
+                        "products.name",
+                        "products.sell_price",
+                        'products_stock.id',
+                        "products_stock.qty",
+                        "products_stock.product_id",
+                        "products_stock.buy_price",
+                        "products_stock.created_at",
+                        'branch_code',
+                        "branch.name as Branch_name"
+                    )
+                    ->where('branch.code', '=', $branch)
+                    ->where('products_stock.created_at', 'like', '%' . $date . '%')
+                    ->orderBy('products_stock.id')
+                    ->paginate(7);
+                foreach ($stocks as $stock) {
+                    $stock['date'] = $date;
+                }
+            } else {
+                $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
+                    ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
+                    ->select("products.*", "products_stock.qty", 'products_stock.id', 'branch_code', "products_stock.product_id", "products_stock.buy_price", "branch.name as Branch_name")
+                    ->where('branch.code', '=', $branch)
+                    ->orderBy('products_stock.id')
+                    ->paginate(7);
+            }
+            $arr['branch'] = $branch;
+            return view('Master.Stock.stock', compact('stocks', 'arr'));
         } else {
             return abort(404);
         }
@@ -32,7 +66,7 @@ class StockController extends Controller
     public function Excel($code, $date = null)
     {
         $name = "Stocks " . date("Y-m-d") . ".xlsx";
-        return Excel::download(new ProductsExport($code, $date), $name);
+        return Excel::download(new StocksExport($code, $date), $name);
     }
     public function market()
     {
@@ -278,56 +312,6 @@ class StockController extends Controller
         session()->flash('success', 'The Data Was Added');
         return redirect()->to('/branch');
     }
-
-    public function stock($branch = null)
-    {
-        if (Auth::user()->roles[0] == "Admin") {
-            $id = Auth::user()->branch_code;
-            $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
-                ->join("users", "users.branch_code", "branch.code")
-                ->select("products.*", "products_stock.qty", 'branch.code', 'products_stock.id', "products_stock.product_id", "products_stock.buy_price", "branch.name as Branch_name", "users.roles")
-                ->where('users.branch_code', "=", $id)
-                ->orderBy('products_stock.id')
-                ->paginate(7);
-            return view('Admin.Stock.stock', compact('stocks'));
-        } elseif (Auth::user()->roles[0] == "Master") {
-            if (request()->date) {
-                $date = request()->date;
-                $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
-                    ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
-                    ->select(
-                        "products.name",
-                        "products.sell_price",
-                        'products_stock.id',
-                        "products_stock.qty",
-                        "products_stock.product_id",
-                        "products_stock.buy_price",
-                        "products_stock.created_at",
-                        'branch_code',
-                        "branch.name as Branch_name"
-                    )
-                    ->where('branch.code', '=', $branch)
-                    ->where('products_stock.created_at', 'like', '%' . $date . '%')
-                    ->orderBy('products_stock.id')
-                    ->paginate(7);
-                foreach ($stocks as $stock) {
-                    $stock['date'] = $date;
-                }
-            } else {
-                $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
-                    ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
-                    ->select("products.*", "products_stock.qty", 'products_stock.id', 'branch_code', "products_stock.product_id", "products_stock.buy_price", "branch.name as Branch_name")
-                    ->where('branch.code', '=', $branch)
-                    ->orderBy('products_stock.id')
-                    ->paginate(7);
-            }
-            $arr['branch'] = $branch;
-            return view('Master.Stock.stock', compact('stocks', 'arr'));
-        } else {
-            return abort(404);
-        }
-    }
-
     public function update(Product $product)
     {
         $attr = request()->all();
