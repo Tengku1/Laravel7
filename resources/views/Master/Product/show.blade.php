@@ -7,11 +7,7 @@
     </div>
 
     <div class="card-body">
-        @if ($qty < 20)
-            <div class="row mt-3 alert alert-warning">
-                Status : The Product Running Low ! Increase Now !
-            </div>
-        @elseif ($qty <= 0)
+        @if ($qty <= 0)
             <div class="row mt-3 alert alert-danger">
                 Status : Out Of Product ! Add Now !
             </div>
