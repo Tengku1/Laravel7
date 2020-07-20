@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
+use App\Exports\BranchExport;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BranchController extends Controller
 {
@@ -30,6 +32,12 @@ class BranchController extends Controller
     {
         return view("Master.Branch.edit", compact("branch"));
     }
+
+    public function excel()
+    {
+        return Excel::download(new BranchExport, "Branch.xlsx");
+    }
+
     public function update(Branch $branch)
     {
         $attr = request()->all();

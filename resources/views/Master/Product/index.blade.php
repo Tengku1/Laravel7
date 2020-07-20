@@ -37,7 +37,7 @@ $no = 1;
             <th scope="col">No</th>
             <th scope="col">Name</th>
             <th scope="col">Sell Price</th>
-            <th scope="col">Modified At</th>
+            <th scope="col">Status</th>
             <th scope="col" colspan="2">Action</th>
         </tr>
         @foreach ($data as $values)
@@ -45,14 +45,14 @@ $no = 1;
             <td scope="col">{{$no++}}</td>
             <td scope="col">{{Str::limit($values->name,20)}}</td>
             <td scope="col">{{$values->sell_price}}</td>
-            <td scope="col">{{$values->modified_at}}</td>
+            <td scope="col">{{$values->status}}</td>
             <td>
                 <div class="btn-group">
                     <a href="/product/{{$values->slug}}">
                         <button class="btn rounded-0 btn-sm btn-info" title="Edit"><i class="fa fa-eye"></i></button>
                     </a>
                     <a href="/product/edit/{{$values->slug}}">
-                        <button class="btn rounded-0 btn-sm btn-secondary" title="Edit"><i
+                        <button class="btn rounded-0 btn-sm btn-warning" title="Edit"><i
                                 class="fa fa-pencil-square-o"></i></button>
                     </a>
                     <button type="submit" class="btn rounded-0 btn-sm btn-danger delete" data-toggle="modal" data-target="#delete" data-id="{{$values->id}}" title="Delete">

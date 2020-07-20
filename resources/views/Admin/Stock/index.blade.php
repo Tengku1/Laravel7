@@ -8,7 +8,7 @@
 @section('content')
 
 <h4 class="text-info mb-3">Stock <i class="fa fa-dropbox"></i></h4>
-@if ($stocks->count())
+@if ($data->count())
 
 <div class="col-md-12">
 
@@ -21,22 +21,20 @@
         </a>
     </div>
     <div class="col-md-4 float-left">
-        <form action="#" method="post" class="p-0">
-            <div class="input-group col-md-12">
-                <input class="form-control py-2" type="search" value="" placeholder="Search ..." id="searchdata">
-                <span class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </span>
-            </div>
+        <form action="/stock/{{$data[0]->BranchSlug}}/search" method="get" class="px-0 py-0 col-md-12 input-group">
+            <input class="form-control py-2 float-left" type="search" value="" placeholder="Search ..." id="searchdata" name="by">
+            <span class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+            </span>
         </form>
     </div>
 
 </div>
 
 <div class="table-responsive px-1">
-    @include('layouts.table',$stocks)
+    @include('layouts.tableProducts')
 </div>
 
 <!-- Modal -->
@@ -56,7 +54,7 @@
                 <div class="modal-body">
                     You Want You Sure Delete This Record?
                     <input type="hidden" name="stock_id" id="stock_id">
-                    <input type="hidden" name="branch_code" value="{{$stocks[0]->branch_code}}">
+                    <input type="hidden" name="branch_code" value="{{$data[0]->branch_code}}">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
@@ -71,14 +69,14 @@
 {{-- For Pagination --}}
 <div class="btn-group">
     <span class="pt-2 mr-3 text-info">
-        Showing {{$stocks->firstItem()}} to {{$stocks->lastItem()}} of {{$stocks->total()}} Entries
+        Showing {{$data->firstItem()}} to {{$data->lastItem()}} of {{$data->total()}} Entries
     </span>
-    {{$stocks->links()}}
+    {{$data->links()}}
 </div>
 {{-- EndPagination --}}
 
 @else
-<a href="/product/create">
+<a href="/stock/create">
     <div class="col-md-12">
         <button class="btn btn-primary">Add Data <i class="fa fa-plus"></i></button>
     </div>

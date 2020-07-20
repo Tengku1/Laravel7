@@ -37,7 +37,7 @@
             <td>
                 <div class="btn-group">
                     <a href="/branch/{{$values->code}}/edit">
-                        <button class="btn rounded-0 btn-sm btn-secondary" title="Edit"><i
+                        <button class="btn rounded-0 btn-sm btn-warning" title="Edit"><i
                                 class="fa fa-pencil-square-o"></i></button>
                     </a>
                     <button type="submit" class="btn rounded-0 btn-sm btn-danger" data-toggle="modal"

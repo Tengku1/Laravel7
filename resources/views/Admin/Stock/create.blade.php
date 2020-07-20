@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="col-md-12 btn-group mt-3">
-                <button type="submit" class="btn btn-primary">Add Data <i class="fa fa-plus"></i></button>
+                <button type="submit" class="btn btn-success">Add Data <i class="fa fa-plus"></i></button>
                 <a href="/product">
                     <button type="button" class="btn btn-primary rounded-0">Back</button>
                 </a>

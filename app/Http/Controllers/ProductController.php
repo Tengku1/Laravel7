@@ -42,7 +42,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $data = Product::select('name', 'sell_price', 'modified_at', 'slug', 'id')->paginate(7);
+        $data = Product::select('name', 'sell_price', 'modified_at', 'slug', 'status', 'id')->paginate(7);
         return view('Master.Product.index', compact('data'));
     }
 

@@ -25,7 +25,7 @@ Route::group(['middleware' => ['auth']], function () {
     // End Home
 
     // Branch Only For Master !!
-    Route::get('/branch', 'BranchController@index');
+    Route::get('/branch', 'BranchController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::get('/branch/create', 'BranchController@create')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::get('/branch/excel', 'BranchController@excel')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
     Route::post('/branch/store', 'BranchController@store')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
@@ -65,17 +65,20 @@ Route::group(['middleware' => ['auth']], function () {
     // End Products
 
     // Stock Routes
-    Route::get('/stock/{code}', 'StockController@index');
-    Route::post('/stock/{code}', 'StockController@index');
-    Route::get('/stock/search/{code}', 'StockController@search');
+    Route::get('/stock', 'StockController@index');
+    Route::get('/stock/create', 'StockController@create');
+    Route::get('/stock/create/{code}', 'StockController@create');
+    Route::delete('/stock/delete', 'StockController@destroy');
+    Route::get('/stock/detail/{product:slug}', 'StockController@show');
+    Route::get('/stock/edit/{product:slug}', 'StockController@edit');
     Route::get('/stock/excel/{code}', 'StockController@Excel');
     Route::get('/stock/excel/{code}/{date}', 'StockController@Excel');
-    Route::get('/stock/create/{code}', 'StockController@create');
+    Route::get('/stock/{slug}/search', 'StockController@search');
     Route::post('/stock/store/{code}', 'StockController@store');
 
-    Route::get('/stock/{product:slug}', 'StockController@show');
-    Route::delete('/stock/delete', 'StockController@destroy');
-    Route::get('/stock/{product:id}/edit', 'StockController@edit');
+    Route::get('/stock/{code}', 'StockController@index');
+    Route::post('/stock/{code}', 'StockController@index');
+
     Route::patch('/stock/{product:id}/update', 'StockController@update');
     Route::get('/stock/{product:id}/market', 'StockController@market');
     // End Stock

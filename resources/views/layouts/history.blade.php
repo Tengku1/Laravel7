@@ -8,16 +8,6 @@
     <div class="col-md-8 float-left">
         <h4 class="text-info mb-3">Histories Sells <i class="fa fa-shopping-cart"></i></h4>
     </div>
-    <div class="col-md-4 float-left">
-        <div class="input-group col-md-12">
-            <input class="form-control py-2" type="search" value="" placeholder="Search ..." id="searchdata">
-            <span class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button">
-                    <i class="fa fa-search"></i>
-                </button>
-            </span>
-        </div>
-    </div>
 </div>
 <div class="table-responsive px-1">
     <table class="mt-3 tableData table-hover table table-light">

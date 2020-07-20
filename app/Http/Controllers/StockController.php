@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Branch;
 use App\Exports\StocksExport;
 use App\history_product_monthly;
 use App\history_sell;
@@ -18,17 +19,27 @@ class StockController extends Controller
     {
         if (Auth::user()->roles[0] == "Admin") {
             $id = Auth::user()->branch_code;
-            $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
+            $data =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
                 ->join("users", "users.branch_code", "branch.code")
-                ->select("products.*", "products_stock.qty", 'branch.code', 'products_stock.id', "products_stock.product_id", "products_stock.buy_price", "branch.name as Branch_name", "users.roles")
+                ->select(
+                    "products.*",
+                    "products_stock.qty",
+                    "branch.code",
+                    "products_stock.id",
+                    "products_stock.product_id",
+                    "products_stock.buy_price",
+                    "branch.name as Branch_name",
+                    "branch.slug as BranchSlug",
+                    "users.roles"
+                )
                 ->where('users.branch_code', "=", $id)
                 ->orderBy('products_stock.id')
                 ->paginate(7);
-            return view('Admin.Stock.stock', compact('stocks'));
+            return view('Admin.Stock.index', compact('data'));
         } elseif (Auth::user()->roles[0] == "Master") {
             if (request()->date) {
                 $date = request()->date;
-                $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
+                $data =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
                     ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
                     ->select(
                         "products.name",
@@ -45,11 +56,11 @@ class StockController extends Controller
                     ->where('products_stock.created_at', 'like', '%' . $date . '%')
                     ->orderBy('products_stock.id')
                     ->paginate(7);
-                foreach ($stocks as $stock) {
-                    $stock['date'] = $date;
+                foreach ($data as $value) {
+                    $value['date'] = $date;
                 }
             } else {
-                $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
+                $data =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
                     ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
                     ->select("products.*", "products_stock.qty", 'products_stock.id', 'branch_code', "products_stock.product_id", "products_stock.buy_price", "branch.name as Branch_name")
                     ->where('branch.code', '=', $branch)
@@ -57,7 +68,7 @@ class StockController extends Controller
                     ->paginate(7);
             }
             $arr['branch'] = $branch;
-            return view('Master.Stock.stock', compact('stocks', 'arr'));
+            return view('Master.Stock.index', compact('data', 'arr'));
         } else {
             return abort(404);
         }
@@ -113,7 +124,11 @@ class StockController extends Controller
                     session()->flash('success', 'The Data Was Updated');
                 }
             }
-            return redirect()->to('/branch');
+            if (Auth::user()->roles[0] == "Master") {
+                return redirect()->to('/product');
+            } else {
+                return redirect()->to('/stock');
+            }
 
             // Sell Stocks
         } elseif ($attr['buyqty'] == null) {
@@ -178,63 +193,36 @@ class StockController extends Controller
                 $historyattr['history_sell'] = $history_sell[0]->id;
                 history_sell_product::create($historyattr);
             }
-            return redirect()->to('/branch');
+            if (Auth::user()->roles[0] == "Master") {
+                return redirect()->to('/product');
+            } else {
+                return redirect()->to('/stock');
+            }
         } else {
             abort(404);
         }
     }
 
-    public function search($branch)
-    {
-        $by = request()->all();
-        foreach ($by as $value) {
-            $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
-                ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
-                ->select("products.*", "products_stock.qty", 'products_stock.id', 'branch_code', "products_stock.product_id", "products_stock.buy_price", "branch.name as Branch_name")
-                ->where('products.name', 'like', '%' . $value . '%')
-                ->orWhere('products.sell_price', 'like', '%' . $value . '%')
-                ->orWhere('products_stock.buy_price', 'like', '%' . $value . '%')
-                ->orderBy('products_stock.qty')
-                ->paginate(7);
-        }
-        $arr['branch'] = $branch;
-        return view('Master.Stock.stock', compact('stocks', 'arr'));
-    }
 
-    public function create($code)
+    public function create($code = null)
     {
         $data['code'] = $code;
         if (Auth::user()->roles[0] == "Master") {
             return view('Master.Stock.create', compact('data'));
         } elseif (Auth::user()->roles[0] == "Admin") {
+            $data['code'] = Auth::user()->branch_code;
             return view('Admin.Stock.create', compact('data'));
         }
     }
 
-    public function edit($id)
+    public function edit($slug)
     {
-        $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")->select("products.id", "products.name", "products.slug", "products.sell_price", "products_stock.qty", "products_stock.buy_price", "products_stock.branch_code")->where('products.id', '=', $id)
-            ->get();
-        foreach ($stocks as $value) {
-            $stocks['id'] = $value->id;
-            $stocks['slug'] = $value->slug;
-            $stocks['name'] = $value->name;
-            $stocks['sell_price'] = $value->sell_price;
-            $stocks['qty'] = $value->qty;
-            if (Auth::user()->roles[0] == "Master") {
-                $stocks['branch_code'] = $value->branch_code;
-            } else {
-                $stocks['branch_code'] = Auth::user()->branch_code;
-            }
-            $stocks['buy_price'] = $value->buy_price;
-            if (!$stocks['buy_price']) {
-                $product['buy_price'] = 0;
-            }
-        }
+        $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")->select("products.id", "products.name", "products.slug", "products.sell_price", "products_stock.qty", "products_stock.buy_price", "products_stock.branch_code")->where('products.slug', '=', $slug)->get();
         if (Auth::user()->roles[0] == "Admin") {
             return view('Admin.Stock.edit', compact('stocks'));
         } elseif (Auth::user()->roles[0] == "Master") {
-            return view('Master.Stock.edit', compact('stocks'));
+            $branch = Branch::select("name")->get();
+            return view('Master.Stock.edit', compact('stocks', 'branch'));
         } else {
             return abort(404);
         }
@@ -258,15 +246,32 @@ class StockController extends Controller
         } elseif (Auth::user()->roles[0] == "Admin") {
             if (count($product)) {
                 session()->flash('success', 'The Data Was Deleted');
-                return redirect()->to('/stock/branch/' . Auth::user()->branch_code);
+                return redirect()->to('/stock');
             } else {
                 Product::where('id', '=', $product_id[0]->product_id)->update(['status' => 'out_of_stock']);
                 session()->flash('success', 'The Data Was Deleted');
-                return redirect()->to('/stock/branch/' . Auth::user()->branch_code);
+                return redirect()->to('/stock');
             }
         } else {
             return abort(404);
         }
+    }
+
+    public function search($branch = null)
+    {
+        $by = request()->all();
+        foreach ($by as $value) {
+            $stocks =  Product::leftJoin("products_stock", "products.id", "=", "products_stock.product_id")
+                ->leftJoin("branch", "products_stock.branch_code", "=", "branch.code")
+                ->select("products.name", "products_stock.qty", 'products_stock.id', 'branch_code', "products_stock.product_id", "products_stock.buy_price", "branch.name as Branch_name")
+                ->where('products.name', 'like', '%' . $value . '%')
+                ->orWhere('products.sell_price', 'like', '%' . $value . '%')
+                ->orWhere('products_stock.buy_price', 'like', '%' . $value . '%')
+                ->orderBy('products_stock.qty')
+                ->paginate(7);
+        }
+        $arr['branch'] = $branch;
+        return view('Master.Stock.stock', compact('stocks', 'arr'));
     }
 
     public function show($slug)
@@ -310,7 +315,11 @@ class StockController extends Controller
         $prd['branch_code'] = $code;
         Products_Stock::create($prd);
         session()->flash('success', 'The Data Was Added');
-        return redirect()->to('/branch');
+        if (Auth::user()->roles[0] == "Master") {
+            return redirect()->to('/branch');
+        } else {
+            return redirect()->to('/stock');
+        }
     }
     public function update(Product $product)
     {
@@ -328,10 +337,17 @@ class StockController extends Controller
         if ($stock->isEmpty()) {
             Products_Stock::create($atrStock);
         } else {
-            Products_Stock::where('product_id', $atrStock['product_id'])->update([
-                'branch_code' => $atrStock['branch_code'],
-                'buy_price' => $atrStock['buy_price']
-            ]);
+            if (Auth::user()->roles[0] == "Master") {
+                Products_Stock::where('product_id', $atrStock['product_id'])->update([
+                    'branch_code' => $atrStock['branch_code'],
+                    'buy_price' => $atrStock['buy_price']
+                ]);
+            } else {
+                Products_Stock::where('product_id', $atrStock['product_id'])->update([
+                    'branch_code' => Auth::user()->branch_code,
+                    'buy_price' => $atrStock['buy_price']
+                ]);
+            }
         }
 
         $product->update($attr);
