@@ -23,7 +23,9 @@ class ProductController extends Controller
     public function destroy()
     {
         $attr = request()->all();
-        Product::where('id', '=', $attr['id'])->delete();
+        Product::where('id', '=', $attr['id'])->update([
+            'status' => "inactive",
+        ]);
         session()->flash('success', 'The Data Was Deleted');
         return redirect('/product');
     }
@@ -42,7 +44,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $data = Product::select('name', 'sell_price', 'modified_at', 'slug', 'status', 'id')->paginate(7);
+        $data = Product::select('name', 'sell_price', 'modified_at', 'slug', 'status', 'id')->where('status', '!=', 'inactive')->paginate(7);
         return view('Master.Product.index', compact('data'));
     }
 

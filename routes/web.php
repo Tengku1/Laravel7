@@ -36,10 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
     // End Branch
 
     // Market
-    Route::get('/market', 'StockController@market');
-    Route::get('/market/buy', 'StockController@buy');
-    Route::get('/market/sell', 'StockController@sell');
-    Route::patch('/market/marketex', 'StockController@marketex');
+    Route::get('/market', 'MarketController@index');
     // End Market
 
     // Products Only For MASTER !!
@@ -86,6 +83,10 @@ Route::group(['middleware' => ['auth']], function () {
     // Users
 
     Route::get('/user', 'UserController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+
+    Route::get('/user/edit/{email}', 'UserController@edit')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+
+    Route::patch('/user/{email}/update', 'UserController@update')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 
     Route::get('/user/excel', 'UserController@excel')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 

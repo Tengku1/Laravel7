@@ -41,13 +41,20 @@ $no = 1;
             <th scope="col" colspan="2">Action</th>
         </tr>
         @foreach ($data as $values)
+        @if ($values->status == 'out of stock')
+        <tr class="bg-danger text-white" title="Product is empty !!">
+        @elseif($values->status == 'running low')
+        <tr class="bg-warning" title="Quantity below 20 !!">
+        @else
         <tr>
+        @endif
             <td scope="col">{{$no++}}</td>
             <td scope="col">{{Str::limit($values->name,20)}}</td>
             <td scope="col">{{$values->sell_price}}</td>
+            
             <td scope="col">{{$values->status}}</td>
             <td>
-                <div class="btn-group">
+                <div class="btn-group border">
                     <a href="/product/{{$values->slug}}">
                         <button class="btn rounded-0 btn-sm btn-info" title="Edit"><i class="fa fa-eye"></i></button>
                     </a>

@@ -36,7 +36,6 @@ $no = 1;
             <th scope="col">Full Name</th>
             <th scope="col">Email</th>
             <th scope="col">Status</th>
-            <th scope="col">Modified At</th>
             <th scope="col" colspan="2">Action</th>
         </tr>
         @foreach ($data as $values)
@@ -46,9 +45,12 @@ $no = 1;
             <td scope="col">{{Str::limit($values->full_name,20)}}</td>
             <td scope="col">{{$values->email}}</td>
             <td scope="col">{{$values->status}}</td>
-            <td scope="col">{{$values->modified_at->diffForHumans()}}</td>
             <td>
                 <div class="btn-group">
+                    <a href="/user/edit/{{$values->email}}">
+                        <button class="btn rounded-0 btn-sm btn-warning" title="Edit"><i
+                                class="fa fa-pencil-square-o"></i></button>
+                    </a>
                     <button type="submit" class="btn rounded-0 btn-sm btn-danger delete" data-toggle="modal" data-target="#delete" data-id="{{$values->id}}" title="Delete">
                         <i class="fa fa-trash"></i>
                     </button>
