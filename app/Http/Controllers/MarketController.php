@@ -9,23 +9,14 @@ use App\Products_Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class Market extends Controller
+class MarketController extends Controller
 {
     public function index()
     {
-        return view('layouts.Market.market');
+        return view('layouts.Market.index');
     }
 
     public function create()
-    {
-    }
-
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function edit($id)
     {
         //
     }
@@ -145,9 +136,17 @@ class Market extends Controller
         //
     }
 
-
+    public function edit($id)
+    {
+        //
+    }
 
     public function update(Request $request, $id)
+    {
+        //
+    }
+
+    public function sell($id)
     {
         //
     }

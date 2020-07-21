@@ -80,8 +80,6 @@ class StockController extends Controller
         return Excel::download(new StocksExport($code, $date), $name);
     }
 
-
-
     public function create($code = null)
     {
         $data['code'] = $code;
