@@ -56,11 +56,6 @@
                         Product <i class="fa fa-product-hunt"></i>
                     </a>
                 </li>
-                <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
-                    <a href="/history" class="menuitem nav-item nav-link">
-                        History Sells <i class="fa fa-history"></i>
-                    </a>
-                </li>
                 <li class="mx-1{{ request()->is(strstr($url,"user")) ? ' active' : '' }}">
                     <a href="/user" class="menuitem nav-item nav-link">
                         User <i class="fa fa-user"></i>
@@ -72,15 +67,15 @@
                     Stock <i class="fa fa-dropbox"></i>
                 </a>
             </li>
-            <li class="mx-1{{ request()->is(strstr($url,"history")) ? ' active' : '' }}">
-                    <a href="/history" class="menuitem nav-item nav-link">
-                        History Sells <i class="fa fa-history"></i>
-                    </a>
-                </li>
             @endif
-            <li class="mx-1{{ request()->is(strstr($url,"market")) ? ' active' : '' }}">
-                <a href="/market" class="menuitem nav-item nav-link">
-                    Market <i class="fa fa-shopping-cart"></i>
+            <li class="mx-1{{ request()->is(strstr($url,"sell")) ? ' active' : '' }}">
+                <a href="/sell" class="menuitem nav-item nav-link">
+                    Sell Product <i class="fa fa-shopping-cart"></i>
+                </a>
+            </li>
+            <li class="mx-1{{ request()->is(strstr($url,"buy")) ? ' active' : '' }}">
+                <a href="/buy" class="menuitem nav-item nav-link">
+                    Buy Product <i class="fa fa-shopping-bag"></i>
                 </a>
             </li>
         </div>

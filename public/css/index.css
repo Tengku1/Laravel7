@@ -277,11 +277,7 @@ header div:first-of-type {
 
 .tableData {
     text-align: center;
-    box-shadow: 0px 0px 1px 0px #333;
-}
-
-.tableData tr:first-of-type:hover {
-    background-color: unset;
+    border-top: 2px solid rgba(0, 107, 98, 1) !important;
 }
 
 /* ============================================= */

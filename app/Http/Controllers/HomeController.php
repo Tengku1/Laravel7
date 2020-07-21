@@ -30,16 +30,4 @@ class HomeController extends Controller
         }
         return view('layouts.home', compact('data'));
     }
-
-    public function history()
-    {
-        if (Auth::user()->roles[0] == "Master") {
-            $data = history_sell_product::join('products_stock', 'history_sell_product.product_id', 'products_stock.product_id')->join('products', 'products_stock.product_id', '=', 'products.id')->join('branch', 'products_stock.branch_code', '=', 'branch.code')
-                ->select('branch.name as BranchName', 'history_sell_product.qty', 'history_sell_product.buy_price', 'history_sell_product.sell_price', 'products.name as ProductName')->paginate(5);
-        } else {
-            $data = history_sell_product::join('products_stock', 'history_sell_product.product_id', 'products_stock.product_id')->join('products', 'products_stock.product_id', '=', 'products.id')->join('branch', 'products_stock.branch_code', '=', 'branch.code')
-                ->select('branch.name as BranchName', 'history_sell_product.qty', 'history_sell_product.buy_price', 'history_sell_product.sell_price', 'products.name as ProductName')->where('history_sell_product.branch_code', '=', Auth::user()->branch_code)->paginate(5);
-        }
-        return view('layouts.history', compact('data'));
-    }
 }

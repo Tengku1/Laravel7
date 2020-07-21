@@ -36,7 +36,14 @@ Route::group(['middleware' => ['auth']], function () {
     // End Branch
 
     // Market
-    Route::get('/market', 'MarketController@index');
+    Route::get('/sell', 'StockController@sell');
+    Route::get('/sell/paginate/{limit}/', 'StockController@sell');
+    Route::get('/sell/detail', 'StockController@DetailSell');
+    Route::get('/buy', 'StockController@buy');
+    Route::get('/buy/paginate/{limit}/', 'StockController@buy');
+    Route::get('/buy/detail', 'StockController@DetailBuy');
+
+    Route::get('/market/store', 'StockController@marketStore');
     // End Market
 
     // Products Only For MASTER !!
