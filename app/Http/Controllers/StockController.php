@@ -80,17 +80,6 @@ class StockController extends Controller
         return Excel::download(new StocksExport($code, $date), $name);
     }
 
-    public function buy($limit = null)
-    {
-        if ($limit == null) {
-            $data = history_sell_product::join('history_sell', 'history_sell_product.history_sell', '=', 'history_sell.id')->paginate(7);
-        } else {
-            $data = history_sell_product::join('history_sell', 'history_sell_product.history_sell', '=', 'history_sell.id')->paginate($limit);
-        }
-        $limit = history_sell_product::get();
-        return view('layouts.Market.buy', compact('data', 'limit'));
-    }
-
     public function create($code = null)
     {
         $data['code'] = $code;
@@ -144,17 +133,6 @@ class StockController extends Controller
         }
     }
 
-    public function detailBuy()
-    {
-        $data = Product::select('name')->get();
-        return view('layouts.Market.detailBuy', compact('data'));
-    }
-    public function detailSell()
-    {
-        $data = Product::select('name')->get();
-        return view('layouts.Market.detailSell', compact('data'));
-    }
-
     public function marketStore()
     {
         $attr = request()->all();
@@ -175,17 +153,6 @@ class StockController extends Controller
         }
         $arr['branch'] = $branch;
         return view('Master.Stock.stock', compact('stocks', 'arr'));
-    }
-
-    public function sell($limit = null)
-    {
-        if ($limit == null) {
-            $data = history_sell_product::join('history_sell', 'history_sell_product.history_sell', '=', 'history_sell.id')->paginate(7);
-        } else {
-            $data = history_sell_product::join('history_sell', 'history_sell_product.history_sell', '=', 'history_sell.id')->paginate($limit);
-        }
-        $limit = history_sell_product::get();
-        return view('layouts.Market.sell', compact('data', 'limit'));
     }
 
     public function show($slug)

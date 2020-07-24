@@ -36,14 +36,17 @@ Route::group(['middleware' => ['auth']], function () {
     // End Branch
 
     // Market
-    Route::get('/sell', 'StockController@sell');
-    Route::get('/sell/paginate/{limit}/', 'StockController@sell');
-    Route::get('/sell/detail', 'StockController@DetailSell');
-    Route::get('/buy', 'StockController@buy');
-    Route::get('/buy/paginate/{limit}/', 'StockController@buy');
-    Route::get('/buy/detail', 'StockController@DetailBuy');
+    Route::get('/market/{path}/', 'HomeController@market');
+    Route::get('/market/{path}/paginate/{limit}', 'HomeController@market');
+    Route::get('/market/detail/buy', 'HomeController@DetailBuy');
+    Route::get('/market/detail/buy/{new}', 'HomeController@DetailBuy');
+    Route::get('/market/detail/sell', 'HomeController@DetailSell');
+    Route::get('/market/detail/sell/{page}', 'HomeController@DetailSell');
+    Route::post('/market/storeBuy', 'HomeController@marketBuy');
+    Route::post('/market/storeSell', 'HomeController@marketSell');
 
-    Route::get('/market/store', 'StockController@marketStore');
+    Route::post('/market/stockSell', 'HomeController@stockSell');
+    Route::post('/market/stockBuy', 'HomeController@stockBuy');
     // End Market
 
     // Products Only For MASTER !!

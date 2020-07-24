@@ -46,35 +46,35 @@
             </li>
 
             @if (Auth::user()->roles[0] == "Master")
-                <li class="mx-1{{ request()->is(strstr($url,"branch")) ? ' active' : '' }}">
+                <li class="mx-1{{ strstr($url, "branch") ? ' active' : '' }}">
                     <a href="/branch" class="menuitem nav-item nav-link">
                         Branch <i class="fa fa-dropbox"></i>
                     </a>
                 </li>
-                <li class="mx-1{{ request()->is(strstr($url,"product")) ? ' active' : '' }}">
+                <li class="mx-1{{ strstr($url, "product") ? ' active' : '' }}">
                     <a href="/product" class="menuitem nav-item nav-link">
                         Product <i class="fa fa-product-hunt"></i>
                     </a>
                 </li>
-                <li class="mx-1{{ request()->is(strstr($url,"user")) ? ' active' : '' }}">
+                <li class="mx-1{{ strstr($url, "user") ? ' active' : '' }}">
                     <a href="/user" class="menuitem nav-item nav-link">
                         User <i class="fa fa-user"></i>
                     </a>
                 </li>
             @else
-            <li class="mx-1{{ request()->is(strstr($url,"stock")) ? ' active' : '' }}">
+            <li class="mx-1{{ strstr($url, "stock") ? ' active' : '' }}">
                 <a href="/stock" class="menuitem nav-item nav-link">
                     Stock <i class="fa fa-dropbox"></i>
                 </a>
             </li>
             @endif
-            <li class="mx-1{{ request()->is(strstr($url,"sell")) ? ' active' : '' }}">
-                <a href="/sell" class="menuitem nav-item nav-link">
+            <li class="mx-1{{ strstr($url, "sell") ? ' active' : '' }}">
+                <a href="/market/sell" class="menuitem nav-item nav-link">
                     Sell Product <i class="fa fa-shopping-cart"></i>
                 </a>
             </li>
-            <li class="mx-1{{ request()->is(strstr($url,"buy")) ? ' active' : '' }}">
-                <a href="/buy" class="menuitem nav-item nav-link">
+            <li class="mx-1{{ strstr($url, "buy") ? ' active' : '' }}">
+                <a href="/market/buy" class="menuitem nav-item nav-link">
                     Buy Product <i class="fa fa-shopping-bag"></i>
                 </a>
             </li>
