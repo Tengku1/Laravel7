@@ -83,20 +83,53 @@ class HomeController extends Controller
     public function market($path)
     {
         if ($path == "buy") {
-            $data = history_buy_product::join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')->select('history_buy.id', 'history_buy_product.qty', 'history_buy_product.buy_price')->paginate(7);
+            $data = history_buy_product::join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')->select('history_buy.id', 'history_buy_product.qty', 'history_buy_product.buy_price', 'history_buy_product.id as historyProductID')->paginate(7);
+
             $branch = Branch::select('name as branch_name', 'slug')->get();
             return view('layouts.Market.buy', compact('data', 'branch'));
         } else {
-            $data = history_sell_product::join('history_sell', 'history_sell_product.history_sell', 'history_sell.id')->select('history_sell.id', 'history_sell_product.qty', 'history_sell_product.sell_price')->paginate(7);
+            $data = history_sell_product::join('history_sell', 'history_sell_product.history_sell', 'history_sell.id')->select('history_sell.id', 'history_sell_product.qty', 'history_sell_product.sell_price', 'history_buy_product.id as historyProductID')->paginate(7);
+
             $branch = Branch::select('name as branch_name', 'slug')->get();
             return view('layouts.Market.sell', compact('data', 'branch'));
         }
+    }
+
+    public function deleteBuy()
+    {
+        $attr = request()->all();
+
+        history_buy_product::where('id', '=', $attr['id'])->delete();
+
+        session()->flash('success', 'The Data Was Deleted');
+        return redirect('/market/buy');
+    }
+
+    public function deleteSell()
+    {
+        $attr = request()->all();
+        dd($attr);
+        // history_sell_product::where("history_buy", "=", $id)->delete();
+        session()->flash('success', 'The Data Was Deleted');
+        return redirect('/market/buy');
     }
 
     public function marketBuy()
     {
         $attr = request()->all();
         history_buy_product::create([
+            'history_buy' => $attr['buyId'],
+            'product_id' => $attr['product_id'],
+            'qty' => $attr['qty'],
+            'buy_price' => $attr['buy_price'],
+        ]);
+        return redirect()->back();
+    }
+
+    public function marketSell()
+    {
+        $attr = request()->all();
+        history_sell_product::create([
             'history_buy' => $attr['buyId'],
             'product_id' => $attr['product_id'],
             'qty' => $attr['qty'],
@@ -118,18 +151,21 @@ class HomeController extends Controller
                 'qty' => $value->qty,
             ]);
         }
-        return redirect()->to('/market/buy');
+        return redirect()->to('/market/buy/');
     }
 
     public function stockSell()
     {
         $attr = request()->all();
-        Products_Stock::create([
-            'product_id',
-            'branch_code',
-            'buy_price',
-            'qty',
-        ]);
+        // $history = history_buy_product::join('products', 'history_buy_product.product_id', 'products.id')->join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')->select('history_buy_product.qty', 'products.id', 'history_buy.code')->where('history_buy.id', '=', $attr['id'])->orderBy('')->get();
+
+        // foreach ($variable as $key => $value) {
+        //     # code...
+        // }
+
+        // Products_Stock::where('product_id', '=', $history->id)->where('branch_code', $history->code)->update([
+        //     'qty', 
+        // ]);
         return redirect()->to('/market/sell');
     }
 

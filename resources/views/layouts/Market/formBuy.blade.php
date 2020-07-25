@@ -45,11 +45,11 @@
             {{ csrf_field() }}
             <div class="col-md-12">
                 <div class="col-md-6 float-left px-1">
-                    <span class="text-bold">Reff ID : {{$historySell[0]->id}}</span>
+                    <span class="text-bold">Reff ID : {{$historyBuy[0]->id}}</span>
                 </div>
                 <div class="col-md-6 float-left px-1">
                     <span class="text-bold">Total Price : {{$total[0]}}</span>
-                    <button type="submit" class="btn btn-success float-right text-white">Finish</button>
+                    <button type="{{count($history) ? 'submit' : 'button'}}" class="btn btn-success float-right text-white" {{count($history) ? '' : 'disabled'}}>Finish</button>
                 </div>
             </div>
             <div class="col-md-12 mt-5">

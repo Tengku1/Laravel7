@@ -39,11 +39,20 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/market/{path}/', 'HomeController@market');
     Route::get('/market/{path}/paginate/{limit}', 'HomeController@market');
     Route::get('/market/detail/buy', 'HomeController@DetailBuy');
-    Route::get('/market/detail/buy/{new}', 'HomeController@DetailBuy');
+    Route::get('/market/detail/buy/{historyID}', 'HomeController@DetailBuy');
     Route::get('/market/detail/sell', 'HomeController@DetailSell');
     Route::get('/market/detail/sell/{page}', 'HomeController@DetailSell');
     Route::post('/market/storeBuy', 'HomeController@marketBuy');
     Route::post('/market/storeSell', 'HomeController@marketSell');
+
+    Route::delete('/market/deleteBuy', 'HomeController@deleteBuy');
+    Route::delete('/market/deleteSell', 'HomeController@deleteSell');
+
+    Route::get('/market/editBuy/{id}', 'HomeController@editBuy');
+    Route::get('/market/editSell/{id}', 'HomeController@editSell');
+
+    Route::patch('/market/updateBuy/{id}', 'HomeController@updateBuy');
+    Route::patch('/market/updateSell/{id}', 'HomeController@updateSell');
 
     Route::post('/market/stockSell', 'HomeController@stockSell');
     Route::post('/market/stockBuy', 'HomeController@stockBuy');
