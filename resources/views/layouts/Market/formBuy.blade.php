@@ -40,7 +40,7 @@
         List Detail Product
     </div>
     <div class="card-body">
-        <form action="/market/stockBuy/" method="post" class="px-0 py-0" id="listDetailProduct">
+        <form action="/market/storeStockBuy/" method="post" class="px-0 py-0" id="listDetailProduct">
             {{ csrf_field() }}
             @foreach ($data as $item)
             <input type="hidden" name="id" value="{{$item->buyId}}">

@@ -36,7 +36,7 @@
         List Product
     </div>
     <div class="card-body">
-        <form action="/market/stockSell/" method="post" class="px-0 py-0" id="listDetailProduct">
+        <form action="/market/storeStockSell/" method="post" class="px-0 py-0" id="listDetailProduct">
 
             {{ csrf_field() }}
             @foreach ($data as $item)

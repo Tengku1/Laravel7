@@ -53,8 +53,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::patch('/market/updateBuy', 'HomeController@updateBuy');
     Route::patch('/market/updateSell', 'HomeController@updateSell');
 
-    Route::post('/market/stockSell', 'HomeController@stockSell');
-    Route::post('/market/stockBuy', 'HomeController@stockBuy');
+    Route::post('/market/storeStockSell', 'HomeController@stockSell');
+    Route::post('/market/storeStockBuy', 'HomeController@stockBuy');
 
     Route::get('/market/{page}/search/', 'HomeController@search');
     // End Market
