@@ -39,6 +39,9 @@ body {
 /* ============================================= */
 
 /* ==================== C ====================== */
+.dashboardDatabase {
+    margin-bottom: 10px;
+}
 
 .dashboardDatabase .card-body,
 .dashboardDatabase .card-header {
