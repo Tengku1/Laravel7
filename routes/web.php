@@ -36,26 +36,25 @@ Route::group(['middleware' => ['auth']], function () {
     // End Branch
 
     // Market
+    Route::get('/market/detail/buy', 'HistoryController@DetailBuy');
+    Route::get('/market/detail/sell', 'HistoryController@DetailSell');
+    Route::post('/market/storeBuy', 'HistoryController@storeBuy');
+    Route::post('/market/storeSell', 'HistoryController@storeSell');
+    Route::delete('/market/deleteBuy', 'HistoryController@deleteBuy');
+    Route::delete('/market/deleteSell', 'HistoryController@deleteSell');
+    Route::patch('/market/updateBuy', 'HistoryController@updateBuy');
+    Route::patch('/market/updateSell', 'HistoryController@updateSell');
+    Route::post('/market/storeStockSell', 'HistoryController@stockSell');
+    Route::post('/market/storeStockBuy', 'HistoryController@stockBuy');
 
-    Route::get('/market/detail/buy', 'HomeController@DetailBuy');
-    Route::get('/market/detail/sell', 'HomeController@DetailSell');
-    Route::post('/market/storeBuy', 'HomeController@storeBuy');
-    Route::post('/market/storeSell', 'HomeController@storeSell');
-    Route::delete('/market/deleteBuy', 'HomeController@deleteBuy');
-    Route::delete('/market/deleteSell', 'HomeController@deleteSell');
-    Route::patch('/market/updateBuy', 'HomeController@updateBuy');
-    Route::patch('/market/updateSell', 'HomeController@updateSell');
-    Route::post('/market/storeStockSell', 'HomeController@stockSell');
-    Route::post('/market/storeStockBuy', 'HomeController@stockBuy');
+    Route::get('/market/{path}/', 'HistoryController@history');
+    Route::get('/market/{path}/paginate/{limit}', 'HistoryController@history');
 
-    Route::get('/market/{path}/', 'HomeController@history');
-    Route::get('/market/{path}/paginate/{limit}', 'HomeController@history');
+    Route::get('/market/detail/buy/{branchSlug}/paginate/{paginate}', 'HistoryController@DetailBuy');
+    Route::get('/market/detail/sell/{branchSlug}/paginate/{paginate}', 'HistoryController@DetailSell');
 
-    Route::get('/market/detail/buy/{branchSlug}/paginate/{paginate}', 'HomeController@DetailBuy');
-    Route::get('/market/detail/sell/{branchSlug}/paginate/{paginate}', 'HomeController@DetailSell');
-
-    Route::get('/market/edit/{page}/{id}', 'HomeController@edit')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-    Route::get('/market/{page}/search/', 'HomeController@search');
+    Route::get('/market/edit/{page}/{id}', 'HistoryController@edit')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+    Route::get('/market/{page}/search/', 'HistoryController@search');
     // End Market
 
     // Products Only For MASTER !!
