@@ -35,12 +35,12 @@
     </div>
 </form>
 
+<form action="/market/storeStockBuy/" method="post" class="px-0 py-0" id="listDetailProduct">
 <div class="card">
     <div class="card-header">
         List Detail Product
     </div>
     <div class="card-body">
-        <form action="/market/storeStockBuy/" method="post" class="px-0 py-0" id="listDetailProduct">
             {{ csrf_field() }}
             @foreach ($data as $item)
             <input type="hidden" name="id" value="{{$item->buyId}}">
@@ -56,7 +56,6 @@
                         {{count($data) ? '' : 'disabled'}}>Finish</button>
                 </div>
             </div>
-        </form>
         <div class="col-md-12 mt-5">
             <div class="col-md-6 float-left">
                 <div class="dropdown float-left mb-2">
@@ -111,4 +110,5 @@
     <div class="card-footer text-muted">
     </div>
 </div>
+</form>
 @endsection
