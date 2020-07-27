@@ -39,43 +39,35 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/market/{path}/', 'HomeController@market');
     Route::get('/market/{path}/paginate/{limit}', 'HomeController@market');
     Route::get('/market/detail/buy', 'HomeController@DetailBuy');
-    Route::get('/market/detail/buy/{historyID}', 'HomeController@DetailBuy');
+    Route::get('/market/detail/buy/{branchSlug}/paginate/{paginate}', 'HomeController@DetailBuy');
     Route::get('/market/detail/sell', 'HomeController@DetailSell');
-    Route::get('/market/detail/sell/{page}', 'HomeController@DetailSell');
-    Route::post('/market/storeBuy', 'HomeController@marketBuy');
-    Route::post('/market/storeSell', 'HomeController@marketSell');
+    Route::get('/market/detail/sell/{branchSlug}/paginate/{paginate}', 'HomeController@DetailSell');
+    Route::post('/market/storeBuy', 'HomeController@storeBuy');
+    Route::post('/market/storeSell', 'HomeController@storeSell');
 
     Route::delete('/market/deleteBuy', 'HomeController@deleteBuy');
     Route::delete('/market/deleteSell', 'HomeController@deleteSell');
 
-    Route::get('/market/editBuy/{id}', 'HomeController@editBuy');
-    Route::get('/market/editSell/{id}', 'HomeController@editSell');
+    Route::get('/market/edit/{page}/{id}', 'HomeController@edit')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 
-    Route::patch('/market/updateBuy/{id}', 'HomeController@updateBuy');
-    Route::patch('/market/updateSell/{id}', 'HomeController@updateSell');
+    Route::patch('/market/updateBuy', 'HomeController@updateBuy');
+    Route::patch('/market/updateSell', 'HomeController@updateSell');
 
     Route::post('/market/stockSell', 'HomeController@stockSell');
     Route::post('/market/stockBuy', 'HomeController@stockBuy');
+
+    Route::get('/market/{page}/search/', 'HomeController@search');
     // End Market
 
     // Products Only For MASTER !!
     Route::get('/product', 'ProductController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-
     Route::get('/product/create', 'ProductController@create')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-
-
     Route::get('/product/edit/{product:slug}', 'ProductController@edit')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-
     Route::get('/product/excel', 'ProductController@excel')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-
     Route::get('/product/search', 'ProductController@search')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-
     Route::patch('/product/{id}', 'ProductController@update')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-
     Route::post('/product/store', 'ProductController@store')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-
     Route::delete('/product/destroy', 'ProductController@destroy')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-
     Route::get('/product/{product:slug}', 'ProductController@show')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 
     // End Products

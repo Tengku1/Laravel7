@@ -34,7 +34,7 @@
 </div>
 
 <div class="table-responsive px-1">
-    @include('layouts.tableProducts')
+    @include('layouts.table')
 </div>
 
 <!-- Modal -->

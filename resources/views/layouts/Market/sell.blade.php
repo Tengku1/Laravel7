@@ -13,23 +13,21 @@ $no = 1;
 @if ($data->count())
 <div class="col-md-12 py-2">
     <div class="col-md-8 float-left mb-2">
-        <a href="/market/detail/sell">
-            <button class="btn btn-primary rounded-0 float-left mr-1 mb-2" data-toggle="modal" data-target="#selling" title="Sell Product">Add Sales <i class="fa fa-plus"></i></button>
-        </a>
+        <button class="btn btn-primary rounded-0 float-left mr-1 mb-2" data-toggle="modal" data-target="#selling" title="Sell Product">Sell Product<i class="fa fa-plus"></i></button>
         <div class="dropdown float-left mb-2">
             <button class="btn btn-info rounded-0 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             Show Entries
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            @for ($i = 1; $i <= sizeof($data); $i++)
-                <a href="/market/paginate/{{$i}}/" class="dropdown-item">{{$i}}</a>
-            @endfor
-        </div>
+                @for ($i = 1; $i <= sizeof($getSizeData); $i++) <a href="/market/sell/paginate/{{$i}}/" class="dropdown-item">
+                    {{$i}}</a>
+                    @endfor
+            </div>
         </div>
     </div>
     <div class="col-md-4 float-left mb-2">
-        <form action="/sell/search" method="get" class="px-0 py-0 input-group">
+        <form action="/market/sell/search" method="get" class="px-0 py-0 input-group">
             <input class="form-control py-2 float-left" type="search" value="" placeholder="Search ..." id="searchdata"
                 name="by">
             <span class="input-group-append">
@@ -50,19 +48,22 @@ $no = 1;
         </tr>
         @foreach ($data as $values)
             <td>{{$no++}}</td>
-            <td>{{$values->product_id}}</td>
-            <td>{{$values->status}}</td>
+            <td>{{$values->id}}</td>
+            <td>{{$values->qty}}</td>
             <td>
                 <div class="btn-group border">
-                    <a href="/product/{{$values->slug}}">
-                        <button class="btn rounded-0 btn-sm btn-info" title="Edit"><i class="fa fa-eye"></i></button>
-                    </a>
-                    <a href="/product/edit/{{$values->slug}}">
+                    @if ($values->has_finished == "false")
+                    <form action="/market/detail/buy" class="px-0 py-0" method="get">
+                        <button class="btn rounded-0 btn-sm btn-info" name="branch" title="Edit"
+                            value="{{$values->branchSlug}}"><i class="fa fa-eye"></i></button>
+                    </form>
+                    @endif
+                    <a href="/market/edit/sell/{{$values->historyProductID}}">
                         <button class="btn rounded-0 btn-sm btn-warning" title="Edit"><i
                                 class="fa fa-pencil-square-o"></i></button>
                     </a>
                     <button type="submit" class="btn rounded-0 btn-sm btn-danger delete" data-toggle="modal"
-                        data-target="#delete" data-id="{{$values->id}}" title="Delete">
+                        data-target="#delete" data-id="{{$values->historyProductID}}" title="Delete">
                         <i class="fa fa-trash"></i>
                     </button>
                 </div>
@@ -88,6 +89,43 @@ $no = 1;
 {{-- End If --}}
 @endif
 
+<!-- Modal -->
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/market/deleteSell" method="post">
+                {{method_field('delete')}}
+                {{ csrf_field() }}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    You Want You Sure Delete This Record?
+                    <input type="hidden" name="id" id="id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger waves-effect remove-data-from-delete-form">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section('script')
+
+<script>
+    $(document).on('click', '.delete', function () {
+        var id = $(this).attr('data-id');
+        $('#id').val(id);
+    });
+</script>
+
+@endsection
+{{-- End Modal --}}
 
 <!-- Modal -->
 <div class="modal fade" id="selling" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -95,7 +133,7 @@ $no = 1;
         <div class="modal-content">
             <form action="/market/detail/sell" method="get">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Product</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Select Branch</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

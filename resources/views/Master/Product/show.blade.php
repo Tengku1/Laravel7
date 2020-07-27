@@ -11,6 +11,10 @@
             <div class="row mt-3 alert alert-danger">
                 Status : Out Of Product ! Add Now !
             </div>
+        @elseif($qty > 0 && $qty <= 20)
+            <div class="row mt-3 alert alert-warning">
+                Status : Running Low ! Increase Now !
+            </div>
         @endif
         <div class="table-responsive">
             <table class="col-md-12 mt-3 table table-hover table-light">

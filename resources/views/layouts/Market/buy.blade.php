@@ -21,16 +21,15 @@ $no = 1;
                 Show Entries
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                @for ($i = 1; $i <= sizeof($data); $i++) <a href="/market/paginate/{{$i}}/" class="dropdown-item">
+                @for ($i = 1; $i <= sizeof($getSizeData); $i++) <a href="/market/buy/paginate/{{$i}}/" class="dropdown-item">
                     {{$i}}</a>
                     @endfor
             </div>
         </div>
     </div>
     <div class="col-md-4 float-left mb-2">
-        <form action="/buy/search" method="get" class="px-0 py-0 input-group">
-            <input class="form-control py-2 float-left" type="search" value="" placeholder="Search ..." id="searchdata"
-                name="by">
+        <form action="/market/buy/search" method="get" class="px-0 py-0 input-group">
+            <input class="form-control py-2 float-left" type="search" value="" placeholder="Search ..." id="searchdata" name="by">
             <span class="input-group-append">
                 <button class="btn btn-outline-secondary" type="submit">
                     <i class="fa fa-search"></i>
@@ -48,24 +47,31 @@ $no = 1;
             <th>Action</th>
         </tr>
         @foreach ($data as $values)
-        <td>{{$no++}}</td>
-        <td>{{$values->id}}</td>
-        <td>{{$values->qty * $values->buy_price}}</td>
-        <td>
-            <div class="btn-group border">
-                <a href="/product/{{$values->slug}}">
-                    <button class="btn rounded-0 btn-sm btn-info" title="Edit"><i class="fa fa-eye"></i></button>
-                </a>
-                <a href="/product/edit/{{$values->slug}}">
-                    <button class="btn rounded-0 btn-sm btn-warning" title="Edit"><i
-                            class="fa fa-pencil-square-o"></i></button>
-                </a>
-                <button type="submit" class="btn rounded-0 btn-sm btn-danger delete" data-toggle="modal"
-                    data-target="#delete" data-id="{{$values->historyProductID}}" title="Delete">
-                    <i class="fa fa-trash"></i>
-                </button>
-            </div>
-        </td>
+        @if ($values->has_finished == "false")
+        <tr class="bg-warning" title="Please Complete The Transaction !">
+        @else
+        <tr>
+        @endif
+            <td>{{$no++}}</td>
+            <td>{{$values->id}}</td>
+            <td>{{$values->qty * $values->buy_price}}</td>
+            <td>
+                <div class="btn-group border">
+                    @if ($values->has_finished == "false")
+                    <form action="/market/detail/buy" class="px-0 py-0" method="get">
+                        <button class="btn rounded-0 btn-sm btn-info" name="branch" title="Edit"
+                            value="{{$values->branchSlug}}"><i class="fa fa-eye"></i></button>
+                    </form>
+                    @endif
+                    <a href="/market/edit/buy/{{$values->historyProductID}}">
+                        <button class="btn rounded-0 btn-sm btn-warning" title="Edit"><i
+                                class="fa fa-pencil-square-o"></i></button>
+                    </a>
+                    <button type="submit" class="btn rounded-0 btn-sm btn-danger delete" data-toggle="modal" data-target="#delete" data-id="{{$values->historyProductID}}" title="Delete">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </td>
         </tr>
         @endforeach
     </table>
@@ -80,7 +86,7 @@ $no = 1;
 {{-- If Data is Empty --}}
 <div class="row px-2">
     <button class="btn btn-primary rounded-0 float-left mr-1 mb-2" data-toggle="modal" data-target="#shoping"
-    title="Buy Product">Add Sales <i class="fa fa-plus"></i></button>
+        title="Buy Product">Add Sales <i class="fa fa-plus"></i></button>
 </div>
 <div class="row mt-3 alert alert-info">
     No Data Available
@@ -113,6 +119,7 @@ $no = 1;
         </div>
     </div>
 </div>
+
 @section('script')
 
 <script>
@@ -138,7 +145,7 @@ $no = 1;
                     <select name="branch" id="branch" class="form-control">
                         <option value=""></option>
                         @foreach ($branch as $item)
-                            <option value="{{$item->slug}}">{{$item->branch_name}}</option>
+                        <option value="{{$item->slug}}">{{$item->branch_name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -150,14 +157,6 @@ $no = 1;
         </div>
     </div>
 </div>
-@section('script')
-{{-- End Modal --}}
-
-
-
-
-
-@endsection
 
 {{-- ======= --}}
 @endsection
