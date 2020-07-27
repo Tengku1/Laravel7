@@ -201,7 +201,7 @@ class HomeController extends Controller
         return redirect('/market/sell');
     }
 
-    public function markets($path, $paginate = 7)
+    public function history($path, $paginate = 7)
     {
         if ($path == "buy") {
             $data = history_buy_product::join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')
@@ -230,6 +230,7 @@ class HomeController extends Controller
                 )->where('history_sell.created_at', 'like', '%' . date('Y-m-d') . '%')->paginate($paginate);
             $branch = Branch::select('name as branch_name', 'slug')->get();
             $getSizeData = history_sell_product::get();
+            dd("bangsat kenapa kesini bangsat !?, heroku sialan !");
             return view('layouts.Market.sell', compact('data', 'branch', 'getSizeData'));
         }
     }

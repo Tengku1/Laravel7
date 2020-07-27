@@ -48,8 +48,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/market/storeStockSell', 'HomeController@stockSell');
     Route::post('/market/storeStockBuy', 'HomeController@stockBuy');
 
-    Route::get('/market/{path}/', 'HomeController@markets');
-    Route::get('/market/{path}/paginate/{limit}', 'HomeController@markets');
+    Route::get('/market/{path}/', 'HomeController@history');
+    Route::get('/market/{path}/paginate/{limit}', 'HomeController@history');
 
     Route::get('/market/detail/buy/{branchSlug}/paginate/{paginate}', 'HomeController@DetailBuy');
     Route::get('/market/detail/sell/{branchSlug}/paginate/{paginate}', 'HomeController@DetailSell');
