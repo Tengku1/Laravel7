@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Http\Middleware\CheckUserRole;
 use App\Role\RoleChecker;
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
+setlocale(LC_TIME, config('app.locale'));
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -29,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        config(['app.locale' => 'id']);
+        Carbon::setLocale('id');
+        date_default_timezone_set('Asia/Jakarta');
     }
 }
