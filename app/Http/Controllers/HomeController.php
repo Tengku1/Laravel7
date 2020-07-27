@@ -201,7 +201,7 @@ class HomeController extends Controller
         return redirect('/market/sell');
     }
 
-    public function market($path, $paginate = 7)
+    public function markets($path, $paginate = 7)
     {
         if ($path == "buy") {
             $data = history_buy_product::join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')
