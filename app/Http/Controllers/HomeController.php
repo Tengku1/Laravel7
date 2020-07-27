@@ -282,6 +282,8 @@ class HomeController extends Controller
     public function stockBuy()
     {
         $attr = request()->all();
+        dd($attr);
+
         $history = history_buy_product::join('products', 'history_buy_product.product_id', 'products.id')->join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')->select('products.name', 'history_buy_product.qty', 'history_buy_product.buy_price', 'products.id')->where('history_buy.id', '=', $attr['id'])->get();
 
         for ($i = 0; $i < sizeof($history); $i++) {
