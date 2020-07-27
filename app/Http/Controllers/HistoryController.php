@@ -12,7 +12,7 @@ use App\Products_Stock;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class History extends Controller
+class HistoryController extends Controller
 {
     public function DetailBuy($branchSlug = null, $paginate = 7)
     {
