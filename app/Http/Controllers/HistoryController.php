@@ -16,8 +16,6 @@ class HistoryController extends Controller
 {
     public function DetailBuy($branchSlug = null, $paginate = 7)
     {
-        dd(date("Y-m-d H:i:s"));
-
         $attr = request()->all();
         if ($branchSlug != null) {
             $branch = Branch::select('code', 'slug')
