@@ -211,7 +211,6 @@ class HistoryController extends Controller
                 )->where('history_sell.created_at', 'like', '%' . date('Y-m-d') . '%')->paginate($paginate);
             $branch = Branch::select('name as branch_name', 'slug')->get();
             $getSizeData = history_sell_product::get();
-            dd("Nah bang, disini saya bingung, seharusnya ketika tekan finish maka dia akan ke proses, tapi di heroku malah gak ke proses, yang ada dia langsung keredirect ke halaman ini , padahal kalau di laptop lancar aja, disini saya bingung");
             return view('layouts.Market.sell', compact('data', 'branch', 'getSizeData'));
         }
     }
