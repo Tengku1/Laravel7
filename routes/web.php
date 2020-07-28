@@ -44,8 +44,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/market/deleteSell', 'HistoryController@deleteSell');
     Route::patch('/market/updateBuy', 'HistoryController@updateBuy');
     Route::patch('/market/updateSell', 'HistoryController@updateSell');
-    Route::post('/market/storeStockSell', 'HistoryController@stockSell');
-    Route::post('/market/storeStockBuy', 'HistoryController@stockBuy');
+    Route::post('/market/storeStockSell', 'HistoryController@stockSell')->name('StoreExecution');
+    Route::post('/market/storeStockBuy', 'HistoryController@stockBuy')->name('StoreExecution');
 
     Route::get('/market/{path}/', 'HistoryController@history');
     Route::get('/market/{path}/paginate/{limit}', 'HistoryController@history');
