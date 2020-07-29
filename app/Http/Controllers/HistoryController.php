@@ -182,7 +182,7 @@ class HistoryController extends Controller
     public function history($path, $paginate = 7)
     {
         if ($path == "buy") {
-            $data = history_buy_product::join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')
+            $data = history_buy_product::rightJoin('history_buy', 'history_buy_product.history_buy', 'history_buy.id')
                 ->join('branch', 'history_buy.branch_code', '=', 'branch.code')
                 ->select(
                     'history_buy.id',
@@ -197,7 +197,7 @@ class HistoryController extends Controller
             $getSizeData = history_buy_product::get();
             return view('layouts.Market.buy', compact('data', 'branch', 'getSizeData'));
         } else {
-            $data = history_sell_product::join('history_sell', 'history_sell_product.history_sell', 'history_sell.id')
+            $data = history_sell_product::rightJoin('history_sell', 'history_sell_product.history_sell', 'history_sell.id')
                 ->join('branch', 'history_sell.branch_code', '=', 'branch.code')
                 ->select(
                     'history_sell.id',
