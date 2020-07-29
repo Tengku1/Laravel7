@@ -188,9 +188,7 @@ class HistoryController extends Controller
                 ->join('branch', 'history_buy.branch_code', '=', 'branch.code')
                 ->select(
                     'history_buy.id',
-                    'history_buy_product.qty',
                     'branch.slug as branchSlug',
-                    'history_buy_product.buy_price',
                     'history_buy_product.id as historyProductID',
                     'history_buy.has_finished',
                 )->where('history_buy.created_at', 'like', '%' . date('Y-m-d') . '%')->paginate($paginate);
@@ -202,9 +200,7 @@ class HistoryController extends Controller
                 ->join('branch', 'history_sell.branch_code', '=', 'branch.code')
                 ->select(
                     'history_sell.id',
-                    'history_sell_product.qty',
                     'branch.slug as branchSlug',
-                    'history_sell_product.sell_price',
                     'history_sell_product.id as historyProductID',
                     'history_sell.has_finished',
                 )->where('history_sell.created_at', 'like', '%' . date('Y-m-d') . '%')->paginate($paginate);

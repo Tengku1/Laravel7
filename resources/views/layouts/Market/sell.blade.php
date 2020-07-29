@@ -45,13 +45,11 @@ $no = 1;
         <tr>
             <th>No</th>
             <th>Reff ID</th>
-            <th>Total Harga</th>
             <th>Action</th>
         </tr>
         @foreach ($data as $values)
         <td>{{$no++}}</td>
         <td>{{$values->id}}</td>
-        <td>{{$values->qty}}</td>
         <td>
             @if ($values->has_finished == "true")
             <form action="/market/detail/sell/show/" class="px-0 py-0" method="get">
