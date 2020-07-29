@@ -205,8 +205,8 @@ class HistoryController extends Controller
                     'history_sell.has_finished',
                 )
                 ->where('history_sell.created_at', 'like', '%' . date('Y-m-d') . '%')
-                ->orderBy('history_buy.id')
-                ->groupBy('history_buy.id', 'branch.slug', 'history_buy.has_finished')
+                ->orderBy('history_sell.id')
+                ->groupBy('history_sell.id', 'branch.slug', 'history_sell.has_finished')
                 ->paginate($paginate);
             $branch = Branch::select('name as branch_name', 'slug')->get();
             $getSizeData = history_sell_product::get();
