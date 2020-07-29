@@ -67,6 +67,11 @@
                     Product <i class="fa fa-product-hunt"></i>
                 </a>
             </li>
+            <li class="mx-1{{ strstr($url, "stock") ? ' active' : '' }}">
+                <a href="/stock" class="menuitem nav-item nav-link">
+                    Stock <i class="fa fa-dropbox"></i>
+                </a>
+            </li>
             @endif
             <li class="mx-1{{ strstr($url, "sell") ? ' active' : '' }}">
                 <a href="/market/sell" class="menuitem nav-item nav-link">

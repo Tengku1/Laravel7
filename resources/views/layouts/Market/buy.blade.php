@@ -21,7 +21,8 @@ $no = 1;
                 Show Entries
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                @for ($i = 1; $i <= sizeof($getSizeData); $i++) <a href="/market/buy/paginate/{{$i}}/" class="dropdown-item">
+                @for ($i = 1; $i <= sizeof($getSizeData); $i++) <a href="/market/buy/paginate/{{$i}}/"
+                    class="dropdown-item">
                     {{$i}}</a>
                     @endfor
             </div>
@@ -29,7 +30,8 @@ $no = 1;
     </div>
     <div class="col-md-4 float-left mb-2">
         <form action="/market/buy/search" method="get" class="px-0 py-0 input-group">
-            <input class="form-control py-2 float-left" type="search" value="" placeholder="Search ..." id="searchdata" name="by">
+            <input class="form-control py-2 float-left" type="search" value="" placeholder="Search ..." id="searchdata"
+                name="by">
             <span class="input-group-append">
                 <button class="btn btn-outline-secondary" type="submit">
                     <i class="fa fa-search"></i>
@@ -49,23 +51,24 @@ $no = 1;
         @foreach ($data as $values)
         @if ($values->has_finished == "false")
         <tr class="bg-warning" title="Please Complete The Transaction !">
-        @else
+            @else
         <tr>
-        @endif
+            @endif
             <td>{{$no++}}</td>
             <td>{{$values->id}}</td>
             <td>{{$values->qty * $values->buy_price}}</td>
             <td>
-                <div>
-                    @if ($values->has_finished == "false")
-                    <form action="/market/detail/buy" class="px-0 py-0" method="get">
-                        <button class="btn rounded-0 btn-sm btn-info" name="branch" title="Edit"
-                            value="{{$values->branchSlug}}"><i class="fa fa-eye"></i></button>
-                    </form>
-                    @else
-                    <span>No Action</span>
-                    @endif
-                </div>
+                @if ($values->has_finished == "true")
+                <form action="/market/detail/buy/show/" class="px-0 py-0" method="get">
+                    <button class="btn rounded-0 btn-sm btn-info" name="id" title="Edit"
+                        value="{{$data[0]->historyProductID}}"><i class="fa fa-eye"></i></button>
+                </form>
+                @else
+                <form action="/market/detail/buy" class="px-0 py-0" method="get">
+                    <button class="btn rounded-0 btn-sm btn-info" name="branch" title="Edit"
+                        value="{{$values->branchSlug}}"><i class="fa fa-pencil-square-o"></i></button>
+                </form>
+                @endif
             </td>
         </tr>
         @endforeach

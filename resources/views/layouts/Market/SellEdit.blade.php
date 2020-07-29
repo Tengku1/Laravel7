@@ -1,4 +1,4 @@
-@extends('layouts.master',['title'=>'Edit - Crux'])
+@extends('layouts.master',['title'=>'Sell Edit - Crux'])
 
 @section('content')
 <div class="card">

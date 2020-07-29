@@ -259,6 +259,28 @@ class HistoryController extends Controller
         }
     }
 
+    public function show($page)
+    {
+        $attr = request()->all();
+        if ($page = "buy") {
+            $data = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")
+                ->join("products", "history_buy_product.product_id", "products.id")
+                ->join("branch", "history_buy.branch_code", "branch.code")
+                ->select("products.name as ProductName", "branch.name as BranchName", "qty", "history_buy.modified_user", "buy_price")
+                ->where("history_buy_product.id", "=", $attr['id'])->get();
+            return view("layouts.Market.showBuy", compact('data'));
+        } elseif ($page = "sell") {
+            $data = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")
+                ->join("products", "history_sell_product.product_id", "products.id")
+                ->join("branch", "history_sell.branch_code", "branch.code")
+                ->select("products.name as ProductName", "branch.name as BranchName", "qty", "history_sell.modified_user", "buy_price", "sell_price")
+                ->where("history_sell_product.id", "=", $attr['id'])->get();
+            return view("layouts.Market.showSell", compact('data'));
+        } else {
+            abort(404);
+        }
+    }
+
     public function stockBuy()
     {
         $attr = request()->all();

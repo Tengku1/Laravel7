@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::patch('/market/updateSell', 'HistoryController@updateSell');
     Route::post('/market/storeStockSell', 'HistoryController@stockSell')->name('SellExecution');
     Route::post('/market/storeStockBuy', 'HistoryController@stockBuy')->name('BuyExecution');
+    route::get('/market/detail/{page}/show/', 'HistoryController@show');
 
     Route::get('/market/{path}/', 'HistoryController@history');
     Route::get('/market/{path}/paginate/{limit}', 'HistoryController@history');
@@ -70,11 +71,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     // End Products
 
-    Route::get('/stock/{code}', 'StockController@index');
-    Route::post('/stock/{code}', 'StockController@index');
-
-    Route::patch('/stock/{product:id}/update', 'StockController@update');
-    Route::get('/stock/{product:id}/market', 'StockController@market');
+    // Stock
+    Route::get('/stock', 'StockController@index');
+    Route::get('/stock/paginate/{paginate}', 'StockController@index');
     // End Stock
 
     // Users
