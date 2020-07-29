@@ -7,10 +7,10 @@
     </div>
 
     <div class="card-body">
+        <span>Reff ID : {{$data[0]->ReffID}}</span>
         <div class="table-responsive">
             <table class="mt-3 tableData table table-light">
                 <tr>
-                    <th>Reff ID</th>
                     <th>Product Name</th>
                     <th>Quantity</th>
                     <th>Sell Price</th>
@@ -19,7 +19,6 @@
                 @if (count($data))
                 @foreach ($data as $item)
                 <tr>
-                    <td>{{$item->ReffID}}</td>
                     <td>{{$item->ProductName}}</td>
                     <td>{{$item->qty}}</td>
                     <td>{{$item->sell_price}}</td>
