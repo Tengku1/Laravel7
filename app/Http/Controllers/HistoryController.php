@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class HistoryController extends Controller
 {
-    public function DetailBuy($branchSlug = null, $paginate = 7)
+    public function DetailBuy($branchSlug = null)
     {
         $attr = request()->all();
         if ($branchSlug != null) {
@@ -55,10 +55,10 @@ class HistoryController extends Controller
                 ->where('products.name', 'like', '%' . $attr['by'] . '%')
                 ->orWhere('history_buy_product.buy_price', 'like', '%' . $attr['by'] . '%')
                 ->orWhere('history_buy_product.qty', 'like', '%' . $attr['by'] . '%')
-                ->paginate($paginate);
+                ->paginate(7);
         } else {
             $data = history_buy_product::join('products', 'history_buy_product.product_id', 'products.id')->join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')->select('products.name', 'history_buy_product.qty', 'history_buy_product.id as HistoryProductID', 'history_buy_product.buy_price', 'products.id', 'history_buy.id as buyId')
-                ->where('history_buy.id', '=', $historyId)->paginate($paginate);
+                ->where('history_buy.id', '=', $historyId)->paginate(7);
         }
 
         $product = Product::select('name', 'id')->get();
@@ -67,11 +67,10 @@ class HistoryController extends Controller
         $price = history_buy_product::where('history_buy', $historyId)->sum("buy_price");
         $total = $qty * $price;
         $total = explode(' ', $total);
-        $getSizeData = history_buy_product::join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')->where('history_buy.id', '=', $historyId)->get();
-        return view('layouts.Market.formBuy', compact('total', 'getSizeData', 'historyId', 'product', 'data', 'branch'));
+        return view('layouts.Market.formBuy', compact('total', 'historyId', 'product', 'data', 'branch'));
     }
 
-    public function DetailSell($branchSlug = null, $paginate = 7)
+    public function DetailSell($branchSlug = null)
     {
         $attr = request()->all();
         if ($branchSlug != null) {
@@ -113,7 +112,7 @@ class HistoryController extends Controller
                 ->orWhere('history_sell_product.buy_price', 'like', '%' . $attr['by'] . '%')
                 ->orWhere('history_sell_product.sell_price', 'like', '%' . $attr['by'] . '%')
                 ->orWhere('history_sell_product.qty', 'like', '%' . $attr['by'] . '%')
-                ->paginate($paginate);
+                ->paginate(7);
         } else {
             $data = history_sell_product::join('products', 'history_sell_product.product_id', 'products.id')
                 ->join('history_sell', 'history_sell_product.history_sell', 'history_sell.id')
@@ -124,7 +123,7 @@ class HistoryController extends Controller
                     'history_sell_product.qty',
                     'history_sell_product.buy_price',
                     'history_sell.id as sellId'
-                )->where('history_sell.id', '=', $historyId)->paginate($paginate);
+                )->where('history_sell.id', '=', $historyId)->paginate(7);
         }
 
         $product = Product::select('name', 'id')->get();
@@ -133,8 +132,7 @@ class HistoryController extends Controller
         $price = history_sell_product::sum("buy_price");
         $total = $qty * $price;
         $total = explode(' ', $total);
-        $getSizeData = history_sell_product::join('history_sell', 'history_sell_product.history_sell', 'history_sell.id')->where('history_sell.id', '=', $historyId)->get();
-        return view('layouts.Market.formSell', compact('getSizeData', 'total', 'historyId', 'product', 'data', 'branch'));
+        return view('layouts.Market.formSell', compact('total', 'historyId', 'product', 'data', 'branch'));
     }
 
     public function edit($page = null, $id)

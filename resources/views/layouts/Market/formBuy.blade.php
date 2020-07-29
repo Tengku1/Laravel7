@@ -57,33 +57,6 @@
                 </div>
             </div>
         </form>
-        <div class="col-md-12 mt-5">
-            <div class="col-md-6 float-left">
-                <div class="dropdown float-left mb-2">
-                    <button class="btn btn-info rounded-0 dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        {{count($data)  ? '' : ' disabled'}}>
-                        Show Entries
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        @for ($i = 1; $i <= sizeof($getSizeData); $i++) <a
-                            href="/market/detail/buy/{{$branch[0]->slug}}/paginate/{{$i}}" class="dropdown-item">
-                            {{$i}}</a>
-                            @endfor
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 btn-group float-left">
-                <form action="/market/detail/buy" method="get" class="px-0 py-0 input-group">
-                    <input type="hidden" name="branch" value="{{$branch[0]->slug}}">
-                    <input class="form-control rounded-0 py-2 col-md-10 py-2 px-2 float-left" type="search"
-                        placeholder="Search ..." id="searchdata" name="by">
-                    <button class="btn btn-info rounded-0" type="submit">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
         <div class="col-md-12 table-responsive px-2">
             <table class="mt-3 tableData table table-light">
                 <tr>

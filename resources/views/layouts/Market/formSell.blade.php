@@ -55,31 +55,6 @@
                 </div>
             </div>
         </form>
-        <div class="col-md-12 mt-5">
-            <div class="col-md-6 float-left">
-                <div class="dropdown float-left mb-2">
-                    <button class="btn btn-info rounded-0 dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        {{count($data)  ? '' : ' disabled'}}>
-                        Show Entries
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        @for ($i = 1; $i <= sizeof($data); $i++) <a href="/market/detail/sell/{{$i}}"
-                            class="dropdown-item">{{$i}}</a>
-                            @endfor
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 btn-group float-left">
-                <form action="/market/detail/sell" method="get" class="px-0 py-0 input-group">
-                    <input class="form-control rounded-0 py-2 col-md-10 py-2 px-2 float-left" type="search" value=""
-                        {{count($data) ? '' : 'disabled'}} placeholder="Search ..." id="searchdata" name="by">
-                    <button class="btn btn-info rounded-0" {{count($data) ? '' : 'disabled'}} type="submit">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </form>
-            </div>
-        </div>
     </div>
     <div class="col-md-12 table-responsive px-4">
         <table class="mt-3 tableData table table-light">
