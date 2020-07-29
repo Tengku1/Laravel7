@@ -44,8 +44,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::delete('/market/deleteSell', 'HistoryController@deleteSell');
     Route::patch('/market/updateBuy', 'HistoryController@updateBuy');
     Route::patch('/market/updateSell', 'HistoryController@updateSell');
-    Route::post('/market/storeStockSell', 'HistoryController@stockSell')->name('StoreExecution');
-    Route::post('/market/storeStockBuy', 'HistoryController@stockBuy')->name('StoreExecution');
+    Route::post('/market/storeStockSell', 'HistoryController@stockSell')->name('SellExecution');
+    Route::post('/market/storeStockBuy', 'HistoryController@stockBuy')->name('BuyExecution');
 
     Route::get('/market/{path}/', 'HistoryController@history');
     Route::get('/market/{path}/paginate/{limit}', 'HistoryController@history');
@@ -58,29 +58,17 @@ Route::group(['middleware' => ['auth']], function () {
     // End Market
 
     // Products Only For MASTER !!
-    Route::get('/product', 'ProductController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-    Route::get('/product/create', 'ProductController@create')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-    Route::get('/product/edit/{product:slug}', 'ProductController@edit')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-    Route::get('/product/excel', 'ProductController@excel')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-    Route::get('/product/search', 'ProductController@search')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-    Route::patch('/product/{id}', 'ProductController@update')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-    Route::post('/product/store', 'ProductController@store')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-    Route::delete('/product/destroy', 'ProductController@destroy')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
-    Route::get('/product/{product:slug}', 'ProductController@show')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+    Route::get('/product', 'ProductController@index');
+    Route::get('/product/create', 'ProductController@create');
+    Route::get('/product/edit/{product:slug}', 'ProductController@edit');
+    Route::get('/product/excel', 'ProductController@excel');
+    Route::get('/product/search', 'ProductController@search');
+    Route::patch('/product/{id}', 'ProductController@update');
+    Route::post('/product/store', 'ProductController@store');
+    Route::delete('/product/destroy', 'ProductController@destroy');
+    Route::get('/product/{product:slug}', 'ProductController@show');
 
     // End Products
-
-    // Stock Routes
-    Route::get('/stock', 'StockController@index');
-    Route::get('/stock/create', 'StockController@create');
-    Route::get('/stock/create/{code}', 'StockController@create');
-    Route::delete('/stock/delete', 'StockController@destroy');
-    Route::get('/stock/detail/{product:slug}', 'StockController@show');
-    Route::get('/stock/edit/{product:slug}', 'StockController@edit');
-    Route::get('/stock/excel/{code}', 'StockController@Excel');
-    Route::get('/stock/excel/{code}/{date}', 'StockController@Excel');
-    Route::get('/stock/{slug}/search', 'StockController@search');
-    Route::post('/stock/store/{code}', 'StockController@store');
 
     Route::get('/stock/{code}', 'StockController@index');
     Route::post('/stock/{code}', 'StockController@index');

@@ -3,10 +3,10 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        Add Data
+        Add Product
     </div>
     <div class="card-body">
-        <form action="/stock/store/{{$data['code']}}" method="post">
+        <form action="/product/store" method="post">
             {{ csrf_field() }}
             <div class="form-group row">
                 <div class="col-md-12">

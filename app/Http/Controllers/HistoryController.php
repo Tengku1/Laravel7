@@ -170,7 +170,7 @@ class HistoryController extends Controller
         $attr = request()->all();
         history_buy_product::where('id', '=', $attr['id'])->delete();
         session()->flash('success', 'The Data Was Deleted');
-        return redirect('/market/buy');
+        return redirect()->back();
     }
 
     public function deleteSell()
@@ -355,20 +355,27 @@ class HistoryController extends Controller
     public function storeSell()
     {
         $attr = request()->all();
-        $branch = history_sell::select('branch_code')->where('id', '=', $attr['id'])->get();
-        $product = Product::select('sell_price')->where('id', '=', $attr['product_id'])->get();
-        $stock = Products_Stock::select("buy_price")->where("product_id", "=", $attr['product_id'])->orderBy('created_at', 'asc')->get();
 
-        $attr['sell_price'] = $product[0]->sell_price;
-        $attr['buy_price'] = $stock[0]->buy_price;
-        history_sell_product::create([
-            'history_sell' => $attr['id'],
-            'product_id' => $attr['product_id'],
-            'qty' => $attr['qty'],
-            'buy_price' => $attr['buy_price'],
-            'sell_price' => $attr['sell_price'],
-        ]);
-        return redirect()->back();
+        $getQty = Products_Stock::where("product_id", "=", $attr['product_id'])->get()->sum("qty");
+        if ($getQty < $attr['qty']) {
+            session()->flash('warning', 'Warning : the product stock you have chosen is not enough ! ');
+            return redirect()->back()->with("Stock tidak mencukupi");
+        } else {
+            $branch = history_sell::select('branch_code')->where('id', '=', $attr['id'])->get();
+            $product = Product::select('sell_price')->where('id', '=', $attr['product_id'])->get();
+            $stock = Products_Stock::select("buy_price")->where("product_id", "=", $attr['product_id'])->orderBy('created_at', 'asc')->get();
+
+            $attr['sell_price'] = $product[0]->sell_price;
+            $attr['buy_price'] = $stock[0]->buy_price;
+            history_sell_product::create([
+                'history_sell' => $attr['id'],
+                'product_id' => $attr['product_id'],
+                'qty' => $attr['qty'],
+                'buy_price' => $attr['buy_price'],
+                'sell_price' => $attr['sell_price'],
+            ]);
+            return redirect()->back();
+        }
     }
 
     public function updateBuy()
