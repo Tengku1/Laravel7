@@ -13,6 +13,9 @@ $no = 1;
 @if ($data->count())
 <div class="col-md-12">
     <div class="col-md-8 float-left">
+        <a href="/user/create">
+            <button class="btn btn-primary">Add Data <i class="fa fa-plus"></i></button>
+        </a>
         <a href="/user/excel" target="_blank">
             <button class="btn btn-success rounded-0">Export Excel <i class="fa fa-file-excel-o"></i></button>
         </a>

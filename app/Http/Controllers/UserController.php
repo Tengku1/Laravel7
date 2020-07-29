@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Branch;
 use App\Exports\UserExport;
 use App\User;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -14,6 +14,12 @@ class UserController extends Controller
     {
         $data = User::where('status', '=', 'active')->paginate(7);
         return view('Master.User.index', compact('data'));
+    }
+
+    public function create()
+    {
+        $branch = Branch::select("name", "code")->get();
+        return view("Master.User.create", compact("branch"));
     }
 
     public function destroy()
@@ -46,6 +52,21 @@ class UserController extends Controller
             ->orWhere('created_at', 'like', '%' . $attr['by'] . '%')
             ->paginate(7);
         return view('Master.User.index', compact('data'));
+    }
+
+    public function store()
+    {
+        $attr = request()->all();
+        User::create([
+            'name' => $attr['name'],
+            'password' => Hash::make($attr['password']),
+            'full_name' => $attr['full_name'],
+            'email' => $attr['email'],
+            'status' => 'active',
+            'branch_code' => $attr['branch_code'],
+            'roles' => '[' . $attr['roles'] . ']',
+        ]);
+        return redirect()->to("/user");
     }
 
     public function update()

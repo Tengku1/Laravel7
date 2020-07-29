@@ -63,6 +63,7 @@
                 <th>Quantity</th>
                 <th>Sell Price</th>
                 <th>Sub Total</th>
+                <th>Action</th>
             </tr>
             @if (count($data))
             @foreach ($data as $item)
@@ -71,6 +72,12 @@
                 <td>{{$item->qty}}</td>
                 <td>{{$item->buy_price}}</td>
                 <td>{{$item->sell_price * $item->qty}}</td>
+                <td>
+                    <button type="button" class="btn rounded-0 btn-sm btn-danger delete" data-toggle="modal"
+                        data-target="#delete" title="Delete">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
             </tr>
             <!-- Modal -->
             <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -105,7 +112,7 @@
             @endforeach
             @else
             <tr>
-                <td colspan="4" class="bg-dark text-white text-bold">No Data Available in this Table</td>
+                <td colspan="5" class="bg-dark text-white text-bold">No Data Available in this Table</td>
             </tr>
             @endif
         </table>

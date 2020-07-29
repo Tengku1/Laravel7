@@ -10,6 +10,7 @@
         <div class="table-responsive">
             <table class="mt-3 tableData table table-light">
                 <tr>
+                    <th>Reff ID</th>
                     <th>Product Name</th>
                     <th>Quantity</th>
                     <th>Buy Price</th>
@@ -18,12 +19,16 @@
                 @if (count($data))
                 @foreach ($data as $item)
                 <tr>
+                    <td>{{$item->ReffID}}</td>
                     <td>{{$item->ProductName}}</td>
                     <td>{{$item->qty}}</td>
                     <td>{{$item->buy_price}}</td>
                     <td>{{$item->buy_price * $item->qty}}</td>
                 </tr>
                 @endforeach
+                <tr class="bg-success text-white text-bold text-center">
+                    <td colspan="5">Total : {{$total[0]->TotalBuy}}</td>
+                </tr>
                 @else
                 <tr>
                     <td colspan="5" class="bg-dark text-white text-bold">No Data Available in this Table</td>

@@ -105,7 +105,8 @@ class HistoryController extends Controller
                     'products.sell_price',
                     'history_sell_product.qty',
                     'history_sell_product.buy_price',
-                    'history_sell.id as sellId'
+                    'history_sell.id as sellId',
+                    'history_sell_product.id as HistoryProductID'
                 )
                 ->where('history_sell.id', '=', $historyId)
                 ->where('products.name', 'like', '%' . $attr['by'] . '%')
@@ -122,7 +123,8 @@ class HistoryController extends Controller
                     'products.sell_price',
                     'history_sell_product.qty',
                     'history_sell_product.buy_price',
-                    'history_sell.id as sellId'
+                    'history_sell.id as sellId',
+                    'history_sell_product.id as HistoryProductID'
                 )->where('history_sell.id', '=', $historyId)->paginate(7);
         }
 
@@ -176,7 +178,7 @@ class HistoryController extends Controller
         $attr = request()->all();
         history_sell_product::where("id", "=", $attr['id'])->delete();
         session()->flash('success', 'The Data Was Deleted');
-        return redirect('/market/sell');
+        return redirect()->back();
     }
 
     public function history($path, $paginate = 7)
@@ -254,26 +256,41 @@ class HistoryController extends Controller
         }
     }
 
-    public function show($page)
+    public function show($page = null)
     {
         $attr = request()->all();
-        if ($page = "buy") {
+        if ($page == "buy") {
             $data = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")
                 ->join("products", "history_buy_product.product_id", "products.id")
-                ->select("products.name as ProductName", "qty", "history_buy.modified_user", "buy_price")
+                ->select(
+                    "products.name as ProductName",
+                    "qty",
+                    "history_buy.modified_user",
+                    "history_buy.id as ReffID",
+                    "buy_price"
+                )
                 ->where("history_buy.id", "like", '%' . $attr['id'] . '%')->get();
+            $total = history_buy_product::select(DB::raw("sum(qty * buy_price) as TotalBuy"))->where("history_buy", "=", $attr['id'])->get();
             if (count($data)) {
-                return view("layouts.Market.showBuy", compact('data'));
+                return view("layouts.Market.showBuy", compact('data', 'total'));
             } else {
                 return abort(404);
             }
-        } elseif ($page = "sell") {
+        } elseif ($page == "sell") {
             $data = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")
                 ->join("products", "history_sell_product.product_id", "products.id")
-                ->select("products.name as ProductName", "qty", "history_sell.modified_user", "buy_price", "sell_price")
+                ->select(
+                    "products.name as ProductName",
+                    "qty",
+                    "history_sell.modified_user",
+                    "buy_price",
+                    "history_sell.id as ReffID",
+                    "products.sell_price"
+                )
                 ->where("history_sell.id", "like", '%' . $attr['id'] . '%')->get();
+            $total = history_sell_product::select(DB::raw("sum(qty * sell_price) as TotalSell"))->where("history_sell", "=", $attr['id'])->get();
             if (count($data)) {
-                return view("layouts.Market.showSell", compact('data'));
+                return view("layouts.Market.showSell", compact('data', 'total'));
             } else {
                 return abort(404);
             }

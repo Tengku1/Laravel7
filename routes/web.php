@@ -80,13 +80,17 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/user', 'UserController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 
-    Route::get('/user/edit/{email}', 'UserController@edit')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+    Route::get('/user/create', 'UserController@create')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 
-    Route::patch('/user/{email}/update', 'UserController@update')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+    Route::get('/user/edit/{email}', 'UserController@edit')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 
     Route::get('/user/excel', 'UserController@excel')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 
     Route::get('/user/search', 'UserController@search')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+
+    Route::post('/user/store', 'UserController@store')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
+
+    Route::patch('/user/{email}/update', 'UserController@update')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 
     Route::delete('/user/destroy', 'UserController@destroy')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 
