@@ -69,7 +69,7 @@
                 @if (count($data))
                 @foreach ($data as $item)
                 <tr>
-                    <td>{{$item->name}} {{$item->HistoryProductID}}</td>
+                    <td>{{$item->name}}</td>
                     <td>{{$item->qty}}</td>
                     <td>{{$item->buy_price}}</td>
                     <td>{{$item->buy_price * $item->qty}}</td>

@@ -259,17 +259,23 @@ class HistoryController extends Controller
         if ($page = "buy") {
             $data = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")
                 ->join("products", "history_buy_product.product_id", "products.id")
-                ->join("branch", "history_buy.branch_code", "branch.code")
-                ->select("products.name as ProductName", "branch.name as BranchName", "qty", "history_buy.modified_user", "buy_price")
-                ->where("history_buy_product.id", "=", $attr['id'])->get();
-            return view("layouts.Market.showBuy", compact('data'));
+                ->select("products.name as ProductName", "qty", "history_buy.modified_user", "buy_price")
+                ->where("history_buy_product.id", "like", '%' . $attr['id'] . '%')->get();
+            if (count($data)) {
+                return view("layouts.Market.showBuy", compact('data'));
+            } else {
+                return abort(404);
+            }
         } elseif ($page = "sell") {
             $data = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")
                 ->join("products", "history_sell_product.product_id", "products.id")
-                ->join("branch", "history_sell.branch_code", "branch.code")
-                ->select("products.name as ProductName", "branch.name as BranchName", "qty", "history_sell.modified_user", "buy_price", "sell_price")
-                ->where("history_sell_product.id", "=", $attr['id'])->get();
-            return view("layouts.Market.showSell", compact('data'));
+                ->select("products.name as ProductName", "qty", "history_sell.modified_user", "buy_price", "sell_price")
+                ->where("history_sell_product.id", "like", '%' . $attr['id'] . '%')->get();
+            if (count($data)) {
+                return view("layouts.Market.showSell", compact('data'));
+            } else {
+                return abort(404);
+            }
         } else {
             abort(404);
         }

@@ -8,32 +8,27 @@
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class="col-md-12 mt-3 table table-hover table-light">
+            <table class="mt-3 tableData table table-light">
                 <tr>
-                    <td>Product Name</td>
-                    <td>:</td>
-                    <td>{{$data[0]->ProductName}}</td>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Buy Price</th>
+                    <th>Sub Total</th>
                 </tr>
+                @if (count($data))
+                @foreach ($data as $item)
                 <tr>
-                    <td>Branch Name</td>
-                    <td>:</td>
-                    <td>{{$data[0]->BranchName}}</td>
+                    <td>{{$item->ProductName}}</td>
+                    <td>{{$item->qty}}</td>
+                    <td>{{$item->buy_price}}</td>
+                    <td>{{$item->buy_price * $item->qty}}</td>
                 </tr>
+                @endforeach
+                @else
                 <tr>
-                    <td>Qty</td>
-                    <td>:</td>
-                    <td>{{$data[0]->qty}}</td>
+                    <td colspan="5" class="bg-dark text-white text-bold">No Data Available in this Table</td>
                 </tr>
-                <tr>
-                    <td>Buy Price</td>
-                    <td>:</td>
-                    <td>{{$data[0]->buy_price}}</td>
-                </tr>
-                <tr>
-                    <td>Modified User</td>
-                    <td>:</td>
-                    <td>{{$data[0]->modified_user}}</td>
-                </tr>
+                @endif
             </table>
         </div>
     </div>

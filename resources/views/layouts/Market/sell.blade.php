@@ -52,7 +52,7 @@ $no = 1;
         <td>{{$values->id}}</td>
         <td>
             @if ($values->has_finished == "true")
-            <form action="/market/detail/sell/show/" class="px-0 py-0" method="get">
+            <form action="/market/detail/sell/show" class="px-0 py-0" method="get">
                 <button class="btn rounded-0 btn-sm btn-info" name="id" title="Edit" value="{{$data[0]->historyProductID}}"><i class="fa fa-eye"></i></button>
             </form>
             @else
