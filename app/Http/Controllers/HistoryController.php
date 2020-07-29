@@ -187,9 +187,12 @@ class HistoryController extends Controller
                 ->select(
                     'history_buy.id',
                     'branch.slug as branchSlug',
-                    'history_buy_product.id as historyProductID',
                     'history_buy.has_finished',
-                )->where('history_buy.created_at', 'like', '%' . date('Y-m-d') . '%')->paginate($paginate);
+                )
+                ->where('history_buy.created_at', 'like', '%' . date('Y-m-d') . '%')
+                ->orderBy('history_buy.id')
+                ->groupBy('history_buy.id', 'branch.slug', 'history_buy.has_finished')
+                ->paginate($paginate);
             $branch = Branch::select('name as branch_name', 'slug')->get();
             $getSizeData = history_buy_product::get();
             return view('layouts.Market.buy', compact('data', 'branch', 'getSizeData'));
@@ -199,9 +202,12 @@ class HistoryController extends Controller
                 ->select(
                     'history_sell.id',
                     'branch.slug as branchSlug',
-                    'history_sell_product.id as historyProductID',
                     'history_sell.has_finished',
-                )->where('history_sell.created_at', 'like', '%' . date('Y-m-d') . '%')->paginate($paginate);
+                )
+                ->where('history_sell.created_at', 'like', '%' . date('Y-m-d') . '%')
+                ->orderBy('history_buy.id')
+                ->groupBy('history_buy.id', 'branch.slug', 'history_buy.has_finished')
+                ->paginate($paginate);
             $branch = Branch::select('name as branch_name', 'slug')->get();
             $getSizeData = history_sell_product::get();
             return view('layouts.Market.sell', compact('data', 'branch', 'getSizeData'));
@@ -260,7 +266,7 @@ class HistoryController extends Controller
             $data = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")
                 ->join("products", "history_buy_product.product_id", "products.id")
                 ->select("products.name as ProductName", "qty", "history_buy.modified_user", "buy_price")
-                ->where("history_buy_product.id", "like", '%' . $attr['id'] . '%')->get();
+                ->where("history_buy.id", "like", '%' . $attr['id'] . '%')->get();
             if (count($data)) {
                 return view("layouts.Market.showBuy", compact('data'));
             } else {
@@ -270,7 +276,7 @@ class HistoryController extends Controller
             $data = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")
                 ->join("products", "history_sell_product.product_id", "products.id")
                 ->select("products.name as ProductName", "qty", "history_sell.modified_user", "buy_price", "sell_price")
-                ->where("history_sell_product.id", "like", '%' . $attr['id'] . '%')->get();
+                ->where("history_sell.id", "like", '%' . $attr['id'] . '%')->get();
             if (count($data)) {
                 return view("layouts.Market.showSell", compact('data'));
             } else {
