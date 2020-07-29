@@ -48,19 +48,26 @@ $no = 1;
             <th>Action</th>
         </tr>
         @foreach ($data as $values)
-        <td>{{$no++}}</td>
-        <td>{{$values->id}}</td>
-        <td>
-            @if ($values->has_finished == "true")
-            <form action="/market/detail/sell/show" class="px-0 py-0" method="get">
-                <button class="btn rounded-0 btn-sm btn-info" name="id" title="Edit" value="{{$data[0]->id}}"><i class="fa fa-eye"></i></button>
-            </form>
-            @else
-            <form action="/market/detail/buy" class="px-0 py-0" method="get">
-                <button class="btn rounded-0 btn-sm btn-info" name="branch" title="Edit" value="{{$values->branchSlug}}"><i class="fa fa-pencil-square-o"></i></button>
-            </form>
-            @endif
-        </td>
+        @if ($values->has_finished == "false")
+        <tr class="bg-warning" title="Please Complete The Transaction !">
+        @else
+        <tr>
+        @endif
+            <td>{{$no++}}</td>
+            <td>{{$values->id}}</td>
+            <td>
+                @if ($values->has_finished == "true")
+                <form action="/market/detail/sell/show" class="px-0 py-0" method="get">
+                    <button class="btn rounded-0 btn-sm btn-info" name="id" title="Edit" value="{{$data[0]->id}}"><i
+                            class="fa fa-eye"></i></button>
+                </form>
+                @else
+                <form action="/market/detail/buy" class="px-0 py-0" method="get">
+                    <button class="btn rounded-0 btn-sm btn-info" name="branch" title="Edit"
+                        value="{{$values->branchSlug}}"><i class="fa fa-pencil-square-o"></i></button>
+                </form>
+                @endif
+            </td>
         </tr>
         @endforeach
     </table>

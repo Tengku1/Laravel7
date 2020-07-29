@@ -228,9 +228,7 @@ class HistoryController extends Controller
                     'history_buy_product.id as historyProductID',
                     'history_buy.has_finished',
                 )
-                ->Where('history_buy.created_at', 'like', '%' . $attr['by'] . '%')
-                ->orWhere('history_buy.id', 'like', '%' . $attr['by'] . '%')
-                ->orWhere('history_buy_product.buy_price', 'like', '%' . $attr['by'] . '%')
+                ->where('history_buy.id', 'like', '%' . $attr['by'] . '%')
                 ->paginate(7);
             $branch = Branch::select('name as branch_name', 'slug')->get();
             $getSizeData = history_buy_product::get();
@@ -246,10 +244,7 @@ class HistoryController extends Controller
                     'history_sell_product.id as historyProductID',
                     'history_sell.has_finished',
                 )
-                ->Where('history_sell.created_at', 'like', '%' . $attr['by'] . '%')
-                ->orWhere('history_sell.id', 'like', '%' . $attr['by'] . '%')
-                ->orWhere('buy_price', 'like', '%' . $attr['by'] . '%')
-                ->orWhere('history_sell_product.sell_price', 'like', '%' . $attr['by'] . '%')
+                ->where('history_sell.id', 'like', '%' . $attr['by'] . '%')
                 ->paginate(7);
             $branch = Branch::select('name as branch_name', 'slug')->get();
             $getSizeData = history_sell_product::get();
