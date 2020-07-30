@@ -63,9 +63,11 @@ class HistoryController extends Controller
 
         $product = Product::select('name', 'id')->get();
 
-        $qty = history_buy_product::where('history_buy', $historyId)->sum("qty");
-        $price = history_buy_product::where('history_buy', $historyId)->sum("buy_price");
-        $total = $qty * $price;
+        $total = 0;
+        for ($i = 0; $i < sizeof($data); $i++) {
+            $total += $data[$i]->qty * $data[$i]->buy_price;
+        }
+
         $total = explode(' ', $total);
         return view('layouts.Market.formBuy', compact('total', 'historyId', 'product', 'data', 'branch'));
     }
@@ -129,10 +131,11 @@ class HistoryController extends Controller
         }
 
         $product = Product::select('name', 'id')->get();
+        $total = 0;
+        for ($i = 0; $i < sizeof($data); $i++) {
+            $total += $data[$i]->qty * $data[$i]->sell_price;
+        }
 
-        $qty = history_sell_product::sum("qty");
-        $price = history_sell_product::sum("buy_price");
-        $total = $qty * $price;
         $total = explode(' ', $total);
         return view('layouts.Market.formSell', compact('total', 'historyId', 'product', 'data', 'branch'));
     }
