@@ -20,9 +20,9 @@
                 @foreach ($data as $item)
                 <tr>
                     <td>{{$item->ProductName}}</td>
-                    <td>{{$item->qty}}</td>
-                    <td>{{$item->buy_price}}</td>
-                    <td>{{$item->buy_price * $item->qty}}</td>
+                    <td>{{number_format($item->qty)}}</td>
+                    <td>Rp. {{number_format($item->buy_price,2)}}</td>
+                    <td>Rp. {{number_format($item->buy_price * $item->qty,2)}}</td>
                 </tr>
                 @endforeach
                 <tr class="bg-success text-white text-bold text-center">

@@ -74,10 +74,17 @@ Route::group(['middleware' => ['auth']], function () {
     // Stock
     Route::get('/stock', 'StockController@index');
     Route::get('/stock/paginate/{paginate}', 'StockController@index');
+    Route::get('/stock/search', 'StockController@search');
     // End Stock
 
-    // Users
+    // Reports
+    Route::get('/report/{page}', 'HomeController@report');
+    Route::post('/report/{page}', 'HomeController@report');
+    Route::get('/report/{page}/paginate/{paginate}/', 'HomeController@report');
+    Route::get('/report/{page}/search', 'HomeController@search');
+    // End Reports
 
+    // Users
     Route::get('/user', 'UserController@index')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);
 
     Route::get('/user/create', 'UserController@create')->middleware('check_user_role:' . \App\Role\UserRole::ROLE_MASTER);

@@ -60,7 +60,7 @@ body {
 
 .categoriActive {
     color: white;
-    background-color: rgb(1, 129, 129) !important;
+    /* background-color: rgb(1, 129, 129) !important; */
     border-bottom: 2px solid rgb(0, 107, 107) !important;
 }
 
@@ -86,25 +86,14 @@ body {
 
 /* ==================== D ====================== */
 
-.dashboardUser,
-.dashboardProduct,
-.dashboardBranch {
+.dashboardCount {
     height: 200px;
 }
 
-.dashboardUser {
-    background: linear-gradient(to right, rgb(221, 186, 28), rgb(235, 120, 43));
+.dashboardCount {
     color: white;
-}
-
-.dashboardProduct {
-    background: linear-gradient(to right, rgb(83, 196, 216), rgb(0, 129, 86));
-    color: white;
-}
-
-.dashboardBranch {
-    background: linear-gradient(to right, rgb(78, 241, 152), rgb(28, 136, 7));
-    color: white;
+    box-shadow: 0 1px 3px 1px #12343b;
+    background-color: #2d545e;
 }
 
 /* ============================================= */

@@ -19,15 +19,9 @@ $no = 1;
                 Show Entries
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                @if ($branch != null)
-                    @for ($i = 1; $i <= sizeof($getSizeData); $i++) 
-                    <a href="/stock/{{$branch}}/paginate{{$i}}/" class="dropdown-item">{{$i}}</a>
-                    @endfor
-                @else
-                    @for ($i = 1; $i <= sizeof($getSizeData); $i++) 
-                    <a href="/stock/paginate/{{$i}}/" class="dropdown-item">{{$i}}</a>
-                    @endfor
-                @endif
+                @for ($i = 1; $i <= sizeof($getSizeData); $i++) 
+                    <a href="/stock/{{$data[0]->branch_slug}}/paginate{{$i}}/" class="dropdown-item">{{$i}}</a>
+                @endfor
             </div>
         </div>
     </div>
@@ -56,8 +50,8 @@ $no = 1;
             <td>{{$no++}}</td>
             <td>{{$item->ProductName}}</td>
             <td>{{$item->BranchName}}</td>
-            <td>{{$item->buy_price}}</td>
-            <td>{{$item->qty}}</td>
+            <td>Rp. {{number_format($item->buy_price)}}</td>
+            <td>{{number_format($item->qty)}}</td>
         </tr>
         @endforeach
     </table>

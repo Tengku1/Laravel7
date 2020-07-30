@@ -26,7 +26,7 @@
                 <tr>
                     <td>Sell Price</td>
                     <td>:</td>
-                    <td>{{$data[0]->sell_price}}</td>
+                    <td>Rp. {{number_format($data[0]->sell_price,2)}}</td>
                 </tr>
                 <tr>
                     <td>Created At</td>

@@ -51,7 +51,7 @@
                     Branch <i class="fa fa-dropbox"></i>
                 </a>
             </li>
-            <li class="mx-1{{ strstr($url, "product") ? ' active' : '' }}">
+            <li class="mx-1{{ (strstr($url, "/product") && !(strstr($url, "/report/product"))) ? ' active' : '' }}">
                 <a href="/product" class="menuitem nav-item nav-link">
                     Product <i class="fa fa-product-hunt"></i>
                 </a>
@@ -62,7 +62,7 @@
                 </a>
             </li>
             @else
-            <li class="mx-1{{ strstr($url, "product") ? ' active' : '' }}">
+            <li class="mx-1{{ (strstr($url, "/product") && !(strstr($url, "/report/product"))) ? ' active' : '' }}">
                 <a href="/product" class="menuitem nav-item nav-link">
                     Product <i class="fa fa-product-hunt"></i>
                 </a>
@@ -73,25 +73,25 @@
                 </a>
             </li>
             @endif
-            <li class="mx-1{{ strstr($url, "sell") ? ' active' : '' }}">
+            <li class="mx-1{{ (strstr($url, "/sell") && !(strstr($url, "/report/sell"))) ? ' active' : '' }}">
                 <a href="/market/sell" class="menuitem nav-item nav-link">
                     Sell Product <i class="fa fa-shopping-cart"></i>
                 </a>
             </li>
-            <li class="mx-1{{ strstr($url, "buy") ? ' active' : '' }}">
+            <li class="mx-1{{ (strstr($url, "/buy") && !(strstr($url, "/report/buy"))) ? ' active' : '' }}">
                 <a href="/market/buy" class="menuitem nav-item nav-link">
                     Buy Product <i class="fa fa-shopping-bag"></i>
                 </a>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown{{ strstr($url, "/report") ? ' active' : '' }}">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
-                    Report <i class="fa fa-paperclip"></i>
+                    Reports <i class="fa fa-paperclip"></i>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Products</a>
-                    <a class="dropdown-item" href="#">History Buy</a>
-                    <a class="dropdown-item" href="#">History Sell</a>
+                    <a class="dropdown-item" href="/report/products">Products</a>
+                    <a class="dropdown-item" href="/report/buy">History Buy</a>
+                    <a class="dropdown-item" href="/report/sell">History Sell</a>
                 </div>
             </li>
         </div>

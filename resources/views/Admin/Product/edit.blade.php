@@ -20,7 +20,7 @@
                 <div class="col-md-12 px-1">
                     <label for="sell_price" class="font-weight-bold">Sell Price</label>
                     <input type="text" class="form-control" name="sell_price" id="sell_price"
-                        placeholder="values : {{ $data[0]->sell_price}}" required>
+                        placeholder="Rp. {{ number_format($data[0]->sell_price) }}" required>
                 </div>
 
             </div>

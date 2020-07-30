@@ -50,7 +50,7 @@ $no = 1;
         @endif
             <td scope="col">{{$no++}}</td>
             <td scope="col">{{Str::limit($values->name,20)}}</td>
-            <td scope="col">{{$values->sell_price}}</td>
+            <td scope="col">Rp. {{number_format($values->sell_price,2)}}</td>
             
             <td scope="col">{{$values->status}}</td>
             <td>
