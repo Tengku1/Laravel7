@@ -83,6 +83,17 @@
                     Buy Product <i class="fa fa-shopping-bag"></i>
                 </a>
             </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Report <i class="fa fa-paperclip"></i>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Products</a>
+                    <a class="dropdown-item" href="#">History Buy</a>
+                    <a class="dropdown-item" href="#">History Sell</a>
+                </div>
+            </li>
         </div>
     </div>
 </nav>
