@@ -37,19 +37,31 @@ class HomeController extends Controller
     public function report($page, $paginate = 7, $fromDate = null, $toDate = null)
     {
         $attr = request()->all();
+
         if (isset($attr['fromDate']) && isset($attr['toDate'])) {
             $fromDate = $attr['fromDate'];
             $toDate = $attr['toDate'];
             $unRecognizeBuy = history_buys::join("branch", "history_buy.branch_code", "branch.code")->select("history_buy.id as ReffID", "branch.name", "history_buy.created_at as CreatedAt")->where("history_buy.created_at", ">=", $fromDate)->where("history_buy.created_at", "<=", $toDate);
 
             $unRecognizeSell = history_sell::join("branch", "history_sell.branch_code", "branch.code")->select("history_sell.id as ReffID", "branch.name", "branch.slug", "history_sell.created_at as CreatedAt")->where("history_sell.created_at", ">=", $fromDate)->where("history_sell.created_at", "<=", $toDate);
+
+            $data = Products_Stock::join("products", "products_stock.product_id", "products.id")->select(
+                'product_id',
+                'products.name as ProductName',
+                DB::raw('sum(buy_price) as BuyPrice'),
+                DB::raw('SUM(qty) as Qty')
+            )->groupBy('product_id', 'ProductName',)->where("products_stock.created_at", ">=", $fromDate)->where("products_stock.created_at", "<=", $toDate)->paginate($paginate);
         } else {
             $unRecognizeBuy = history_buys::join("branch", "history_buy.branch_code", "branch.code")->select("history_buy.id as ReffID", "branch.name", "history_buy.created_at as CreatedAt");
 
             $unRecognizeSell = history_sell::join("branch", "history_sell.branch_code", "branch.code")->select("history_sell.id as ReffID", "branch.name", "branch.slug", "history_sell.created_at as CreatedAt");
+
+            $data = Products_Stock::join("products", "products_stock.product_id", "products.id")->select(
+                'product_id',
+                'products.name as ProductName',
+                DB::raw('sum(buy_price) * sum(qty) as Total'),
+            )->groupBy('product_id', 'ProductName')->paginate($paginate);
         }
-
-
         // Total Proses
         $sell = history_sell_product::get();
         $totalSell = 0;
@@ -64,33 +76,32 @@ class HomeController extends Controller
             $totalBuy += $buy[$i]->qty * $buy[$i]->buy_price;
         }
         $totalBuy = explode(" ", $totalBuy);
+
+        $totalProducts = 0;
+        for ($i = 0; $i < sizeof($data); $i++) {
+            $totalProducts += $data[$i]->Total;
+        }
+
         // End Proses
 
         if ($fromDate == null && $toDate == null) {
             if ($page == "buy") {
                 $data = $unRecognizeBuy->paginate($paginate);
                 $getSizeData = history_buy_product::get();
-                if (count($data)) {
-                    return view("layouts.Reports.Buy", compact("data", "getSizeData", "totalBuy"));
-                } else {
-                    return abort(404);
+                if (!count($data)) {
+                    $totalBuy[0] = 0;
                 }
+                return view("layouts.Reports.Buy", compact("data", "getSizeData", "totalBuy"));
             } elseif ($page == "sell") {
                 $data = $unRecognizeSell->paginate($paginate);
                 $getSizeData = history_sell_product::get();
-                if (count($data)) {
-                    return view("layouts.Reports.Sell", compact("data", "getSizeData", "totalSell"));
-                } else {
-                    return abort(404);
+                if (!count($data)) {
+                    $totalSell[0] = 0;
                 }
+                return view("layouts.Reports.Sell", compact("data", "getSizeData", "totalSell"));
             } elseif ($page == "products") {
-                $data = Product::paginate($paginate);
                 $getSizeData = Product::get();
-                if (count($data)) {
-                    return view("layouts.Reports.Products", compact("data", "getSizeData"));
-                } else {
-                    return abort(404);
-                }
+                return view("layouts.Reports.Products", compact("data", "getSizeData", "totalProducts"));
             } else {
                 return abort(404);
             }
@@ -101,27 +112,20 @@ class HomeController extends Controller
             if ($page == "buy") {
                 $data = $unRecognizeBuy->paginate($paginate);
                 $getSizeData = history_buy_product::get();
-                if (count($data)) {
-                    return view("layouts.Reports.Buy", compact("data", "getSizeData", "totalBuy"));
-                } else {
-                    return abort(404);
+                if (!count($data)) {
+                    $totalBuy[0] = 0;
                 }
+                return view("layouts.Reports.Buy", compact("data", "getSizeData", "totalBuy"));
             } elseif ($page == "sell") {
                 $data = $unRecognizeSell->paginate($paginate);
                 $getSizeData = history_sell_product::get();
-                if (count($data)) {
-                    return view("layouts.Reports.Sell", compact("data", "getSizeData", "totalSell"));
-                } else {
-                    return abort(404);
+                if (!count($data)) {
+                    $totalSell[0] = 0;
                 }
+                return view("layouts.Reports.Sell", compact("data", "getSizeData", "totalSell"));
             } elseif ($page == "products") {
-                $data = Product::paginate($paginate);
                 $getSizeData = Product::get();
-                if (count($data)) {
-                    return view("layouts.Reports.Products", compact("data", "getSizeData"));
-                } else {
-                    return abort(404);
-                }
+                return view("layouts.Reports.Products", compact("data", "getSizeData", "totalProducts"));
             } else {
                 return abort(404);
             }

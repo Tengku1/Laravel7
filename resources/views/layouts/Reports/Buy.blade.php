@@ -38,9 +38,9 @@
                         Show Entries
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        @for ($i = 1; $i <= sizeof($getSizeData); $i++) <a href="/report/buy/paginate/{{$i}}/"
-                            class="dropdown-item"> {{$i}}</a>
-                            @endfor
+                        @for ($i = 1; $i <= sizeof($getSizeData); $i++) 
+                        <a href="/report/buy/paginate/{{$i}}/" class="dropdown-item"> {{$i}}</a>
+                        @endfor
                     </div>
                 </div>
                 <div class="col-md-3 px-1 py-0 float-right">
