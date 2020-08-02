@@ -28,6 +28,7 @@ class ReportController extends Controller
                 $data = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")
                     ->join("branch", "history_buy.branch_code", "branch.code")
                     ->select("history_buy.id", "branch.name", "branch.slug", DB::raw("sum(history_buy_product.qty) as TotalQty"))
+                    ->where("history_buy.created_at", "=", date("Y-m-d"))
                     ->groupBy("history_buy.id", "branch.name", "branch.slug")
                     ->paginate($paginate);
                 return view("layouts.Reports.Master.Buy", compact('data'));
@@ -35,6 +36,7 @@ class ReportController extends Controller
                 $data = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")
                     ->join("branch", "history_sell.branch_code", "branch.code")
                     ->select("history_sell.id", "branch.name", "branch.slug", DB::raw("sum(history_sell_product.qty) as TotalQty"))
+                    ->where("history_sell.created_at", "=", date("Y-m-d"))
                     ->groupBy("history_sell.id", "branch.name", "branch.slug")
                     ->paginate($paginate);
                 return view("layouts.Reports.Master.Sell", compact("data"));
@@ -65,8 +67,24 @@ class ReportController extends Controller
             }
         } elseif (Auth::user()->roles[0] == "Admin") {
             if ($page == "buy") {
+                $data = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")
+                    ->join("branch", "history_buy.branch_code", "branch.code")
+                    ->select("history_buy.id", "branch.name", "branch.slug", DB::raw("sum(history_buy_product.qty) as TotalQty"))
+                    ->where("history_buy.created_at", "=", date("Y-m-d"))
+                    ->where("history_buy.modified_user", "=", Auth::user()->name)
+                    ->groupBy("history_buy.id", "branch.name", "branch.slug")
+                    ->paginate($paginate);
+                return view("layouts.Reports.Admin.Buy", compact('data'));
             } elseif ($page == "sell") {
-            } elseif ($page == "product") {
+                $data = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")
+                    ->join("branch", "history_sell.branch_code", "branch.code")
+                    ->select("history_sell.id", "branch.name", "branch.slug", DB::raw("sum(history_sell_product.qty) as TotalQty"))
+                    ->where("history_sell.created_at", "=", date("Y-m-d"))
+                    ->where("history_sell.modified_user", "=", Auth::user()->name)
+                    ->groupBy("history_sell.id", "branch.name", "branch.slug")
+                    ->paginate($paginate);
+                return view("layouts.Reports.Admin.Sell", compact("data"));
+            } elseif ($page == "products") {
                 $data = Product::join("products_stock", "products_stock.product_id", "products.id")
                     ->join("branch", "products_stock.branch_code", "branch.code")
                     ->join("history_buy", "history_buy.branch_code", "branch.code")
