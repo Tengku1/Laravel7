@@ -78,10 +78,17 @@ Route::group(['middleware' => ['auth']], function () {
     // End Stock
 
     // Reports
-    Route::get('/report/{page}', 'HomeController@report');
-    Route::post('/report/{page}', 'HomeController@report');
-    Route::get('/report/{page}/paginate/{paginate}/', 'HomeController@report');
-    Route::get('/report/{page}/search', 'HomeController@search');
+
+    Route::post('/report/excel/{page}', 'ReportController@excel')->name("excelReport");
+    Route::post('/report/show/excel/{page}', 'ReportController@excelShow')->name("excelShowReport");
+
+    Route::get('/report/{page}/', 'ReportController@index');
+    Route::get('/report/{page}/paginate/{paginate}', 'ReportController@index');
+    Route::get('/report/{page}/{branch}', 'ReportController@index');
+    Route::get('/report/{page}/{branch}/paginate/{paginate}', 'ReportController@index');
+    Route::get('/report/{page}/{branch}/{slug}', 'ReportController@show');
+    Route::get('/report/{page}/{branch}/{slug}/paginate/{paginate}', 'ReportController@show');
+
     // End Reports
 
     // Users

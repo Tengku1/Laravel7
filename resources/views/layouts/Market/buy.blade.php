@@ -13,8 +13,7 @@ $no = 1;
 @if ($data->count())
 <div class="col-md-12 py-2">
     <div class="col-md-8 float-left mb-2">
-        <button class="btn btn-primary rounded-0 float-left mr-1 mb-2" data-toggle="modal" data-target="#shoping"
-            title="Buy Product">Add Sales <i class="fa fa-plus"></i></button>
+        <button class="btn btn-primary rounded-0 float-left mr-1 mb-2" data-toggle="modal" data-target="#shoping" title="Buy Product">Add Sales <i class="fa fa-plus"></i></button>
         <div class="dropdown float-left mb-2">
             <button class="btn btn-info rounded-0 dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
