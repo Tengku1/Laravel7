@@ -208,17 +208,19 @@ class ReportController extends Controller
     {
         $attr = request()->all();
         if (isset($attr['fromDate']) && isset($attr['toDate'])) {
-            $sell = history_sell::join("history_sell_product", "history_sell_product.history_sell", "history_sell.id")->join("products", "history_sell_product.product_id", "products.id")->select("products.name", "qty", "products.sell_price", "buy_price", "history_sell.id as ReffID", DB::raw("sum(qty * buy_price) as SubTotal"));
+            $sell = history_sell::join("history_sell_product", "history_sell_product.history_sell", "history_sell.id")->join("products", "history_sell_product.product_id", "products.id")->select("products.name", "qty", "products.sell_price", "buy_price", "history_sell.id as ReffID", DB::raw("sum(qty * buy_price) as SubTotal"))->where("history_sell.created_at", ">=", $attr['fromDate'])->where("history_sell.created_at", ">=", $attr['toDate']);
             $fromDate = explode(" ", $attr['fromDate']);
             $toDate = explode(" ", $attr['toDate']);
         } elseif (isset($attr['fromDate']) && !isset($attr['toDate'])) {
             history_sell::join("history_sell_product", "history_sell_product.history_sell", "history_sell.id")->join("products", "history_sell_product.product_id", "products.id")->select("products.name", "qty", "products.sell_price", "buy_price", "history_sell.id as ReffID", DB::raw("sum(qty * buy_price) as SubTotal"));
+
             session()->flash('warning', "From or To must be filled");
         } else {
             $sell = history_sell::join("history_sell_product", "history_sell_product.history_sell", "history_sell.id")->join("products", "history_sell_product.product_id", "products.id")->select("products.name", "qty", "products.sell_price", "buy_price", "history_sell.id as ReffID", DB::raw("sum(qty * buy_price) as SubTotal"));
             $fromDate = [];
             $toDate = [];
         }
+
         if (isset($attr['by'])) {
             $data = $sell->where("history_sell.id", "=", $id)->where("products.name", "like", "%" . $attr['by'] . "%")->orWhere("qty", "like", "%" . $attr['by'] . "%")->orWhere("buy_price", "like", "%" . $attr['by'] . "%")->groupBy("products.name", "qty", "buy_price", "products.sell_price", "ReffID")->paginate($paginate);
             $total = 0;
