@@ -9,7 +9,7 @@
         <div class="col-md-12 table-responsive px-2">
             <div class="col-md-12 mb-3">
                 <div class="col-md-12 px-1 py-1 float-left btn-group">
-                    <a href="{{route('excelReport','product')}}" target="_blank">
+                    <a href="{{route('excelReport','sell')}}" target="_blank">
                         <button class="btn btn-success rounded-0 float-left mr-1 mb-2">Export Excel
                             <i class="fa fa-file-excel-o"></i>
                         </button>

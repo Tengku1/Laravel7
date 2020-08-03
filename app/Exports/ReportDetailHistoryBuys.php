@@ -4,11 +4,13 @@ namespace App\Exports;
 
 use App\history_buys;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ReportDetailHistoryBuys implements FromCollection, WithHeadings
 {
+    use Exportable;
     public function __construct($reffID, $fromDate, $toDate)
     {
         $this->from = $fromDate;

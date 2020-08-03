@@ -5,11 +5,13 @@ namespace App\Exports;
 use App\Product;
 use App\Products_Stock;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ReportDetailProduct implements FromCollection, WithHeadings
 {
+    use Exportable;
     public function __construct($getCode, $productID)
     {
         $this->code = $getCode[0]->code;
