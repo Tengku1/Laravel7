@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        Report Product
+        Report Products
     </div>
     <div class="card-body">
         <div class="col-md-12 table-responsive px-2">
