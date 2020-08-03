@@ -10,12 +10,46 @@
             <div class="col-md-12 px-1 py-1 mb-4">
                 <span>Reff ID : <span class="font-weight-bold">{{count($data) ? $data[0]->ReffID : '-'}}</span>
             </div>
+            @if (count($data) && Auth::user()->roles[0] == "Master")
+            <div class="col-md-12 mb-5">
+                <form action="/report/buy/Reff/{{$data[0]->ReffID}}" method="post" class="px-0 py-0">
+                    {{ csrf_field() }}
+                    <div class="col-md-6 float-left px-1 mb-2">
+                        <div class="col-md-12 mt-1">
+                            <label for="" class="font-weight-bold">From</label>
+
+                        </div>
+                        <div class="col-md-12 float-left mt-1">
+                            <input type="date" name="fromDate" id="" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6 float-left px-1 mb-2">
+                        <div class="col-md-12 mt-1">
+                            <label for="" class="font-weight-bold">To</label>
+                        </div>
+                        <div class="col-md-6 float-left mr-1 mt-1">
+                            <input type="date" name="toDate" id="" class="form-control">
+                        </div>
+                        <div class="col-md-4 float-left btn-group mt-1">
+                            <button type="submit" class="btn bg-info text-white">Search <i
+                                    class="fa fa-search"></i></button>
+                            <button type="clear" class="btn bg-danger text-white">Clear <i
+                                    class="fa fa-eraser"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            @endif
             @if (count($data))
             <div class="col-md-12 mb-3">
                 <div class="col-md-7 px-1 float-left btn-group">
                     <form action="{{route('excelShowReport','buy')}}" class="px-0 py-0" method="post">
                         {{ csrf_field() }}
                         <input type="hidden" name="reffid" value="{{$data[0]->ReffID}}">
+                        @if ($fromDate != null && $toDate != null)
+                        <input type="hidden" name="fromDate" value="{{$fromDate[0]}}">
+                        <input type="hidden" name="toDate" value="{{$toDate[0]}}">
+                        @endif
                         <button type="submit" class="btn btn-success rounded-0 float-left mr-1 mb-2"
                             {{count($data) ? '' : ' disabled'}}>Export Excel
                             <i class="fa fa-file-excel-o"></i>
