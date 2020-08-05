@@ -81,6 +81,12 @@ body {
     }
 }
 
+.clearfix::after {
+    display: block !important;
+    clear: both !important;
+    content: "" !important;
+    margin-bottom: 5px !important;
+}
 
 /* ============================================= */
 

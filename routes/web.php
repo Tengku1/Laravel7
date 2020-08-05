@@ -87,15 +87,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/report/{page}/{branch}', 'ReportController@index');
     Route::get('/report/{page}/{branch}/paginate/{paginate}', 'ReportController@index');
 
-    Route::post('/report/product/{branch}/{slug}', 'ReportController@showProduct');
-    Route::get('/report/product/{branch}/{slug}', 'ReportController@showProduct');
-    Route::get('/report/product/{branch}/{slug}/paginate/{paginate}', 'ReportController@showProduct');
+    Route::get('/report/product/{code}/{id}/', 'ReportController@showProduct');
+    Route::get('/report/product/{code}/{id}/paginate/{paginate}', 'ReportController@showProduct');
 
     Route::post('/report/buy/Reff/{id}', 'ReportController@showBuy');
     Route::get('/report/buy/Reff/{id}/', 'ReportController@showBuy');
     Route::get('/report/buy/Reff/{id}/paginate/{paginate}', 'ReportController@showBuy');
 
-    Route::post('/report/sell/Reff/{id}', 'ReportController@showSell');
     Route::get('/report/sell/Reff/{id}/', 'ReportController@showSell');
     Route::get('/report/sell/Reff/{id}/paginate/{paginate}', 'ReportController@showSell');
 

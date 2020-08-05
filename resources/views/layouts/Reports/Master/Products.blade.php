@@ -55,7 +55,7 @@
                         <td>{{$item->name}}</td>
                         <td>{{$item->qty}}</td>
                         <td>
-                            <a href="/report/product/{{$item->BranchSlug}}/{{$item->ProductSlug}}">
+                            <a href="/report/product/{{$item->BranchCode}}/{{$item->ProductID}}">
                                 <button class="btn rounded-0 btn-sm btn-info" title="Edit">
                                     Details <i class="fa fa-eye"></i>
                                 </button>

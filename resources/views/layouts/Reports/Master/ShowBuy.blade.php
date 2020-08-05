@@ -7,41 +7,37 @@
     </div>
     <div class="card-body">
         <div class="col-md-12 table-responsive px-2">
-            <div class="col-md-12 px-1 py-1 mb-4">
-                <span>Reff ID : <span class="font-weight-bold">{{count($data) ? $data[0]->ReffID : '-'}}</span>
+            <div class="col-md-12">
+                <span class="float-left font-weight-bold">Reff ID : {{count($data) ? $data[0]->ReffID : '-'}}</span>
+                <span class="float-right font-weight-bold">Branch : {{count($data) ? $data[0]->BranchName : '-'}}</span>
             </div>
             @if (count($data) && Auth::user()->roles[0] == "Master")
-            <div class="col-md-12 mb-5">
-                <form action="/report/buy/Reff/{{$data[0]->ReffID}}" method="post" class="px-0 py-0">
-                    {{ csrf_field() }}
-                    <div class="col-md-6 float-left px-1 mb-2">
-                        <div class="col-md-12 mt-1">
-                            <label for="" class="font-weight-bold">From</label>
+            <form action="/report/buy/Reff/{{$data[0]->ReffID}}" method="get" class="p-0 col-md-12 clearfix">
+                <div class="col-md-12 float-left mt-1">
+                    <div class="col-md-4 float-left pr-1 mb-2">
+                        <div class="col-md-12"><label for="" class="font-weight-bold">From</label></div>
 
-                        </div>
-                        <div class="col-md-12 float-left mt-1">
-                            <input type="date" name="fromDate" id="" class="form-control">
+                        <div class="col-md-12">
+                            <input type="date" name="fromDate" id="" class="form-control" value="{{$fromDate != null && $toDate != null ? date("Y-m-d") : ''}}">
                         </div>
                     </div>
-                    <div class="col-md-6 float-left px-1 mb-2">
-                        <div class="col-md-12 mt-1">
-                            <label for="" class="font-weight-bold">To</label>
+                    <div class="col-md-6 float-left pr-1 mb-2">
+                        <div class="col-md-12"><label for="" class="font-weight-bold">To</label></div>
+                        <div class="col-md-8 float-left mb-2">
+                            <input type="date" name="toDate" id="" class="form-control" value="{{$fromDate != null && $toDate != null ? date("Y-m-d") : ''}}">
                         </div>
-                        <div class="col-md-6 float-left mr-1 mt-1">
-                            <input type="date" name="toDate" id="" class="form-control">
-                        </div>
-                        <div class="col-md-4 float-left btn-group mt-1">
-                            <button type="submit" class="btn bg-info text-white">Search <i
+                        <div class="col-md-4 float-left pl-1 btn-group">
+                            <button type="submit" class="btn bg-info text-white rounded-0 mr-1 float-left">Search <i
                                     class="fa fa-search"></i></button>
-                            <button type="clear" class="btn bg-danger text-white">Clear <i
+                            <button type="clear" class="btn bg-danger text-white rounded-0 mr-1 float-left">Clear <i
                                     class="fa fa-eraser"></i></button>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
             @endif
             @if (count($data))
-            <div class="col-md-12 mb-3">
+            <div class="col-md-12 clearfix">
                 <div class="col-md-7 px-1 float-left btn-group">
                     <form action="{{route('excelShowReport','buy')}}" class="px-0 py-0" method="post">
                         {{ csrf_field() }}
@@ -84,7 +80,7 @@
                 </div>
             </div>
             @endif
-            <div class="col-md-12 row">
+            <div class="col-md-12 clearfix">
                 <table class="mt-3 tableData table table-light px-2 border-bottom border-dark">
                     <tr class="bg-dark text-white">
                         <td colspan="5">Total Price : {{number_format($total[0])}}</td>

@@ -14,6 +14,23 @@ use Illuminate\Support\Facades\DB;
 
 class HistoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $sell = history_sell::where("created_at", "=", date("Y-m-d", strtotime("-1 Days")))->where("has_finished", "=", "false")->get();
+        $buy = history_buys::where("created_at", "=", date("Y-m-d", strtotime("-1 Days")))->where("has_finished", "=", "false")->get();
+        if ($buy != null) {
+            for ($i = 0; $i < sizeof($buy); $i++) {
+                history_buys::where("id", "=", $buy[$i]->id)->delete();
+            }
+        }
+        if ($sell != "null") {
+            for ($i = 0; $i < sizeof($sell); $i++) {
+                history_sell::where("id", "=", $buy[$i]->id)->delete();
+            }
+        }
+    }
+
     public function DetailBuy($branchSlug = null)
     {
         $attr = request()->all();
