@@ -20,8 +20,8 @@
     </div>
 </div>
 <div class="table-responsive px-1">
-    <table class="mt-3 tableData table-hover table table-light">
-        <tr>
+    <table class="mt-3 tableData table table-light">
+        <tr class="bg-dark text-white">
             <th scope="col">No</th>
             <th scope="col">Name</th>
             <th scope="col">Address</th>

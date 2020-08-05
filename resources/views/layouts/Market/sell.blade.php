@@ -41,8 +41,8 @@ $no = 1;
     </div>
 </div>
 <div class="table-responsive px-1 py-2">
-    <table class="tableData table-hover table table-light">
-        <tr>
+    <table class="tableData table table-light">
+        <tr class="bg-dark text-white">
             <th>No</th>
             <th>Reff ID</th>
             <th>Action</th>

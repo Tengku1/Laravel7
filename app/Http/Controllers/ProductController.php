@@ -10,6 +10,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
+
+    public function __construct()
+    {
+    }
+
     public function create()
     {
         return view('Master.Product.create');

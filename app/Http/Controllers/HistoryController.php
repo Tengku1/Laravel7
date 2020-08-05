@@ -39,7 +39,7 @@ class HistoryController extends Controller
                 ->where('slug', 'like', '%' . $branchSlug . '%')->get();
         } else {
             $branch = Branch::select('code', 'slug')
-                ->where('slug', 'like', '%' . $branchSlug . '%')->get();
+                ->where('slug', 'like', '%' . $attr['branch'] . '%')->get();
         }
         if (!count($branch)) {
             return abort(404);
@@ -97,7 +97,7 @@ class HistoryController extends Controller
                 ->where('slug', 'like', '%' . $branchSlug . '%')->get();
         } else {
             $branch = Branch::select('code', 'slug')
-                ->where('slug', 'like', '%' . $branchSlug . '%')->get();
+                ->where('slug', 'like', '%' . $attr['branch'] . '%')->get();
         }
         if (!count($branch)) {
             return abort(404);
