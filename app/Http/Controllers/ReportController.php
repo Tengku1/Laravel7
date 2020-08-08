@@ -25,54 +25,44 @@ class ReportController extends Controller
     public function __construct()
     {
         // Index Query
+        $this->buy = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")->join("branch", "history_buy.branch_code", "branch.code")->select("history_buy.id", "branch.name", "branch.slug", DB::raw("sum(history_buy_product.qty) as TotalQty"))->where("branch.status", "like", "active%")->where("history_buy.created_at", "like", "%" . date("Y-m-d") . "%");
 
-        $this->buy = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")->join("branch", "history_buy.branch_code", "branch.code")->select("history_buy.id", "branch.name", "branch.slug", DB::raw("sum(history_buy_product.qty) as TotalQty"))->groupBy("history_buy.id", "branch.name", "branch.slug");
+        $this->sell = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")->join("branch", "history_sell.branch_code", "branch.code")->select("history_sell.id", "branch.name", "branch.slug", DB::raw("sum(history_sell_product.qty) as TotalQty"))->where("branch.status", "like", "active%")->where("history_sell.created_at", "like", "%" . date("Y-m-d") . "%");
 
-        $this->sell = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")->join("branch", "history_sell.branch_code", "branch.code")->select("history_sell.id", "branch.name", "branch.slug", DB::raw("sum(history_sell_product.qty) as TotalQty"))->groupBy("history_sell.id", "branch.name", "branch.slug");
-
-        $this->product = Product::join("products_stock", "products_stock.product_id", "products.id")->join("branch", "products_stock.branch_code", "branch.code")->join("history_buy", "history_buy.branch_code", "branch.code")->select("products.name", "branch.code as BranchCode", "products.id as ProductID", DB::raw("sum(qty) as qty"))->groupBy("products.name", "BranchCode", "ProductID");
+        $this->product = Product::join("products_stock", "products_stock.product_id", "products.id")->join("branch", "products_stock.branch_code", "branch.code")->join("history_buy", "history_buy.branch_code", "branch.code")->select("products.name", "branch.code as BranchCode", "products.id as ProductID", "branch.name as BranchName", DB::raw("sum(qty) as qty"))->where("branch.status", "like", "active%");
         // End Query
     }
 
-    public function index($page, $branch = null, $paginate = 7)
+    public function index($page, $getBranchSlug = null, $paginate = 7)
     {
+        $getCode = Branch::where("slug", "=", $getBranchSlug)->get("code");
+        $branch = Branch::select("name", "code", "slug")->where("status", "like", "active%")->get();
         if (Auth::user()->roles[0] == "Master") {
-            if ($page == "buy") {
-                $data = $this->buy->paginate($paginate);
-                return view("layouts.Reports.Master.Buy", compact('data'));
-            } elseif ($page == "sell") {
-                $data = $this->sell->paginate($paginate);
-                return view("layouts.Reports.Master.Sell", compact("data"));
-            } elseif ($page == "products") {
-                if ($branch == null) {
-                    $data = $this->product->paginate($paginate);
-                    $branch = Branch::select("name", "code", "slug")->where("status", "like", "active%")->get();
-                    return view("layouts.Reports.Master.Products", compact("data", "branch"));
-                } else {
-                    $getCode = Branch::where("slug", "=", $branch)->get("code");
-                    $data = $this->product->where("products_stock.branch_code", "=", $getCode[0]->code)->paginate($paginate);
-                    $branch = Branch::select("name", "code", "slug")->where("status", "like", "active%")->get();
-                    return view("layouts.Reports.Master.Products", compact("data", "branch"));
-                }
+            if ($getBranchSlug == null) {
+                $data = $this->product->groupBy("products.name", "BranchCode", "ProductID", "BranchName")->paginate($paginate);
+                return view("layouts.Reports.Master.Products", compact("data", "branch"));
             } else {
-                return abort(404);
+                $data = $this->product->where("products_stock.branch_code", "=", $getCode[0]->code)->paginate($paginate)->groupBy("products.name", "BranchCode", "ProductID");
+                return view("layouts.Reports.Master.Products", compact("data", "branch"));
             }
         } elseif (Auth::user()->roles[0] == "Admin") {
-            if ($page == "buy") {
-                $data = $this->buy->where("history_buy.modified_user", "=", Auth::user()->name)->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
-                return view("layouts.Reports.Admin.Buy", compact('data'));
-            } elseif ($page == "sell") {
-                $data = $this->sell->where("history_sell.modified_user", "=", Auth::user()->name)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
-                return view("layouts.Reports.Admin.Sell", compact("data"));
-            } elseif ($page == "products") {
-                $data = $this->product->where("products_stock.branch_code", "=", Auth::user()->branch_code)->paginate($paginate);
-                return view("layouts.Reports.Admin.Products", compact("data"));
-            } else {
-                return abort(404);
-            }
+            $data = $this->product->where("products_stock.branch_code", "=", Auth::user()->branch_code)->groupBy("products.name", "BranchCode", "ProductID")->paginate($paginate);
+            return view("layouts.Reports.Admin.Products", compact("data"));
         } else {
             return abort(404);
         }
+    }
+
+    public function Buy($page, $getBranchSlug = null, $paginate = 7)
+    {
+        $data = $this->buy->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
+        return view("layouts.Reports.Master.Buy", compact('data'));
+    }
+
+    public function Sell($page, $getBranchSlug = null, $paginate = 7)
+    {
+        $data = $this->sell->where("history_sell.modified_user", "=", Auth::user()->name)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+        return view("layouts.Reports.Admin.Sell", compact("data"));
     }
 
     public function showProduct($code, $id, $paginate = 7)
@@ -81,46 +71,17 @@ class ReportController extends Controller
 
         $TotalQty = Products_Stock::select(DB::raw("sum(qty) as Total"))->where("branch_code", "=", $code)->where("product_id", "=", $id)->get();
 
-        if (isset($attr['fromDate']) && isset($attr['toDate'])) {
-            $arr = Products_Stock::join("branch", "products_stock.branch_code", "branch.code")
-                ->join("products", "products_stock.product_id", "products.id")
-                ->select(
-                    "products.name",
-                    "products.id as ProductID",
-                    "branch.code as BranchCode",
-                    "branch.name as BranchName",
-                    "qty",
-                    "buy_price",
-                    "products_stock.created_at"
-                )
-                ->where("products_stock.created_at", ">=", $attr['fromDate'])
-                ->where("products_stock.created_at", ">=", $attr['toDate']);
-        } elseif (isset($attr['fromDate']) && !isset($attr['toDate'])) {
-            $arr = Products_Stock::join("branch", "products_stock.branch_code", "branch.code")
-                ->join("products", "products_stock.product_id", "products.id")
-                ->select(
-                    "products.name",
-                    "products.id as ProductID",
-                    "branch.code as BranchCode",
-                    "branch.name as BranchName",
-                    "qty",
-                    "buy_price",
-                    "products_stock.created_at"
-                );
-            session()->flash('warning', "From or To must be filled");
-        } else {
-            $arr = Products_Stock::join("branch", "products_stock.branch_code", "branch.code")
-                ->join("products", "products_stock.product_id", "products.id")
-                ->select(
-                    "products.name",
-                    "products.id as ProductID",
-                    "branch.code as BranchCode",
-                    "branch.name as BranchName",
-                    "qty",
-                    "buy_price",
-                    "products_stock.created_at"
-                );
-        }
+        $arr = Products_Stock::join("branch", "products_stock.branch_code", "branch.code")
+            ->join("products", "products_stock.product_id", "products.id")
+            ->select(
+                "products.name",
+                "products.id as ProductID",
+                "branch.code as BranchCode",
+                "branch.name as BranchName",
+                "qty",
+                "buy_price",
+                "products_stock.created_at"
+            );
 
         if (isset($attr['by'])) {
             $data = $arr->where("buy_price", "like", "%" . $attr['by'] . "%")->where("branch.code", "=", $code)->where("products.id", "=", $id)->orWhere("qty", "like", "%" . $attr['by'] . "%")->paginate($paginate);

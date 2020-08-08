@@ -46,6 +46,11 @@
             </li>
 
             @if (Auth::user()->roles[0] == "Master")
+            <li class="mx-1{{ strstr($url, "user") ? ' active' : '' }}">
+                <a href="/user" class="menuitem nav-item nav-link">
+                    User <i class="fa fa-user"></i>
+                </a>
+            </li>
             <li class="mx-1{{ strstr($url, "branch") ? ' active' : '' }}">
                 <a href="/branch" class="menuitem nav-item nav-link">
                     Branch <i class="fa fa-dropbox"></i>
@@ -54,11 +59,6 @@
             <li class="mx-1{{ (strstr($url, "/product") && !(strstr($url, "/report/product"))) ? ' active' : '' }}">
                 <a href="/product" class="menuitem nav-item nav-link">
                     Product <i class="fa fa-product-hunt"></i>
-                </a>
-            </li>
-            <li class="mx-1{{ strstr($url, "user") ? ' active' : '' }}">
-                <a href="/user" class="menuitem nav-item nav-link">
-                    User <i class="fa fa-user"></i>
                 </a>
             </li>
             @else

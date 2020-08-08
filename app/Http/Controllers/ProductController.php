@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ProductExport;
 use App\Product;
 use App\Products_Stock;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -13,6 +14,19 @@ class ProductController extends Controller
 
     public function __construct()
     {
+        $query = Product::join("products_stock", "products_stock.product_id", "products.id")
+            ->select("products.id", "products.name", "status", DB::raw("sum(qty) as qty"))
+            ->groupBy("products.id", "products.name", "status")
+            ->get();
+        for ($i = 0; $i < sizeof($query); $i++) {
+            if ($query[$i]->qty <= 20) {
+                Product::where("id", "=", $query[$i]->id)->update(["status" => "Running Low"]);
+            } elseif ($query[$i]->qty <= 0) {
+                Product::where("id", "=", $query[$i]->id)->update(["status" => "Out Of Stock"]);
+            } else {
+                Product::where("id", "=", $query[$i]->id)->update(["status" => "In Stock"]);
+            }
+        }
     }
 
     public function create()

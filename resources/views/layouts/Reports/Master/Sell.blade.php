@@ -20,11 +20,11 @@
                             Show Entries
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            @for ($i = 1; $i <= sizeof($data); $i++) 
-                            <a href="/report/buy/paginate/{{$i}}/" class="dropdown-item">
+                            @for ($i = 1; $i <= sizeof($data); $i++) <a href="/report/buy/paginate/{{$i}}/"
+                                class="dropdown-item">
                                 {{$i}}
-                            </a>
-                            @endfor
+                                </a>
+                                @endfor
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,8 @@
                     @endforeach
                     @else
                     <tr>
-                        <td colspan="5" class="bg-dark text-white text-bold">No Data Available in this Table</td>
+                        <td colspan="5" class="bg-dark text-white text-bold text-capitalize">there are no reports today
+                        </td>
                     </tr>
                     @endif
                 </table>

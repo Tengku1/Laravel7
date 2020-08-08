@@ -20,32 +20,35 @@
                             Branch List
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            @for ($i = 0; $i < sizeof($branch); $i++) 
-                            <a href="/report/products/{{$branch[$i]->slug}}/" class="dropdown-item">
+                            @for ($i = 0; $i < sizeof($branch); $i++) <a href="/report/products/{{$branch[$i]->slug}}/"
+                                class="dropdown-item">
                                 {{$branch[$i]->name}}
-                            </a>
-                            @endfor
+                                </a>
+                                @endfor
                         </div>
                     </div>
+                    @if (sizeof($data) != 1)
                     <div class="dropdown">
                         <button class="btn btn-info rounded-0 dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Show Entries
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            @for ($i = 1; $i <= sizeof($data); $i++) 
-                            <a href="/report/buy/paginate/{{$i}}/" class="dropdown-item">
+                            @for ($i = 1; $i <= sizeof($data); $i++) <a href="/report/buy/paginate/{{$i}}/"
+                                class="dropdown-item">
                                 {{$i}}
-                            </a>
-                            @endfor
+                                </a>
+                                @endfor
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="col-md-12 row">
                 <table class="mt-3 tableData table table-light px-2 border-bottom border-dark">
                     <tr class="bg-dark text-white">
                         <th>Product Name</th>
+                        <th>Branch Name</th>
                         <th>Qty</th>
                         <th>Action</th>
                     </tr>
@@ -53,6 +56,7 @@
                     @foreach ($data as $item)
                     <tr>
                         <td>{{$item->name}}</td>
+                        <td>{{$item->BranchName}}</td>
                         <td>{{$item->qty}}</td>
                         <td>
                             <a href="/report/product/{{$item->BranchCode}}/{{$item->ProductID}}">
@@ -72,7 +76,10 @@
             </div>
         </div>
         {{-- Pagination --}}
+        @if (sizeof($data) != 1)
         @include('layouts.paginationTable')
+            
+        @endif
         {{-- == Pagination == --}}
     </div>
 

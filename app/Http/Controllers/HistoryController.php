@@ -403,6 +403,21 @@ class HistoryController extends Controller
     public function storeBuy()
     {
         $attr = request()->all();
+        // $check = history_buy_product::where("history_buy", "=", $attr['buyId'])->where("product_id", "=", $attr['product_id'])->get("qty");
+        // if (count($check)) {
+        //     foreach ($check as $value) {
+        //         $qtyBefore = $value->qty;
+        //         $qtyNow = $attr['qty'] + $qtyBefore;
+        //         history_buy_product::where("history_buy", "=", $attr['buyId'])->where("product_id", "=", $attr['product_id'])->update(["qty" => $qtyNow]);
+        //     }
+        // } else {
+        //     history_buy_product::create([
+        //         'history_buy' => $attr['buyId'],
+        //         'product_id' => $attr['product_id'],
+        //         'qty' => $attr['qty'],
+        //         'buy_price' => $attr['buy_price'],
+        //     ]);
+        // }
         history_buy_product::create([
             'history_buy' => $attr['buyId'],
             'product_id' => $attr['product_id'],

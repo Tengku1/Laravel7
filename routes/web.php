@@ -84,8 +84,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/report/{page}/', 'ReportController@index');
     Route::get('/report/{page}/paginate/{paginate}', 'ReportController@index');
-    Route::get('/report/{page}/{branch}', 'ReportController@index');
-    Route::get('/report/{page}/{branch}/paginate/{paginate}', 'ReportController@index');
+    Route::get('/report/{page}/{getBranchSlug}', 'ReportController@index');
+    Route::get('/report/{page}/{getBranchSlug}/paginate/{paginate}', 'ReportController@index');
 
     Route::get('/report/product/{code}/{id}/', 'ReportController@showProduct');
     Route::get('/report/product/{code}/{id}/paginate/{paginate}', 'ReportController@showProduct');
