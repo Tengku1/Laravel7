@@ -82,10 +82,20 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/report/excel/{page}', 'ReportController@excel')->name("excelReport");
     Route::post('/report/show/excel/{page}', 'ReportController@ShowExcel')->name("excelShowReport");
 
-    Route::get('/report/{page}/', 'ReportController@index');
-    Route::get('/report/{page}/paginate/{paginate}', 'ReportController@index');
-    Route::get('/report/{page}/{getBranchSlug}', 'ReportController@index');
-    Route::get('/report/{page}/{getBranchSlug}/paginate/{paginate}', 'ReportController@index');
+    Route::get('/report/products/', 'ReportController@index');
+    Route::get('/report/products/paginate/{paginate}', 'ReportController@index');
+    Route::get('/report/products/{getBranchSlug}', 'ReportController@index');
+    Route::get('/report/products/{getBranchSlug}/paginate/{paginate}', 'ReportController@index');
+
+    Route::get('/report/buy/', 'ReportController@buy');
+    Route::get('/report/buy/paginate/{paginate}', 'ReportController@buy');
+    Route::get('/report/buy/{getBranchSlug}', 'ReportController@buy');
+    Route::get('/report/buy/{getBranchSlug}/paginate/{paginate}', 'ReportController@buy');
+
+    Route::get('/report/sell/', 'ReportController@sell');
+    Route::get('/report/sell/paginate/{paginate}', 'ReportController@sell');
+    Route::get('/report/sell/{getBranchSlug}', 'ReportController@sell');
+    Route::get('/report/sell/{getBranchSlug}/paginate/{paginate}', 'ReportController@sell');
 
     Route::get('/report/product/{code}/{id}/', 'ReportController@showProduct');
     Route::get('/report/product/{code}/{id}/paginate/{paginate}', 'ReportController@showProduct');

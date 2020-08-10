@@ -67,17 +67,6 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-md-3 float-right">
-                    <form action="/report/sell/Reff/{{$data[0]->ReffID}}" method="get" class="p-0 input-group">
-                        <input class="form-control py-2 float-left" type="search" value="" placeholder="Search ..."
-                            id="searchdata" name="by" {{count($data) ? '' : ' disabled'}}>
-                        <span class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="submit" {{count($data) ? '' : ' disabled'}}>
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </span>
-                    </form>
-                </div>
             </div>
             @endif
             <div class="col-md-12 clearfix">

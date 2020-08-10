@@ -7,11 +7,6 @@
     </div>
     <div class="card-body">
         <div class="col-md-12 px-2">
-            <div class="col-md-12 px-1 py-1 mb-2">
-                <span class="font-weight-bold">Products Name : {{count($data) ? $data[0]->name : '-'}}</span>
-                <span class="float-right font-weight-bold">Branch Name
-                    :{{count($data) ? $data[0]->BranchName : '-'}}</span>
-            </div>
             <div class="col-md-12 table-responsive px-2 pt-3">
                 @if (count($data))
                 <div class="col-md-12">
@@ -43,18 +38,13 @@
                         </div>
                     </div>
                     <div class="col-md-3 px-1 py-0 float-right">
-                        <form action="/report/product/{{$data[0]->BranchSlug}}/{{$data[0]->slug}}" method="get"
-                            class="px-0 py-1 input-group">
-                            <input class="form-control py-2 float-left" type="search" value=""
-                                placeholder="Search By Qty, Buy Price" id="searchdata" name="by"
-                                {{count($data) ? '' : ' disabled'}}>
-                            <span class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="submit"
-                                    {{count($data) ? '' : ' disabled'}}>
-                                    <i class="fa fa-search"></i>
-                                </button>
+                        <div class="col-md-11 px-1 py-2">
+                            <span class="font-weight-bold float-left border-bottom border-dark" title="Branch Name">{{count($data) ? $data[0]->BranchName : '-'}} </span>
+                            <span class="font-weight-bold float-left mx-1"> | </span>
+                            <span class="font-weight-bold float-left border-bottom border-dark" title="Product Name">
+                                {{count($data) ? $data[0]->name : '-'}}
                             </span>
-                        </form>
+                        </div>
                     </div>
                 </div>
                 @endif
