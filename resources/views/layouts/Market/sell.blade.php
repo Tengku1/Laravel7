@@ -28,17 +28,6 @@ $no = 1;
             </div>
         </div>
     </div>
-    <div class="col-md-4 float-left mb-2">
-        <form action="/market/sell/search" method="get" class="px-0 py-0 input-group">
-            <input class="form-control py-2 float-left" type="search" value="" placeholder="Search ..." id="searchdata"
-                name="by">
-            <span class="input-group-append">
-                <button class="btn btn-outline-secondary" type="submit">
-                    <i class="fa fa-search"></i>
-                </button>
-            </span>
-        </form>
-    </div>
 </div>
 <div class="table-responsive px-1 py-2">
     <table class="tableData table table-light">

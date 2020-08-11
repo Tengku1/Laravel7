@@ -29,7 +29,16 @@ class ReportController extends Controller
 
         $this->sell = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")->join("branch", "history_sell.branch_code", "branch.code")->select("history_sell.id", "branch.name", "branch.slug", DB::raw("sum(history_sell_product.qty) as TotalQty"))->where("branch.status", "like", "active%")->where("history_sell.created_at", "like", "%" . date("Y-m-d") . "%");
 
-        $this->product = Product::join("products_stock", "products_stock.product_id", "products.id")->join("branch", "products_stock.branch_code", "branch.code")->join("history_buy", "history_buy.branch_code", "branch.code")->select("products.name", "branch.code as BranchCode", "products.id as ProductID", DB::raw("sum(qty) as qty"))->where("branch.status", "like", "active%");
+
+        $this->product = Product::join("products_stock", "products_stock.product_id", "products.id")
+            ->join("branch", "products_stock.branch_code", "branch.code")
+            ->select(
+                "products.name",
+                "products_stock.branch_code",
+                "products.id as ProductID",
+                "branch.name as BranchName",
+                DB::raw("sum(qty) as qty")
+            );
         // End Query
     }
 
@@ -38,25 +47,17 @@ class ReportController extends Controller
         $branch = Branch::select("name", "code", "slug")->where("status", "like", "active%")->get();
         if (Auth::user()->roles[0] == "Master") {
             if ($getBranchSlug == null) {
-                $BranchName = [];
-                $data = $this->product->groupBy("products.name", "BranchCode", "ProductID")->paginate($paginate);
+                $getFirst = Products_Stock::join("branch", "products_stock.branch_code", "branch.code")->select("code")->where("branch.status", "=", "active")->first();
+                $data = $this->product->where("products_stock.branch_code", "=", $getFirst["code"])->groupBy("products_stock.branch_code", "products.name", "ProductID", "BranchName")->paginate($paginate);
             } else {
-                $BranchName = Branch::where("slug", "=", "$getBranchSlug")->get("name");
-                $getCode = Branch::where("slug", "=", $getBranchSlug)->get("code");
-                if ($BranchName == null) {
-                    $BranchName = [];
-                }
-                if (!count($getCode)) {
-                    $data = [];
-                } else {
-                    $data = $this->product->where("products_stock.branch_code", "=", $getCode[0]->code)->groupBy("products.name", "BranchCode", "ProductID")->paginate($paginate);
-                }
+                $getBranch = Branch::where("slug", "=", $getBranchSlug)->get("code");
+                $data = $this->product->where("products_stock.branch_code", "=", $getBranch[0]->code)->groupBy("products_stock.branch_code", "products.name", "ProductID", "BranchName")->paginate($paginate);
             }
-            return view("layouts.Reports.Products", compact("data", "branch", "BranchName"));
+            return view("layouts.Reports.Products", compact("data", "branch"));
         } elseif (Auth::user()->roles[0] == "Admin") {
-            $data = $this->product->where("products_stock.branch_code", "=", Auth::user()->branch_code)->groupBy("products.name", "BranchCode", "ProductID")->paginate($paginate);
+            $data = $this->product->where("products_stock.branch_code", "=", Auth::user()->branch_code)->groupBy("products_stock.branch_code", "products.name", "ProductID", "BranchName")->paginate($paginate);
             $BranchName = Branch::where("code", "=", Auth::user()->branch_code)->get("name");
-            return view("layouts.Reports.Products", compact("data", "BranchName"));
+            return view("layouts.Reports.Products", compact("data"));
         } else {
             return abort(404);
         }
@@ -90,7 +91,7 @@ class ReportController extends Controller
                 "products_stock.created_at"
             );
         $data = $arr->where("branch.code", "=", $code)->where("products.id", "=", $id)->paginate($paginate);
-        return view("layouts.Reports.Master.showProduct", compact("data", "TotalQty"));
+        return view("layouts.Reports.showProduct", compact("data", "TotalQty"));
     }
 
     public function showBuy($id, $paginate = 7)
@@ -135,7 +136,7 @@ class ReportController extends Controller
             $total += $data[$i]->qty * $data[$i]->buy_price;
         }
         $total = explode(" ", $total);
-        return view("layouts.Reports.Master.ShowBuy", compact("data", "total", "fromDate", "toDate"));
+        return view("layouts.Reports.ShowBuy", compact("data", "total", "fromDate", "toDate"));
     }
 
     public function showSell($id, $paginate = 7)
@@ -159,7 +160,7 @@ class ReportController extends Controller
             $total += $data[$i]->qty * $data[$i]->sell_price;
         }
         $total = explode(" ", $total);
-        return view("layouts.Reports.Master.ShowSell", compact("data", "total", "fromDate", "toDate"));
+        return view("layouts.Reports.ShowSell", compact("data", "total", "fromDate", "toDate"));
     }
 
     public function excel($page)

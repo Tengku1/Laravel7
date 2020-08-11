@@ -34,9 +34,15 @@ class HistoryController extends Controller
     public function DetailBuy($branchSlug = null)
     {
         $attr = request()->all();
+        if (Auth::user()->roles[0] == "Admin") {
+            $branchSlug = $attr['branch'];
+        }
         if ($branchSlug != null) {
             $branch = Branch::select('code', 'slug')
                 ->where('slug', 'like', '%' . $branchSlug . '%')->get();
+            if (!count($branch)) {
+                abort(404);
+            }
         } else {
             $branch = Branch::select('code', 'slug')
                 ->where('slug', 'like', '%' . $attr['branch'] . '%')->get();
@@ -201,9 +207,9 @@ class HistoryController extends Controller
         return redirect()->back();
     }
 
-    public function history($path, $paginate = 7)
+    public function historyBuy($paginate = 7)
     {
-        if ($path == "buy") {
+        if (Auth::user()->roles[0] == "Master") {
             $data = history_buy_product::rightJoin('history_buy', 'history_buy_product.history_buy', 'history_buy.id')
                 ->join('branch', 'history_buy.branch_code', '=', 'branch.code')
                 ->select(
@@ -216,9 +222,26 @@ class HistoryController extends Controller
                 ->groupBy('history_buy.id', 'branch.slug', 'history_buy.has_finished')
                 ->paginate($paginate);
             $branch = Branch::select('name as branch_name', 'slug')->get();
-            $getSizeData = history_buy_product::get();
-            return view('layouts.Market.buy', compact('data', 'branch', 'getSizeData'));
         } else {
+            $data = history_buy_product::rightJoin('history_buy', 'history_buy_product.history_buy', 'history_buy.id')
+                ->select(
+                    'history_buy.id',
+                    'history_buy.has_finished',
+                )
+                ->where('history_buy.created_at', 'like', '%' . date('Y-m-d') . '%')
+                ->where("history_buy.modified_user", "=", Auth::user()->name)
+                ->orderBy('history_buy.id')
+                ->groupBy('history_buy.id', 'history_buy.has_finished')
+                ->paginate($paginate);
+            $branch = Branch::select('slug')->where("code", "=", Auth::user()->branch_code)->get();
+        }
+        $getSizeData = history_buy_product::get();
+        return view('layouts.Market.buy', compact('data', 'branch', 'getSizeData'));
+    }
+
+    public function historySell($paginate = 7)
+    {
+        if (Auth::user()->roles[0] == "Master") {
             $data = history_sell_product::rightJoin('history_sell', 'history_sell_product.history_sell', 'history_sell.id')
                 ->join('branch', 'history_sell.branch_code', '=', 'branch.code')
                 ->select(
@@ -230,10 +253,23 @@ class HistoryController extends Controller
                 ->orderBy('history_sell.id')
                 ->groupBy('history_sell.id', 'branch.slug', 'history_sell.has_finished')
                 ->paginate($paginate);
-            $branch = Branch::select('name as branch_name', 'slug')->get();
-            $getSizeData = history_sell_product::get();
-            return view('layouts.Market.sell', compact('data', 'branch', 'getSizeData'));
+        } else {
+            $data = history_sell_product::rightJoin('history_sell', 'history_sell_product.history_sell', 'history_sell.id')
+                ->join('branch', 'history_sell.branch_code', '=', 'branch.code')
+                ->select(
+                    'history_sell.id',
+                    'branch.slug as branchSlug',
+                    'history_sell.has_finished',
+                )
+                ->where('history_sell.created_at', 'like', '%' . date('Y-m-d') . '%')
+                ->where("history_sell.modified_user", "=", Auth::user()->name)
+                ->orderBy('history_sell.id')
+                ->groupBy('history_sell.id', 'branch.slug', 'history_sell.has_finished')
+                ->paginate($paginate);
         }
+        $branch = Branch::select('name as branch_name', 'slug')->get();
+        $getSizeData = history_sell_product::get();
+        return view('layouts.Market.sell', compact('data', 'branch', 'getSizeData'));
     }
 
     public function search($page)
@@ -282,9 +318,11 @@ class HistoryController extends Controller
         if ($page == "buy") {
             $data = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")
                 ->join("products", "history_buy_product.product_id", "products.id")
+                ->join("branch", "history_buy.branch_code", "branch.code")
                 ->select(
                     "products.name as ProductName",
                     "qty",
+                    "branch.name as BranchName",
                     "history_buy.modified_user",
                     "history_buy.id as ReffID",
                     "buy_price"
@@ -299,9 +337,11 @@ class HistoryController extends Controller
         } elseif ($page == "sell") {
             $data = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")
                 ->join("products", "history_sell_product.product_id", "products.id")
+                ->join("branch", "history_sell.branch_code", "branch.code")
                 ->select(
                     "products.name as ProductName",
                     "qty",
+                    "branch.name as BranchName",
                     "history_sell.modified_user",
                     "buy_price",
                     "history_sell.id as ReffID",

@@ -31,12 +31,12 @@
                 <tr>
                     <td>Created At</td>
                     <td>:</td>
-                    <td>{{$data[0]->created_at->diffForHumans()}}</td>
+                    <td>{{$data[0]->created_at}}</td>
                 </tr>
                 <tr>
                     <td>Modified At</td>
                     <td>:</td>
-                    <td>{{$data[0]->modified_at->diffForHumans()}}</td>
+                    <td>{{$data[0]->modified_at}}</td>
                 </tr>
             </table>
         </div>

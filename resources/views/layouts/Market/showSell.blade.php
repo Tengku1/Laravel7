@@ -10,6 +10,12 @@
         <span>Reff ID : {{$data[0]->ReffID}}</span>
         <div class="table-responsive">
             <table class="mt-3 tableData table table-light">
+                <tr class="bg-dark text-white text-bold text-center">
+                    <td colspan="5" class="px-3">
+                        <span class="float-left">Branch : {{$data[0]->BranchName}}</span>
+                        <span class="float-right">Total : {{$total[0]->TotalSell}}</span> 
+                    </td>
+                </tr>
                 <tr>
                     <th>Product Name</th>
                     <th>Quantity</th>
@@ -25,9 +31,6 @@
                     <td>Rp. {{number_format($item->sell_price * $item->qty,2)}}</td>
                 </tr>
                 @endforeach
-                <tr class="bg-success text-white text-bold text-center">
-                    <td colspan="5">Total : {{$total[0]->TotalSell}}</td>
-                </tr>
                 @else
                 <tr>
                     <td colspan="4" class="bg-dark text-white text-bold">No Data Available in this Table</td>

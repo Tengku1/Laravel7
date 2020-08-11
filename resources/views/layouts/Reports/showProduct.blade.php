@@ -10,7 +10,7 @@
             <div class="col-md-12 table-responsive px-2 pt-3">
                 @if (count($data))
                 <div class="col-md-12">
-                    <div class="col-md-7 px-1 float-left btn-group">
+                    <div class="col-md-6 px-1 float-left btn-group">
                         <form action="{{route('excelShowReport','product')}}" class="px-0 py-0" method="post">
                             {{ csrf_field() }}
                             <input type="hidden" name="slug" value="{{$data[0]->slug}}">
@@ -37,11 +37,11 @@
                             @endif
                         </div>
                     </div>
-                    <div class="col-md-3 px-1 py-0 float-right">
+                    <div class="col-md-6 px-1 py-0 float-right">
                         <div class="col-md-11 px-1 py-2">
-                            <span class="font-weight-bold float-left border-bottom border-dark" title="Branch Name">{{count($data) ? $data[0]->BranchName : '-'}} </span>
-                            <span class="font-weight-bold float-left mx-1"> | </span>
-                            <span class="font-weight-bold float-left border-bottom border-dark" title="Product Name">
+                            <span class="font-weight-bold float-right border-bottom border-dark" title="Branch Name">{{count($data) ? $data[0]->BranchName : '-'}} </span>
+                            <span class="font-weight-bold float-right mx-1"> | </span>
+                            <span class="font-weight-bold float-right border-bottom border-dark" title="Product Name">
                                 {{count($data) ? $data[0]->name : '-'}}
                             </span>
                         </div>

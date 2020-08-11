@@ -1,5 +1,11 @@
 <?php
 
+use App\Branch;
+use App\history_buy_product;
+use App\history_sell_product;
+use App\Product;
+use App\Products_Stock;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -19,9 +25,23 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 
     // Home Routes 
-    Route::get('/', 'HomeController@index');
-    Route::get('/history', 'HomeController@history');
-    Route::get('/history/{$id}', 'HomeController@historyShow');
+    Route::get('/', function () {
+        if (Auth::user()->roles[0] == "Master") {
+            $stock = Products_Stock::get();
+            $product = Product::where('created_at', 'like', '%' . date("Y-m-d") . '%')->paginate(5);
+            $user = User::paginate(5);
+            $branch = Branch::get();
+            $historyBuy = history_buy_product::join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')->get();
+            $historySell = history_sell_product::join('history_sell', 'history_sell_product.history_sell', 'history_sell.id')->get();
+            return view('layouts.home', compact('historyBuy', 'historySell', 'product', 'stock', 'branch', 'user'));
+        } else {
+            $stock = Products_Stock::get();
+            $product = Product::where('created_at', 'like', '%' . date("Y-m-d") . '%')->paginate(5);
+            $historyBuy = history_buy_product::join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')->get();
+            $historySell = history_sell_product::join('history_sell', 'history_sell_product.history_sell', 'history_sell.id')->get();
+            return view('layouts.home', compact('historyBuy', 'historySell', 'product', 'stock'));
+        }
+    });
     // End Home
 
     // Branch Only For Master !!
@@ -48,8 +68,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/market/storeStockBuy', 'HistoryController@stockBuy')->name('BuyExecution');
     route::get('/market/detail/{page}/show/', 'HistoryController@show');
 
-    Route::get('/market/{path}/', 'HistoryController@history');
-    Route::get('/market/{path}/paginate/{limit}', 'HistoryController@history');
+    Route::get('/market/buy/', 'HistoryController@historyBuy');
+    Route::get('/market/buy/paginate/{limit}', 'HistoryController@historyBuy');
+    Route::get('/market/sell/', 'HistoryController@historySell');
+    Route::get('/market/sell/paginate/{limit}', 'HistoryController@historySell');
 
     Route::get('/market/detail/buy/{branchSlug}/paginate/{paginate}', 'HistoryController@DetailBuy');
     Route::get('/market/detail/sell/{branchSlug}/paginate/{paginate}', 'HistoryController@DetailSell');
