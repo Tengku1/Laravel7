@@ -96,6 +96,7 @@ class ReportController extends Controller
 
     public function showBuy($id, $paginate = 7)
     {
+        $attr = request()->all();
         if (isset($attr['fromDate']) && isset($attr['toDate'])) {
             $fromDate = explode(" ", $attr['fromDate']);
             $toDate = explode(" ", $attr['toDate']);
@@ -141,6 +142,7 @@ class ReportController extends Controller
 
     public function showSell($id, $paginate = 7)
     {
+        $attr = request()->all();
         if (isset($attr['fromDate']) && isset($attr['toDate'])) {
             $sell = history_sell::join("history_sell_product", "history_sell_product.history_sell", "history_sell.id")->join("branch", "history_sell.branch_code", "branch.code")->join("products", "history_sell_product.product_id", "products.id")->select("products.name", "qty", "products.sell_price", "buy_price", "history_sell.id as ReffID", "branch.name as BranchName", DB::raw("sum(qty * buy_price) as SubTotal"))->where("history_sell.created_at", ">=", $attr['fromDate'])->where("history_sell.created_at", ">=", $attr['toDate'])->where("history_sell.id", "=", $id);
             $fromDate = explode(" ", $attr['fromDate']);
@@ -182,10 +184,10 @@ class ReportController extends Controller
     {
         $attr = request()->all();
         if ($page == "product") {
-            $getCode = Branch::where("slug", "=", $attr['BranchSlug'])->get("code");
-            $productID = Product::where("slug", "=", $attr['slug'])->get("id");
+            $code = $attr['id'];
+            $id = $attr['code'];
             $name = "Products_Detail_" . date('Y-m-d') . ".xlsx";
-            return Excel::download(new ReportDetailProduct($getCode, $productID), $name);
+            return Excel::download(new ReportDetailProduct($id, $code), $name);
         } elseif ($page == "buy") {
             $name = "History_Buys_Detail_" . date('Y-m-d') . ".xlsx";
             $reffID = $attr['reffid'];

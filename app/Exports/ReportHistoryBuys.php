@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ReportHistoryBuys implements FromCollection
+class ReportHistoryBuys implements FromCollection, WithHeadings
 {
     use Exportable;
 

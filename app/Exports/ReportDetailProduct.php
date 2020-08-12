@@ -12,10 +12,10 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class ReportDetailProduct implements FromCollection, WithHeadings
 {
     use Exportable;
-    public function __construct($getCode, $productID)
+    public function __construct($code, $id)
     {
-        $this->code = $getCode[0]->code;
-        $this->id = $productID[0]->id;
+        $this->code = $code;
+        $this->id = $id;
     }
     public function collection()
     {

@@ -13,8 +13,8 @@
                     <div class="col-md-6 px-1 float-left btn-group">
                         <form action="{{route('excelShowReport','product')}}" class="px-0 py-0" method="post">
                             {{ csrf_field() }}
-                            <input type="hidden" name="slug" value="{{$data[0]->slug}}">
-                            <input type="hidden" name="BranchSlug" value="{{$data[0]->BranchSlug}}">
+                            <input type="hidden" name="id" value="{{$data[0]->ProductID}}">
+                            <input type="hidden" name="code" value="{{$data[0]->BranchCode}}">
                             <button type="submit" class="btn btn-success rounded-0 float-left mr-1 mb-2"
                                 {{count($data) ? '' : ' disabled'}}>Export Excel
                                 <i class="fa fa-file-excel-o"></i>
