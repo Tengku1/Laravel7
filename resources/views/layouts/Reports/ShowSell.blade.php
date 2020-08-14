@@ -91,7 +91,7 @@
                         <td>{{number_format($item->qty)}}</td>
                         <td>{{number_format($item->buy_price)}}</td>
                         <td>{{number_format($item->sell_price)}}</td>
-                        <td>{{number_format($item->qty * $item->buy_price,2)}}</td>
+                        <td>{{number_format($item->qty * $item->sell_price,2)}}</td>
                     </tr>
                     @endforeach
                     @else

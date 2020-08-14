@@ -218,10 +218,20 @@ class HistoryController extends Controller
                     'history_buy.has_finished',
                 )
                 ->where('history_buy.created_at', 'like', '%' . date('Y-m-d') . '%')
+                ->where('branch.status', '=', 'active')
                 ->orderBy('history_buy.id')
                 ->groupBy('history_buy.id', 'branch.slug', 'history_buy.has_finished')
                 ->paginate($paginate);
-            $branch = Branch::select('name as branch_name', 'slug')->get();
+            $branch = Branch::select('name as branch_name', 'slug')->where('status', '=', 'active')->get();
+            $getSizeData = history_buy_product::rightJoin('history_buy', 'history_buy_product.history_buy', 'history_buy.id')
+                ->select(
+                    'history_buy.id',
+                    'history_buy.has_finished',
+                )
+                ->where('history_buy.created_at', 'like', '%' . date('Y-m-d') . '%')
+                ->orderBy('history_buy.id')
+                ->groupBy('history_buy.id', 'history_buy.has_finished')
+                ->get();
         } else {
             $data = history_buy_product::rightJoin('history_buy', 'history_buy_product.history_buy', 'history_buy.id')
                 ->select(
@@ -234,8 +244,18 @@ class HistoryController extends Controller
                 ->groupBy('history_buy.id', 'history_buy.has_finished')
                 ->paginate($paginate);
             $branch = Branch::select('slug')->where("code", "=", Auth::user()->branch_code)->get();
+            $getSizeData = history_buy_product::rightJoin('history_buy', 'history_buy_product.history_buy', 'history_buy.id')
+                ->select(
+                    'history_buy.id',
+                    'history_buy.has_finished',
+                )
+                ->where('history_buy.created_at', 'like', '%' . date('Y-m-d') . '%')
+                ->where("history_buy.modified_user", "=", Auth::user()->name)
+                ->orderBy('history_buy.id')
+                ->groupBy('history_buy.id', 'history_buy.has_finished')
+                ->get();
         }
-        $getSizeData = history_buy_product::get();
+
         return view('layouts.Market.buy', compact('data', 'branch', 'getSizeData'));
     }
 
@@ -250,9 +270,20 @@ class HistoryController extends Controller
                     'history_sell.has_finished',
                 )
                 ->where('history_sell.created_at', 'like', '%' . date('Y-m-d') . '%')
+                ->where('branch.status', '=', 'active')
                 ->orderBy('history_sell.id')
                 ->groupBy('history_sell.id', 'branch.slug', 'history_sell.has_finished')
                 ->paginate($paginate);
+            $getSizeData = history_sell_product::rightJoin('history_sell', 'history_sell_product.history_sell', 'history_sell.id')
+                ->join('branch', 'history_sell.branch_code', '=', 'branch.code')
+                ->select(
+                    'history_sell.id',
+                    'branch.slug as branchSlug',
+                    'history_sell.has_finished',
+                )
+                ->where('history_sell.created_at', 'like', '%' . date('Y-m-d') . '%')
+                ->orderBy('history_sell.id')
+                ->groupBy('history_sell.id', 'branch.slug', 'history_sell.has_finished')->get();
         } else {
             $data = history_sell_product::rightJoin('history_sell', 'history_sell_product.history_sell', 'history_sell.id')
                 ->join('branch', 'history_sell.branch_code', '=', 'branch.code')
@@ -266,9 +297,19 @@ class HistoryController extends Controller
                 ->orderBy('history_sell.id')
                 ->groupBy('history_sell.id', 'branch.slug', 'history_sell.has_finished')
                 ->paginate($paginate);
+            $getSizeData = history_sell_product::rightJoin('history_sell', 'history_sell_product.history_sell', 'history_sell.id')
+                ->join('branch', 'history_sell.branch_code', '=', 'branch.code')
+                ->select(
+                    'history_sell.id',
+                    'branch.slug as branchSlug',
+                    'history_sell.has_finished',
+                )
+                ->where('history_sell.created_at', 'like', '%' . date('Y-m-d') . '%')
+                ->where("history_sell.modified_user", "=", Auth::user()->name)
+                ->orderBy('history_sell.id')
+                ->groupBy('history_sell.id', 'branch.slug', 'history_sell.has_finished')->get();
         }
-        $branch = Branch::select('name as branch_name', 'slug')->get();
-        $getSizeData = history_sell_product::get();
+        $branch = Branch::select('name as branch_name', 'slug')->where("status", "=", "active")->get();
         return view('layouts.Market.sell', compact('data', 'branch', 'getSizeData'));
     }
 
@@ -368,7 +409,7 @@ class HistoryController extends Controller
             $stock = Products_Stock::create([
                 'product_id' => $history[$i]->id,
                 'branch_code' => $attr['branch_code'],
-                'buy_price' => $history[$i]->qty * $history[$i]->buy_price,
+                'buy_price' => $history[$i]->buy_price,
                 'qty' => $history[$i]->qty,
             ]);
         }
@@ -443,21 +484,6 @@ class HistoryController extends Controller
     public function storeBuy()
     {
         $attr = request()->all();
-        // $check = history_buy_product::where("history_buy", "=", $attr['buyId'])->where("product_id", "=", $attr['product_id'])->get("qty");
-        // if (count($check)) {
-        //     foreach ($check as $value) {
-        //         $qtyBefore = $value->qty;
-        //         $qtyNow = $attr['qty'] + $qtyBefore;
-        //         history_buy_product::where("history_buy", "=", $attr['buyId'])->where("product_id", "=", $attr['product_id'])->update(["qty" => $qtyNow]);
-        //     }
-        // } else {
-        //     history_buy_product::create([
-        //         'history_buy' => $attr['buyId'],
-        //         'product_id' => $attr['product_id'],
-        //         'qty' => $attr['qty'],
-        //         'buy_price' => $attr['buy_price'],
-        //     ]);
-        // }
         history_buy_product::create([
             'history_buy' => $attr['buyId'],
             'product_id' => $attr['product_id'],

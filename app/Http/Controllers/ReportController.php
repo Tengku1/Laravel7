@@ -38,7 +38,7 @@ class ReportController extends Controller
                 "products.id as ProductID",
                 "branch.name as BranchName",
                 DB::raw("sum(qty) as qty")
-            );
+            )->where('qty', '!=', 0);
         // End Query
     }
 
@@ -48,7 +48,11 @@ class ReportController extends Controller
         if (Auth::user()->roles[0] == "Master") {
             if ($getBranchSlug == null) {
                 $getFirst = Products_Stock::join("branch", "products_stock.branch_code", "branch.code")->select("code")->where("branch.status", "=", "active")->first();
-                $data = $this->product->where("products_stock.branch_code", "=", $getFirst["code"])->groupBy("products_stock.branch_code", "products.name", "ProductID", "BranchName")->paginate($paginate);
+                if (isset($getFirst)) {
+                    $data = $this->product->where("products_stock.branch_code", "=", $getFirst["code"])->groupBy("products_stock.branch_code", "products.name", "ProductID", "BranchName")->paginate($paginate);
+                } else {
+                    $data = $this->product->groupBy("products_stock.branch_code", "products.name", "ProductID", "BranchName")->paginate($paginate);
+                }
             } else {
                 $getBranch = Branch::where("slug", "=", $getBranchSlug)->get("code");
                 $data = $this->product->where("products_stock.branch_code", "=", $getBranch[0]->code)->groupBy("products_stock.branch_code", "products.name", "ProductID", "BranchName")->paginate($paginate);
@@ -90,7 +94,7 @@ class ReportController extends Controller
                 "buy_price",
                 "products_stock.created_at"
             );
-        $data = $arr->where("branch.code", "=", $code)->where("products.id", "=", $id)->paginate($paginate);
+        $data = $arr->where("branch.code", "=", $code)->where("products.id", "=", $id)->where('qty', '!=', 0)->paginate($paginate);
         return view("layouts.Reports.showProduct", compact("data", "TotalQty"));
     }
 

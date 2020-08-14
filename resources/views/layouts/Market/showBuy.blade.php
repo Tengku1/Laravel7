@@ -13,7 +13,7 @@
                 <tr class="bg-dark text-white text-bold text-center">
                     <td colspan="5" class="px-3">
                         <span class="float-left">Branch : {{$data[0]->BranchName}}</span>
-                        <span class="float-right">Total : {{$total[0]->TotalBuy}}</span> 
+                        <span class="float-right">Total : Rp. {{number_format($total[0]->TotalBuy,2)}}</span> 
                     </td>
                 </tr>
                 <tr>
