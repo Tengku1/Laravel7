@@ -29,21 +29,6 @@
                 </div>
             </div>
             @endif
-            @if (count($data))
-            <div class="dropdown float-left mr-1 mb-1">
-                <button class="btn btn-info rounded-0 dropdown-toggle" type="button" id="dropdownMenuButton"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Show Entries
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    @for ($i = 1; $i <= sizeof($data); $i++) <a href="/report/buy/paginate/{{$i}}/"
-                        class="dropdown-item">
-                        {{$i}}
-                        </a>
-                        @endfor
-                </div>
-            </div>
-            @endif
         </div>
         <div class="col-md-12 table-responsive px-2">
             <div class="col-md-12 row">

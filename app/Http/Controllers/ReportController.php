@@ -25,9 +25,9 @@ class ReportController extends Controller
     public function __construct()
     {
         // Index Query
-        $this->buy = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")->join("branch", "history_buy.branch_code", "branch.code")->select("history_buy.id", "branch.name", "branch.slug", DB::raw("sum(history_buy_product.qty) as TotalQty"))->where("branch.status", "like", "active%")->where("history_buy.created_at", "like", "%" . date("Y-m-d") . "%");
+        $this->buy = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")->join("branch", "history_buy.branch_code", "branch.code")->select("history_buy.id", "branch.name as BranchName", "branch.slug", DB::raw("sum(history_buy_product.qty) as TotalQty"))->where("branch.status", "like", "active%")->where("history_buy.created_at", "like", "%" . date("Y-m-d") . "%");
 
-        $this->sell = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")->join("branch", "history_sell.branch_code", "branch.code")->select("history_sell.id", "branch.name", "branch.slug", DB::raw("sum(history_sell_product.qty) as TotalQty"))->where("branch.status", "like", "active%")->where("history_sell.created_at", "like", "%" . date("Y-m-d") . "%");
+        $this->sell = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")->join("branch", "history_sell.branch_code", "branch.code")->select("history_sell.id", "branch.name as BranchName", "branch.slug", DB::raw("sum(history_sell_product.qty) as TotalQty"))->where("branch.status", "like", "active%")->where("history_sell.created_at", "like", "%" . date("Y-m-d") . "%");
 
 
         $this->product = Product::join("products_stock", "products_stock.product_id", "products.id")
@@ -67,16 +67,87 @@ class ReportController extends Controller
         }
     }
 
-    public function Buy($getBranchSlug = null, $paginate = 7)
+    public function Buy($BranchSlug = null, $paginate = 7)
     {
-        $data = $this->buy->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
-        return view("layouts.Reports.Master.Buy", compact('data'));
+        $branch = Branch::select("name", "code", "slug")->where("status", "like", "active")->get();
+        if (Auth::user()->roles[0] == "Master") {
+            $attr = request()->all();
+            if (!isset($attr['fromDate']) && !isset($attr['toDate'])) {
+                $attr['fromDate'] = date("Y-m-d");
+                $attr['toDate'] = date("Y-m-d");
+            } else {
+                $attr['toDate'] = strtotime("1 day", strtotime($attr['toDate']));
+                $attr['toDate'] = date("Y-m-d", $attr['toDate']);
+            }
+            $fromDate = explode(" ", $attr['fromDate']);
+            $toDate = explode(" ", $attr['toDate']);
+            if ($BranchSlug == null) {
+                $branchSelected = [];
+                $data = $this->buy->where('history_buy.created_at', '=', $attr['fromDate'])->orWhere('history_buy.created_at', '<=', $attr['toDate'])->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
+            } else {
+                $BranchCode = Branch::where("slug", "=", $BranchSlug)->get();
+                $branchSelected = explode(" ", $BranchCode[0]->slug);
+                $data = $this->buy->where('history_buy.created_at', '>=', $attr['fromDate'])->orWhere('history_buy.created_at', '=', $attr['toDate'])->where("history_buy.branch_code", "=", $BranchCode[0]->code)->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
+            }
+            return view("layouts.Reports.Master.Buy", compact("data", "branch", "fromDate", "toDate", "branchSelected"));
+        } else {
+            $data = $this->buy->where('history_buy.modified_user', '=', Auth::user()->name)->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
+            $branchSelected = explode(" ", $data[0]->BranchName);
+            return view("layouts.Reports.Admin.Buy", compact("data", "branchSelected"));
+        }
     }
 
-    public function Sell($getBranchSlug = null, $paginate = 7)
+    public function Sell($BranchSlug = null, $paginate = 7)
     {
-        $data = $this->sell->where("history_sell.modified_user", "=", Auth::user()->name)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
-        return view("layouts.Reports.Admin.Sell", compact("data"));
+        // $attr = request()->all();
+        // if (!isset($attr['fromDate']) && !isset($attr['toDate'])) {
+        //     $attr['fromDate'] = date("Y-m-d");
+        //     $attr['toDate'] = date("Y-m-d");
+        // }
+        // $branch = Branch::select("name", "code", "slug")->where("status", "like", "active")->get();
+        // if (Auth::user()->roles[0] == "Master") {
+        //     if ($BranchSlug == null) {
+        //         $data = $this->sell->where('history_sell.created_at', '>=', $attr['fromDate'])->orWhere('history_sell.created_at', '<=', $attr['toDate'])->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+        //     } else {
+        //         $BranchCode = Branch::where("slug", "=", $BranchSlug)->get("code");
+        //         $data = $this->sell->where('history_sell.created_at', '>=', $attr['fromDate'])->orWhere('history_sell.created_at', '<=', $attr['toDate'])->where("history_sell.branch.slug", "=", $BranchCode[0]->code)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+        //     }
+        //     return view("layouts.Reports.Master.Sell", compact("data", "branch"));
+        // } else {
+        //     if ($BranchSlug == null) {
+        //         $data = $this->sell->where("history_sell.modified_user", "=", Auth::user()->name)->where('history_sell.created_at', '>=', $attr['fromDate'])->orWhere('history_sell.created_at', '<=', $attr['toDate'])->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+        //     } else {
+        //         $BranchCode = Branch::where("slug", "=", $BranchSlug)->get("code");
+        //         $data = $this->sell->where("history_sell.modified_user", "=", Auth::user()->name)->where('history_sell.created_at', '>=', $attr['fromDate'])->orWhere('history_sell.created_at', '<=', $attr['toDate'])->where("history_sell.branch.slug", "=", $BranchCode[0]->code)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+        //     }
+        //     return view("layouts.Reports.Admin.Sell", compact("data"));
+        // }
+        $branch = Branch::select("name", "code", "slug")->where("status", "like", "active")->get();
+        if (Auth::user()->roles[0] == "Master") {
+            $attr = request()->all();
+            if (!isset($attr['fromDate']) && !isset($attr['toDate'])) {
+                $attr['fromDate'] = date("Y-m-d");
+                $attr['toDate'] = date("Y-m-d");
+            } else {
+                $attr['toDate'] = strtotime("1 day", strtotime($attr['toDate']));
+                $attr['toDate'] = date("Y-m-d", $attr['toDate']);
+            }
+            $fromDate = explode(" ", $attr['fromDate']);
+            $toDate = explode(" ", $attr['toDate']);
+            if ($BranchSlug == null) {
+                $branchSelected = [];
+                $data = $this->sell->where('history_sell.created_at', '=', $attr['fromDate'])->orWhere('history_sell.created_at', '<=', $attr['toDate'])->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+            } else {
+                $BranchCode = Branch::where("slug", "=", $BranchSlug)->get();
+                $branchSelected = explode(" ", $BranchCode[0]->slug);
+                $data = $this->sell->where('history_sell.created_at', '>=', $attr['fromDate'])->orWhere('history_sell.created_at', '=', $attr['toDate'])->where("history_sell.branch_code", "=", $BranchCode[0]->code)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+            }
+            return view("layouts.Reports.Master.Buy", compact("data", "branch", "fromDate", "toDate", "branchSelected"));
+        } else {
+            $data = $this->sell->where('history_sell.modified_user', '=', Auth::user()->name)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+            $branchSelected = explode(" ", $data[0]->BranchName);
+            return view("layouts.Reports.Admin.Buy", compact("data", "branchSelected"));
+        }
     }
 
     public function showProduct($code, $id, $paginate = 7)
@@ -100,73 +171,36 @@ class ReportController extends Controller
 
     public function showBuy($id, $paginate = 7)
     {
-        $attr = request()->all();
-        if (isset($attr['fromDate']) && isset($attr['toDate'])) {
-            $fromDate = explode(" ", $attr['fromDate']);
-            $toDate = explode(" ", $attr['toDate']);
-            $buy = history_buys::join("history_buy_product", "history_buy_product.history_buy", "history_buy.id")
-                ->join("products", "history_buy_product.product_id", "products.id")
-                ->join("branch", "history_buy.branch_code", "branch.code")
-                ->select(
-                    "products.name",
-                    "qty",
-                    "buy_price",
-                    "history_buy.id as ReffID",
-                    "branch.name as BranchName",
-                    DB::raw("sum(qty * buy_price) as SubTotal")
-                )
-                ->where("history_buy.created_at", ">=", $attr['fromDate'])
-                ->where("history_buy.created_at", ">=", $attr['toDate']);
-        } else {
-            $buy = history_buys::join("history_buy_product", "history_buy_product.history_buy", "history_buy.id")
-                ->join("products", "history_buy_product.product_id", "products.id")
-                ->join("branch", "history_buy.branch_code", "branch.code")
-                ->select(
-                    "products.name",
-                    "qty",
-                    "buy_price",
-                    "history_buy.id as ReffID",
-                    "branch.name as BranchName",
-                    DB::raw("sum(qty * buy_price) as SubTotal")
-                );
-            $fromDate = [];
-            $toDate = [];
-            if (isset($attr['fromDate']) || isset($attr['toDate'])) {
-                session()->flash('warning', 'From or Date must be Filled !');
-            }
-        }
+        $buy = history_buys::join("history_buy_product", "history_buy_product.history_buy", "history_buy.id")
+            ->join("products", "history_buy_product.product_id", "products.id")
+            ->join("branch", "history_buy.branch_code", "branch.code")
+            ->select(
+                "products.name",
+                "qty",
+                "buy_price",
+                "history_buy.id as ReffID",
+                "branch.name as BranchName",
+                DB::raw("sum(qty * buy_price) as SubTotal")
+            );
         $data = $buy->where("history_buy.id", "=", $id)->groupBy("products.name", "qty", "buy_price", "ReffID", "BranchName")->paginate($paginate);
         $total = 0;
         for ($i = 0; $i < sizeof($data); $i++) {
             $total += $data[$i]->qty * $data[$i]->buy_price;
         }
         $total = explode(" ", $total);
-        return view("layouts.Reports.ShowBuy", compact("data", "total", "fromDate", "toDate"));
+        return view("layouts.Reports.ShowBuy", compact("data", "total"));
     }
 
     public function showSell($id, $paginate = 7)
     {
-        $attr = request()->all();
-        if (isset($attr['fromDate']) && isset($attr['toDate'])) {
-            $sell = history_sell::join("history_sell_product", "history_sell_product.history_sell", "history_sell.id")->join("branch", "history_sell.branch_code", "branch.code")->join("products", "history_sell_product.product_id", "products.id")->select("products.name", "qty", "products.sell_price", "buy_price", "history_sell.id as ReffID", "branch.name as BranchName", DB::raw("sum(qty * buy_price) as SubTotal"))->where("history_sell.created_at", ">=", $attr['fromDate'])->where("history_sell.created_at", ">=", $attr['toDate'])->where("history_sell.id", "=", $id);
-            $fromDate = explode(" ", $attr['fromDate']);
-            $toDate = explode(" ", $attr['toDate']);
-        } else {
-            $sell = history_sell::join("history_sell_product", "history_sell_product.history_sell", "history_sell.id")->join("branch", "history_sell.branch_code", "branch.code")->join("products", "history_sell_product.product_id", "products.id")->select("products.name", "qty", "products.sell_price", "buy_price", "history_sell.id as ReffID", "branch.name as BranchName", DB::raw("sum(qty * buy_price) as SubTotal"))->where("history_sell.id", "=", $id);
-            $fromDate = [];
-            $toDate = [];
-            if (isset($attr['fromDate']) || isset($attr['toDate'])) {
-                session()->flash('warning', "From or To must be Filled !");
-            }
-        }
-
+        $sell = history_sell::join("history_sell_product", "history_sell_product.history_sell", "history_sell.id")->join("branch", "history_sell.branch_code", "branch.code")->join("products", "history_sell_product.product_id", "products.id")->select("products.name", "qty", "products.sell_price", "buy_price", "history_sell.id as ReffID", "branch.name as BranchName", DB::raw("sum(qty * buy_price) as SubTotal"))->where("history_sell.id", "=", $id);
         $data = $sell->groupBy("products.name", "qty", "buy_price", "products.sell_price", "ReffID", "BranchName")->paginate($paginate);
         $total = 0;
         for ($i = 0; $i < sizeof($data); $i++) {
             $total += $data[$i]->qty * $data[$i]->sell_price;
         }
         $total = explode(" ", $total);
-        return view("layouts.Reports.ShowSell", compact("data", "total", "fromDate", "toDate"));
+        return view("layouts.Reports.ShowSell", compact("data", "total"));
     }
 
     public function excel($page)

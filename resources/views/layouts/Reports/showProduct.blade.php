@@ -20,22 +20,6 @@
                                 <i class="fa fa-file-excel-o"></i>
                             </button>
                         </form>
-                        <div class="dropdown">
-                            <button class="btn btn-info rounded-0 dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Show Entries
-                            </button>
-                            @if (count($data))
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                @for ($i = 1; $i <= sizeof($data); $i++) <a
-                                    href="/report/product/{{$data[0]->BranchSlug}}/{{$data[0]->slug}}/paginate/{{$i}}/"
-                                    class="dropdown-item">
-                                    {{$i}}
-                                    </a>
-                                    @endfor
-                            </div>
-                            @endif
-                        </div>
                     </div>
                     <div class="col-md-6 px-1 py-0 float-right">
                         <div class="col-md-11 px-1 py-2">
