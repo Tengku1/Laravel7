@@ -29,8 +29,7 @@
                             <div class="col-md-4 float-left pl-1 btn-group">
                                 <button type="submit" class="btn bg-info text-white rounded-0 mr-1 float-left">Search <i
                                         class="fa fa-search"></i></button>
-                                <button type="clear" class="btn bg-danger text-white rounded-0 mr-1 float-left">Clear <i
-                                        class="fa fa-eraser"></i></button>
+                                <button type="reset" class="btn bg-danger text-white rounded-0 mr-1 float-left">Clear <i class="fa fa-eraser"></i></button>
                             </div>
                         </div>
                     </div>

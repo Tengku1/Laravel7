@@ -25,9 +25,9 @@ class ReportController extends Controller
     public function __construct()
     {
         // Index Query
-        $this->buy = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")->join("branch", "history_buy.branch_code", "branch.code")->select("history_buy.id", "branch.name as BranchName", "branch.slug", DB::raw("sum(history_buy_product.qty) as TotalQty"))->where("branch.status", "like", "active%")->where("history_buy.created_at", "like", date("Y-m-d") . "%");
+        $this->buy = history_buy_product::join("history_buy", "history_buy_product.history_buy", "history_buy.id")->join("branch", "history_buy.branch_code", "branch.code")->select("history_buy.id", "branch.name as BranchName", "branch.slug", DB::raw("sum(history_buy_product.qty) as TotalQty"))->where("branch.status", "=", "active");
 
-        $this->sell = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")->join("branch", "history_sell.branch_code", "branch.code")->select("history_sell.id", "branch.name as BranchName", "branch.slug", DB::raw("sum(history_sell_product.qty) as TotalQty"))->where("branch.status", "like", "active%")->where("history_sell.created_at", "like", date("Y-m-d") . "%");
+        $this->sell = history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")->join("branch", "history_sell.branch_code", "branch.code")->select("history_sell.id", "branch.name as BranchName", "branch.slug", DB::raw("sum(history_sell_product.qty) as TotalQty"))->where("branch.status", "=", "active");
 
 
         $this->product = Product::join("products_stock", "products_stock.product_id", "products.id")
@@ -77,24 +77,22 @@ class ReportController extends Controller
                 $toDate = explode(" ", date("Y-m-d"));
                 if ($BranchSlug == null) {
                     $branchSelected = [];
-                    $data = $this->buy->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
+                    $data = $this->buy->where("history_buy.created_at", "like", date("Y-m-d") . "%")->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
                 } else {
                     $BranchCode = Branch::where("slug", "=", $BranchSlug)->get();
                     $branchSelected = explode(" ", $BranchCode[0]->slug);
-                    $data = $this->buy->where("history_buy.branch_code", "=", $BranchCode[0]->code)->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
+                    $data = $this->buy->where("history_buy.created_at", "like", date("Y-m-d") . "%")->where("history_buy.branch_code", "=", $BranchCode[0]->code)->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
                 }
             } else {
-                $attr['toDate'] = strtotime("1 day", strtotime($attr['toDate']));
-                $attr['toDate'] = date("Y-m-d", $attr['toDate']);
                 $fromDate = explode(" ", $attr['fromDate']);
                 $toDate = explode(" ", $attr['toDate']);
                 if ($BranchSlug == null) {
                     $branchSelected = [];
-                    $data = $this->buy->where('history_buy.created_at', '=', $attr['fromDate'])->orWhere('history_buy.created_at', '<=', $attr['toDate'])->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
+                    $data = $this->buy->where('history_buy.created_at', '>=', $attr['fromDate'])->where('history_buy.created_at', '<=', $attr['toDate'])->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
                 } else {
                     $BranchCode = Branch::where("slug", "=", $BranchSlug)->get();
                     $branchSelected = explode(" ", $BranchCode[0]->slug);
-                    $data = $this->buy->where('history_buy.created_at', '>=', $attr['fromDate'])->orWhere('history_buy.created_at', '=', $attr['toDate'])->where("history_buy.branch_code", "=", $BranchCode[0]->code)->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
+                    $data = $this->buy->where('history_buy.created_at', '>=', $attr['fromDate'])->where('history_buy.created_at', '<=', $attr['toDate'])->where("history_buy.branch_code", "=", $BranchCode[0]->code)->groupBy("history_buy.id", "branch.name", "branch.slug")->paginate($paginate);
                 }
             }
 
@@ -117,24 +115,22 @@ class ReportController extends Controller
                 $toDate = explode(" ", date("Y-m-d"));
                 if ($BranchSlug == null) {
                     $branchSelected = [];
-                    $data = $this->sell->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+                    $data = $this->sell->where("history_sell.created_at", "like", date("Y-m-d") . "%")->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
                 } else {
                     $BranchCode = Branch::where("slug", "=", $BranchSlug)->get();
                     $branchSelected = explode(" ", $BranchCode[0]->slug);
-                    $data = $this->sell->where("history_sell.branch_code", "=", $BranchCode[0]->code)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+                    $data = $this->sell->where("history_sell.created_at", "like", date("Y-m-d") . "%")->where("history_sell.branch_code", "=", $BranchCode[0]->code)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
                 }
             } else {
-                $attr['toDate'] = strtotime("1 day", strtotime($attr['toDate']));
-                $attr['toDate'] = date("Y-m-d", $attr['toDate']);
                 $fromDate = explode(" ", $attr['fromDate']);
                 $toDate = explode(" ", $attr['toDate']);
                 if ($BranchSlug == null) {
                     $branchSelected = [];
-                    $data = $this->sell->where('history_sell.created_at', '=', $attr['fromDate'])->orWhere('history_sell.created_at', '<=', $attr['toDate'])->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+                    $data = $this->sell->where('history_sell.created_at', '>=', $attr['fromDate'])->where('history_sell.created_at', '<=', $attr['toDate'])->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
                 } else {
                     $BranchCode = Branch::where("slug", "=", $BranchSlug)->get();
                     $branchSelected = explode(" ", $BranchCode[0]->slug);
-                    $data = $this->sell->where('history_sell.created_at', '>=', $attr['fromDate'])->orWhere('history_sell.created_at', '=', $attr['toDate'])->where("history_sell.branch_code", "=", $BranchCode[0]->code)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
+                    $data = $this->sell->where('history_sell.created_at', '>=', $attr['fromDate'])->where('history_sell.created_at', '<=', $attr['toDate'])->where("history_sell.branch_code", "=", $BranchCode[0]->code)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
                 }
             }
 
