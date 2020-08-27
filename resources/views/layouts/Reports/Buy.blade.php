@@ -9,7 +9,7 @@
     <div class="card-body">
         <div class="col-md-12 table-responsive px-2">
             @if (Auth::user()->roles[0] == "Master")
-            <form action="/report/buy{{$branchSelected != null ? '/'.$branchSelected[0] : ''}}" method="get"
+            <form action="/report/buy{{$branchSelected != null ? '/'.$branchSelected[1] : ''}}" method="get"
                 class="p-0 col-md-12 clearfix">
                 <div class="col-md-12 float-left mt-1">
                     <div class="col-md-4 float-left pr-1 mb-2">

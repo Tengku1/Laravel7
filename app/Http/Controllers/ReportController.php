@@ -79,7 +79,7 @@ class ReportController extends Controller
                     $data = $this->buy->where("history_buy.created_at", "like", date("Y-m-d") . "%")->groupBy("history_buy.id", "branch.name", "branch.slug")->orderBy('history_buy.id', 'desc')->paginate($paginate);
                 } else {
                     $BranchCode = Branch::where("slug", "=", $BranchSlug)->get();
-                    $branchSelected = [$BranchCode[0]->name];
+                    $branchSelected = [$BranchCode[0]->name, $BranchCode[0]->slug];
                     $data = $this->buy->where("history_buy.created_at", "like", date("Y-m-d") . "%")->where("history_buy.branch_code", "=", $BranchCode[0]->code)->groupBy("history_buy.id", "branch.name", "branch.slug")->orderBy('history_buy.id', 'desc')->paginate($paginate);
                 }
             } else {
@@ -89,14 +89,14 @@ class ReportController extends Controller
                     $data = $this->buy->where('history_buy.created_at', '>=', $attr['fromDate'])->where('history_buy.created_at', '<=', $attr['toDate'])->groupBy("history_buy.id", "branch.name", "branch.slug")->orderBy('history_buy.id', 'desc')->paginate($paginate);
                 } else {
                     $BranchCode = Branch::where("slug", "=", $BranchSlug)->get();
-                    $branchSelected = [$BranchCode[0]->name];
+                    $branchSelected = [$BranchCode[0]->name, $BranchCode[0]->slug];
                     $data = $this->buy->where('history_buy.created_at', '>=', $attr['fromDate'])->where('history_buy.created_at', '<=', $attr['toDate'])->where("history_buy.branch_code", "=", $BranchCode[0]->code)->groupBy("history_buy.id", "branch.name", "branch.slug")->orderBy('history_buy.id', 'desc')->paginate($paginate);
                 }
             }
 
             return view("layouts.Reports.Buy", compact("data", "branch", "datePicker", "branchSelected"));
         } else {
-            $branchSelected = Branch::where("code", "=", Auth::user()->branch_code)->get("name");
+            $branchSelected = Branch::where("code", "=", Auth::user()->branch_code)->get();
             $branchSelected = [$branchSelected[0]->name];
             $data = $this->buy->where('history_buy.modified_user', '=', Auth::user()->name)->groupBy("history_buy.id", "BranchName", "branch.slug")->paginate($paginate);
             return view("layouts.Reports.Buy", compact("data", "branchSelected"));
@@ -115,7 +115,7 @@ class ReportController extends Controller
                     $data = $this->sell->where("history_sell.created_at", "like", date("Y-m-d") . "%")->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
                 } else {
                     $BranchCode = Branch::where("slug", "=", $BranchSlug)->get();
-                    $branchSelected = [$BranchCode[0]->name];
+                    $branchSelected = [$BranchCode[0]->name, $BranchCode[0]->slug];
                     $data = $this->sell->where("history_sell.created_at", "like", date("Y-m-d") . "%")->where("history_sell.branch_code", "=", $BranchCode[0]->code)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
                 }
             } else {
@@ -125,7 +125,7 @@ class ReportController extends Controller
                     $data = $this->sell->where('history_sell.created_at', '>=', $attr['fromDate'])->where('history_sell.created_at', '<=', $attr['toDate'])->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
                 } else {
                     $BranchCode = Branch::where("slug", "=", $BranchSlug)->get();
-                    $branchSelected = [$BranchCode[0]->name];
+                    $branchSelected = [$BranchCode[0]->name, $BranchCode[0]->slug];
                     $data = $this->sell->where('history_sell.created_at', '>=', $attr['fromDate'])->where('history_sell.created_at', '<=', $attr['toDate'])->where("history_sell.branch_code", "=", $BranchCode[0]->code)->groupBy("history_sell.id", "branch.name", "branch.slug")->paginate($paginate);
                 }
             }
