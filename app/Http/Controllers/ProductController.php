@@ -14,15 +14,17 @@ class ProductController extends Controller
 
     public function __construct()
     {
-        $query = Product::join("products_stock", "products_stock.product_id", "products.id")
+        $query = Product::leftJoin("products_stock", "products_stock.product_id", "products.id")
             ->select("products.id", "products.name", "status", DB::raw("sum(qty) as qty"))
             ->groupBy("products.id", "products.name", "status")
             ->get();
         for ($i = 0; $i < sizeof($query); $i++) {
-            if ($query[$i]->qty <= 20) {
+            if ($query[$i]->qty <= 20 && $query[$i]->qty > 0) {
                 Product::where("id", "=", $query[$i]->id)->update(["status" => "Running Low"]);
             } elseif ($query[$i]->qty <= 0) {
-                Product::where("id", "=", $query[$i]->id)->update(["status" => "Out Of Stock"]);
+                if ($query[$i]->status != "inactive") {
+                    Product::where("id", "=", $query[$i]->id)->update(["status" => "Out Of Stock"]);
+                }
             } else {
                 Product::where("id", "=", $query[$i]->id)->update(["status" => "In Stock"]);
             }
@@ -36,10 +38,15 @@ class ProductController extends Controller
     public function destroy()
     {
         $attr = request()->all();
-        Product::where('id', '=', $attr['id'])->update([
-            'status' => "inactive",
-        ]);
-        session()->flash('success', 'The Data Was Deleted');
+        $checkStock = Product::join("products_stock", "products_stock.product_id", "products.id")->get();
+        if ($checkStock == null) {
+            Product::where('id', '=', $attr['id'])->update([
+                'status' => "inactive",
+            ]);
+            session()->flash('success', 'The Data Was Deactivated');
+        } else {
+            session()->flash('warning', 'This product cannot be deactivated while stock is still available');
+        }
         return redirect('/product');
     }
 

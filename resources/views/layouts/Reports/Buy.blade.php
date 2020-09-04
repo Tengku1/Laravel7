@@ -1,9 +1,9 @@
-@extends('layouts.master',['title'=>'Report Sells - Crux'])
+@extends('layouts.master',['title'=>'Report Buys - Crux'])
 
 @section('content')
 <div class="card">
     <div class="card-header">
-        Report Sells
+        Report Buys
     </div>
 
     <div class="card-body">

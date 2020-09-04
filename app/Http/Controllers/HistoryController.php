@@ -406,25 +406,13 @@ class HistoryController extends Controller
         $history = history_buy_product::join('products', 'history_buy_product.product_id', 'products.id')->join('history_buy', 'history_buy_product.history_buy', 'history_buy.id')->select('products.name', 'history_buy_product.qty', 'history_buy_product.buy_price', 'products.id')->where('history_buy.id', '=', $attr['id'])->get();
 
         for ($i = 0; $i < sizeof($history); $i++) {
-            $stock = Products_Stock::create([
+            Products_Stock::create([
                 'product_id' => $history[$i]->id,
                 'branch_code' => $attr['branch_code'],
                 'buy_price' => $history[$i]->buy_price,
                 'qty' => $history[$i]->qty,
             ]);
         }
-        $product = Product::join('products_stock', 'products_stock.product_id', 'products.id')->select(DB::raw('SUM(products_stock.qty) as totalQty'))->where('products.id', '=', $stock->product_id)->get();
-
-        if ($product[0]->totalQty > 20) {
-            $status = "in stock";
-        } elseif ($product[0]->totalQty <= 20 && $product[0]->totalQty > 0) {
-            $status = "running low";
-        } else {
-            $status = "out of stock";
-        }
-        Product::where("id", "=", $stock->product_id)->update([
-            'status' => $status,
-        ]);
 
         history_buys::where('id', '=', $attr['id'])->update([
             'has_finished' => "true",
@@ -435,6 +423,7 @@ class HistoryController extends Controller
     public function stockSell()
     {
         $attr = request()->all();
+
         $history = history_sell_product::join('products', 'history_sell_product.product_id', 'products.id')
             ->join('history_sell', 'history_sell_product.history_sell', 'history_sell.id')
             ->select(
@@ -443,37 +432,40 @@ class HistoryController extends Controller
             )
             ->where('history_sell.id', '=', $attr['id'])->get();
 
-        $stock = Products_Stock::select('qty', 'created_at', 'id')->where('product_id', '=', $history[0]->product_id)->where('branch_code', '=', $attr['branch_code'])->orderBy('created_at', 'asc')->get();
-        $qtyHistory = $history[0]->qty;
+        for ($i = 0; $i < sizeof($history); $i++) {
+            $getStock = Products_Stock::select('qty', 'created_at', 'id')
+                ->where('product_id', "like", $history[$i]->product_id)
+                ->where('branch_code', '=', $attr['branch_code'])
+                ->where('qty', '!=', 0)
+                ->orderBy('created_at', 'asc')
+                ->get();
+            $stock[$i] = $getStock;
+        }
         for ($i = 0; $i < sizeof($stock); $i++) {
-            $qtyStock = $stock[$i]->qty;
-            $qtyNow =  $qtyStock - $qtyHistory;
-            $qtyStock -= $qtyHistory;
-            $qtyHistory -= $stock[$i]->qty;
-            if ($qtyStock > 0) {
-                Products_Stock::where('id', '=', $stock[$i]->id)->update([
-                    'qty' => $qtyNow,
-                ]);
-                break;
-            } else {
-                Products_Stock::where('product_id', '=', $history[0]->product_id)->where('branch_code', '=', $attr['branch_code'])->update([
-                    'qty' => 0,
-                ]);
+            $qtyHistory = $history[$i]->qty;
+            for ($j = 0; $j < sizeof($stock[$i]); $j++) {
+                $qtyStock = $stock[$i][$j]->qty;
+                $qtyNow =  $qtyStock - $qtyHistory;
+                if ($qtyNow < 0) {
+                    $qtyNow = 0;
+                }
+                $qtyStock -= $qtyHistory;
+                $qtyHistory -= $stock[$i][$j]->qty;
+                if ($qtyStock > 0) {
+                    Products_Stock::where('id', '=', $stock[$i][$j]->id)->update([
+                        'qty' => $qtyNow,
+                    ]);
+                } else {
+                    Products_Stock::where('product_id', '=', $history[$i]->product_id)->where('branch_code', '=', $attr['branch_code'])->update([
+                        'qty' => 0,
+                    ]);
+                }
+                if ($qtyHistory <= 0) {
+                    continue;
+                }
             }
         }
 
-        $product = Product::join('products_stock', 'products_stock.product_id', 'products.id')->select(DB::raw('SUM(products_stock.qty) as totalQty'))->where('products.id', '=', $history[0]->id)->get();
-
-        if ($product[0]->totalQty > 20) {
-            $status = "in stock";
-        } elseif ($product[0]->totalQty <= 20 && $product[0]->totalQty > 0) {
-            $status = "running low";
-        } else {
-            $status = "out of stock";
-        }
-        Product::where("id", "=", $stock[0]->product_id)->update([
-            'status' => $status,
-        ]);
 
         history_sell::where('id', '=', $attr['id'])->update([
             'has_finished' => "true",
