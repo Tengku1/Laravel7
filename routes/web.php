@@ -101,7 +101,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Reports
 
-    Route::get('/report/excel/{page}', 'ReportController@excel')->name("excelReport");
+    Route::get('/report/excel/{page}', 'ReportController@excel')->name("reportExcel");
     Route::post('/report/show/excel/{page}', 'ReportController@ShowExcel')->name("excelShowReport");
 
     Route::get('/report/products/', 'ReportController@index');

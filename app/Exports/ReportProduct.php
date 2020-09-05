@@ -14,7 +14,7 @@ class ReportProduct implements FromCollection, WithHeadings
 
     public function collection()
     {
-        return Product::join("products_stock", "products_stock.product_id", "products.id")->join("branch", "products_stock.branch_code", "branch.code")->join("history_buy", "history_buy.branch_code", "branch.code")->select("products.name", "branch.name as BranchName", DB::raw("sum(qty) as qty"))->groupBy("products.name", "BranchName")->get();
+        return Product::join("products_stock", "products_stock.product_id", "products.id")->join("branch", "products_stock.branch_code", "branch.code")->select("products.name", "branch.name as BranchName", DB::raw("sum(qty) as qty"))->groupBy("products.name", "BranchName")->get();
     }
     public function headings(): array
     {

@@ -9,8 +9,7 @@
     <div class="card-body">
         <div class="col-md-12 table-responsive px-2">
             @if (Auth::user()->roles[0] == "Master")
-            <form action="/report/buy{{$branchSelected != null ? '/'.$branchSelected[1] : ''}}" method="get"
-                class="p-0 col-md-12 clearfix">
+            <form action="/report/buy{{$branchSelected != null ? '/'.$branchSelected[1] : ''}}" method="get" class="p-0 col-md-12 clearfix">
                 <div class="col-md-12 float-left mt-1">
                     <div class="col-md-4 float-left pr-1 mb-2">
                         <div class="col-md-12"><label for="" class="font-weight-bold">From</label></div>
@@ -31,13 +30,19 @@
             </form>
             @endif
             <div class="col-md-12 mb-3">
-                <form action="/report/buy/" id="branch" method="get" class="p-0 col-md-12">
-                    <a href="{{route('excelReport','sell')}}" target="_blank">
-                        <button class="btn btn-success rounded-0 float-left mr-1 mb-2">Export Excel
-                            <i class="fa fa-file-excel-o"></i>
-                        </button>
-                    </a>
-                    <select id="SelectedBranch" class="form-control col-md-3 clearfix">
+                <form action="{{route('reportExcel','buy')}}" class="p-0 float-left">
+                    <button class="btn btn-success rounded-0 float-left mr-1 mb-2" type="submit">Export Excel
+                        <i class="fa fa-file-excel-o"></i>
+                    </button>
+                    <input type="hidden" name="fromDate" value="{{$datePicker[0]}}">
+                    <input type="hidden" name="toDate" value="{{$datePicker[1]}}">
+                    @if ($branchSelected != null)
+                        <input type="hidden" name="branch" value="{{$branchSelected[0]}}">
+                    @endif
+                </form>
+                <form action="/report/buy/" id="branch" method="get" class="p-0 col-md-10 float-left">
+                    @if (Auth::user()->roles[0] == "Master")
+                        <select id="SelectedBranch" class="form-control col-md-3 clearfix">
                         <option value="">Select Branch ---</option>
                         @foreach ($branch as $item)
                         <option value="{{$item->slug}}">{{$item->name}}</option>
@@ -45,6 +50,7 @@
                     </select>
                     <input type="hidden" name="fromDate" value="{{$datePicker[0]}}">
                     <input type="hidden" name="toDate" value="{{$datePicker[1]}}">
+                    @endif
                 </form>
             </div>
             <div class="col-md-12 row">

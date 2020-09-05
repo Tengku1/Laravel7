@@ -12,15 +12,35 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class ReportHistorySells implements FromCollection, WithHeadings
 {
     use Exportable;
+
+    public function __construct($fromDate, $toDate, $branch)
+    {
+        $this->fromDate = $fromDate;
+        $this->toDate = $toDate;
+        $this->branch = $branch;
+    }
+
     public function collection()
     {
         if (Auth::user()->roles[0] == "Master") {
-            return history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")
-                ->select(
-                    "history_sell.id",
-                    DB::raw("sum(history_sell_product.qty) as TotalQty")
-                )
-                ->groupBy("history_sell.id")->get();
+
+            if ($this->fromDate == date("Y-m-d") && $this->toDate == date("Y-m-d")) {
+                return history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")
+                    ->select(
+                        "history_sell.id",
+                        DB::raw("sum(history_sell_product.qty) as TotalQty")
+                    )
+                    ->where('history_sell.created_at', 'like', date("Y-m-d") . '%')->where('history_sell.branch_code', 'like', $this->branch)
+                    ->groupBy("history_sell.id")->get();
+            } else {
+                return history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")
+                    ->select(
+                        "history_sell.id",
+                        DB::raw("sum(history_sell_product.qty) as TotalQty")
+                    )
+                    ->where('history_sell.created_at', '>=', $this->fromDate)->where('history_sell.created_at', '<=', $this->toDate)->where('history_sell.branch_code', 'like', $this->branch)
+                    ->groupBy("history_sell.id")->get();
+            }
         } else {
             return history_sell_product::join("history_sell", "history_sell_product.history_sell", "history_sell.id")
                 ->select(

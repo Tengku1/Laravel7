@@ -8,7 +8,7 @@
     <div class="card-body">
         <div class="col-md-12 px-3">
             <div class="float-left mr-1 mb-1">
-                <a href="{{route('excelReport','product')}}" target="_blank">
+                <a href="{{route('reportExcel','product')}}" target="_blank">
                     <button class="btn btn-success rounded-0 float-left">Export Excel
                         <i class="fa fa-file-excel-o"></i>
                     </button>

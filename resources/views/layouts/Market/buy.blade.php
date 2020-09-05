@@ -18,9 +18,9 @@ $no = 1;
             title="Buy Product">Add Sales <i class="fa fa-plus"></i></button>
         @else
         <a href="/market/detail/buy?branch={{$branch[0]->slug}}">
-        <button class="btn btn-primary rounded-0 float-left mr-1 mb-2" title="Buy Product">Add Sales <i
-                class="fa fa-plus"></i></button>
-    </a>
+            <button class="btn btn-primary rounded-0 float-left mr-1 mb-2" title="Buy Product">Add Sales <i
+                    class="fa fa-plus"></i></button>
+        </a>
         @endif
         <div class="dropdown float-left mb-2">
             <button class="btn btn-info rounded-0 dropdown-toggle" type="button" id="dropdownMenuButton"

@@ -72,7 +72,7 @@ class ReportController extends Controller
         if (Auth::user()->roles[0] == "Master") {
             $branch = Branch::select("name", "code", "slug")->where("status", "like", "active")->get();
             $attr = request()->all();
-            if (!isset($attr['fromDate']) && !isset($attr['toDate'])) {
+            if (!isset($attr['fromDate']) && !isset($attr['toDate']) || $attr['fromDate'] == date("Y-m-d") && $attr['toDate'] == date("Y-m-d")) {
                 $datePicker = [date("Y-m-d"), date("Y-m-d")];
                 if ($BranchSlug == null) {
                     $branchSelected = [];
@@ -82,6 +82,7 @@ class ReportController extends Controller
                     $branchSelected = [$BranchCode[0]->name, $BranchCode[0]->slug];
                     $data = $this->buy->where("history_buy.created_at", "like", date("Y-m-d") . "%")->where("history_buy.branch_code", "=", $BranchCode[0]->code)->groupBy("history_buy.id", "branch.name", "branch.slug")->orderBy('history_buy.id', 'desc')->paginate($paginate);
                 }
+                $data = $this->buy->where("history_buy.created_at", "like", date("Y-m-d") . "%")->groupBy("history_buy.id", "branch.name", "branch.slug")->orderBy('history_buy.id', 'desc')->paginate($paginate);
             } else {
                 $datePicker = [$attr['fromDate'], $attr['toDate']];
                 if ($BranchSlug == null) {
@@ -93,7 +94,6 @@ class ReportController extends Controller
                     $data = $this->buy->where('history_buy.created_at', '>=', $attr['fromDate'])->where('history_buy.created_at', '<=', $attr['toDate'])->where("history_buy.branch_code", "=", $BranchCode[0]->code)->groupBy("history_buy.id", "branch.name", "branch.slug")->orderBy('history_buy.id', 'desc')->paginate($paginate);
                 }
             }
-
             return view("layouts.Reports.Buy", compact("data", "branch", "datePicker", "branchSelected"));
         } else {
             $branchSelected = Branch::where("code", "=", Auth::user()->branch_code)->get();
@@ -103,12 +103,44 @@ class ReportController extends Controller
         }
     }
 
+    public function excel($page)
+    {
+        $fromDate = request()->fromDate;
+        $toDate = request()->toDate;
+        if (!isset(request()->branch)) {
+            $branch = "%%";
+        } else {
+            $branchCode = Branch::where("name", "=", request()->branch)->get("code");
+            $branch = $branchCode[0]->code;
+        }
+        if ($page == "product") {
+            $name = "Products_" . date('Y-m-d') . ".xlsx";
+            return Excel::download(new ReportProduct, $name);
+        } elseif ($page == "buy") {
+            $name = "History_Buys_" . date('Y-m-d') . ".xlsx";
+            if (isset($attr['branch'])) {
+                return Excel::download(new ReportHistoryBuys($fromDate, $toDate, $branch), $name);
+            } else {
+                return Excel::download(new ReportHistoryBuys($fromDate, $toDate, $branch), $name);
+            }
+        } elseif ($page == "sell") {
+            $name = "History_Sells_" . date('Y-m-d') . ".xlsx";
+            if (isset($attr['branch'])) {
+                return Excel::download(new ReportHistorySells($fromDate, $toDate, $branch), $name);
+            } else {
+                return Excel::download(new ReportHistorySells($fromDate, $toDate, $branch), $name);
+            }
+        } else {
+            return abort(404);
+        }
+    }
+
     public function Sell($BranchSlug = null, $paginate = 7)
     {
         $branch = Branch::select("name", "code", "slug")->where("status", "like", "active")->get();
         if (Auth::user()->roles[0] == "Master") {
             $attr = request()->all();
-            if (!isset($attr['fromDate']) && !isset($attr['toDate'])) {
+            if (!isset($attr['fromDate']) && !isset($attr['toDate']) || $attr['fromDate'] == date("Y-m-d") && $attr['toDate'] == date("Y-m-d")) {
                 $datePicker = [date("Y-m-d"), date("Y-m-d")];
                 if ($BranchSlug == null) {
                     $branchSelected = [];
@@ -192,21 +224,7 @@ class ReportController extends Controller
         return view("layouts.Reports.ShowSell", compact("data", "total"));
     }
 
-    public function excel($page)
-    {
-        if ($page == "product") {
-            $name = "Products_" . date('Y-m-d') . ".xlsx";
-            return Excel::download(new ReportProduct, $name);
-        } elseif ($page == "buy") {
-            $name = "History_Buys_" . date('Y-m-d') . ".xlsx";
-            return Excel::download(new ReportHistoryBuys, $name);
-        } elseif ($page == "sell") {
-            $name = "History_Sells_" . date('Y-m-d') . ".xlsx";
-            return Excel::download(new ReportHistorySells, $name);
-        } else {
-            return abort(404);
-        }
-    }
+
     public function ShowExcel($page)
     {
         $attr = request()->all();
